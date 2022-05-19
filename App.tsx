@@ -1,13 +1,10 @@
-import { Center, NativeBaseProvider } from 'native-base'
-import { LandingScreen } from './src/screens/LandingScreen'
-import { QuestionnaireScreen } from './src/screens/QuestionnaireScreen'
+import { NativeBaseProvider } from 'native-base'
+import RootNavigator from './src/navigators'
 
 export default function App() {
   return (
     <NativeBaseProvider>
-      <Center flex={1}>
-        <QuestionnaireScreen />
-      </Center>
+      <RootNavigator />
     </NativeBaseProvider>
   )
 }
