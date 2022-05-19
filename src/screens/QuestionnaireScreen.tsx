@@ -2,9 +2,9 @@ import { FC, useState } from 'react'
 import { RootStackScreenProps, Deals } from '../types'
 import { QuestionnaireView } from '../views/QuestionnaireView'
 
-export const QuestionnaireScreen: FC<
-  RootStackScreenProps<'Questionnaire'>
-> = () => {
+export const QuestionnaireScreen: FC<RootStackScreenProps<'Questionnaire'>> = ({
+  navigation,
+}) => {
   const [activeDeals, setActiveDeals] = useState<Array<Deals>>([])
 
   const handleToggleButton = (buttonValue: Deals) => {
@@ -21,6 +21,7 @@ export const QuestionnaireScreen: FC<
     <QuestionnaireView
       handleToggleButton={handleToggleButton}
       isDealActive={isDealActive}
+      onContinue={() => activeDeals.length && navigation.navigate('Dashboard')}
     />
   )
 }

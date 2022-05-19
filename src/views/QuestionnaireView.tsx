@@ -6,11 +6,13 @@ import { FC } from 'react'
 interface IQuestionnaireView {
   handleToggleButton: ToggleButtonOnPress
   isDealActive: (buttonValue: Deals) => boolean
+  onContinue: () => void
 }
 
 export const QuestionnaireView: FC<IQuestionnaireView> = ({
   handleToggleButton,
   isDealActive,
+  onContinue,
 }) => (
   <Center flex={1}>
     <Container centerContent safeArea flex={1} w="100%">
@@ -44,7 +46,9 @@ export const QuestionnaireView: FC<IQuestionnaireView> = ({
           value="Transportation"
         />
       </VStack>
-      <Button variant="ghost">Continue</Button>
+      <Button onPress={onContinue} variant="ghost">
+        Continue
+      </Button>
     </Container>
   </Center>
 )
