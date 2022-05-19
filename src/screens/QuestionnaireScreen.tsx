@@ -1,25 +1,21 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { RootStackScreenProps, Deals } from '../types'
 import { QuestionnaireView } from '../views/QuestionnaireView'
+import { dealsActions } from '../redux/slices/deals'
+import { useAppDispatch, useAppSelector } from '../hooks'
 
 export const QuestionnaireScreen: FC<RootStackScreenProps<'Questionnaire'>> = ({
   navigation,
 }) => {
-  const [activeDeals, setActiveDeals] = useState<Array<Deals>>([])
-
-  const handleToggleButton = (buttonValue: Deals) => {
-    setActiveDeals(prevState => {
-      const index = prevState.indexOf(buttonValue)
-      if (index !== -1) return prevState.filter(value => value !== buttonValue)
-      return [...prevState, buttonValue]
-    })
-  }
-
+  const activeDeals = useAppSelector(state => state.deals.activeDeals)
+  const dispatch = useAppDispatch()
   const isDealActive = (buttonValue: Deals) => activeDeals.includes(buttonValue)
 
   return (
     <QuestionnaireView
-      handleToggleButton={handleToggleButton}
+      handleToggleButton={deal => {
+        dispatch(dealsActions.setActiveDeals(deal))
+      }}
       isDealActive={isDealActive}
       onContinue={() => activeDeals.length && navigation.navigate('Dashboard')}
     />
