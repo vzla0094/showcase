@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { ToggleButtonValues } from '../types'
+import { Deals } from '../types'
 import { QuestionnaireView } from '../views/QuestionnaireView'
 
 export const QuestionnaireScreen = () => {
-  const [activeDeals, setActiveDeals] = useState<Array<ToggleButtonValues>>([])
+  const [activeDeals, setActiveDeals] = useState<Array<Deals>>([])
 
-  const handleToggleButton = (buttonValue: ToggleButtonValues) => {
+  const handleToggleButton = (buttonValue: Deals) => {
     setActiveDeals(prevState => {
       const index = prevState.indexOf(buttonValue)
       if (index !== -1) return prevState.filter(value => value !== buttonValue)
@@ -13,8 +13,7 @@ export const QuestionnaireScreen = () => {
     })
   }
 
-  const isDealActive = (buttonValue: ToggleButtonValues) =>
-    activeDeals.includes(buttonValue)
+  const isDealActive = (buttonValue: Deals) => activeDeals.includes(buttonValue)
 
   return (
     <QuestionnaireView

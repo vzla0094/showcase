@@ -1,11 +1,11 @@
 import { Button, Container, Heading, VStack } from 'native-base'
 import { ToggleButton } from '../components/ToggleButton'
-import { ToggleButtonOnPress, ToggleButtonValues } from '../types'
+import { ToggleButtonOnPress, Deals } from '../types'
 import { FC } from 'react'
 
 interface IQuestionnaireView {
   handleToggleButton: ToggleButtonOnPress
-  isDealActive: (buttonValue: ToggleButtonValues) => boolean
+  isDealActive: (buttonValue: Deals) => boolean
 }
 
 export const QuestionnaireView: FC<IQuestionnaireView> = ({

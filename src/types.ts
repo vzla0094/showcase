@@ -1,8 +1,3 @@
-export type ToggleButtonValues =
-  | 'Food'
-  | 'Activities'
-  | 'Events'
-  | 'Stay'
-  | 'Transportation'
+export type Deals = 'Food' | 'Activities' | 'Events' | 'Stay' | 'Transportation'
 
-export type ToggleButtonOnPress = (buttonValue: ToggleButtonValues) => void
+export type ToggleButtonOnPress = (buttonValue: Deals) => void
