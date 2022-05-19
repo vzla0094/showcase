@@ -13,13 +13,13 @@ export const QuestionnaireScreen = () => {
     })
   }
 
-  const getActive = (buttonValue: ToggleButtonValues) =>
+  const isDealActive = (buttonValue: ToggleButtonValues) =>
     activeDeals.includes(buttonValue)
 
   return (
     <QuestionnaireView
       handleToggleButton={handleToggleButton}
-      getActive={getActive}
+      isDealActive={isDealActive}
     />
   )
 }

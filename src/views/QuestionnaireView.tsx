@@ -5,12 +5,12 @@ import { FC } from 'react'
 
 interface IQuestionnaireView {
   handleToggleButton: ToggleButtonOnPress
-  getActive: (buttonValue: ToggleButtonValues) => boolean
+  isDealActive: (buttonValue: ToggleButtonValues) => boolean
 }
 
 export const QuestionnaireView: FC<IQuestionnaireView> = ({
   handleToggleButton,
-  getActive,
+  isDealActive,
 }) => (
   <Container centerContent safeArea flex={1} w="100%">
     <Heading mt="20" mb="10">
@@ -19,27 +19,27 @@ export const QuestionnaireView: FC<IQuestionnaireView> = ({
     <VStack flex={1} space={8} alignSelf="stretch" mb="10">
       <ToggleButton
         onPress={handleToggleButton}
-        active={getActive('Food')}
+        active={isDealActive('Food')}
         value="Food"
       />
       <ToggleButton
         onPress={handleToggleButton}
-        active={getActive('Activities')}
+        active={isDealActive('Activities')}
         value="Activities"
       />
       <ToggleButton
         onPress={handleToggleButton}
-        active={getActive('Events')}
+        active={isDealActive('Events')}
         value="Events"
       />
       <ToggleButton
         onPress={handleToggleButton}
-        active={getActive('Stay')}
+        active={isDealActive('Stay')}
         value="Stay"
       />
       <ToggleButton
         onPress={handleToggleButton}
-        active={getActive('Transportation')}
+        active={isDealActive('Transportation')}
         value="Transportation"
       />
     </VStack>
