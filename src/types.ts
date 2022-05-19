@@ -4,3 +4,5 @@ export type ToggleButtonValues =
   | 'Events'
   | 'Stay'
   | 'Transportation'
+
+export type ToggleButtonOnPress = (buttonValue: ToggleButtonValues) => void
