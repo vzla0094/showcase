@@ -15,7 +15,11 @@ export default function RootNavigator() {
           options={{ headerShown: false }}
           component={LandingScreen}
         />
-        <Stack.Screen name="Questionnaire" component={QuestionnaireScreen} />
+        <Stack.Screen
+          name="Questionnaire"
+          options={{ headerShown: false }}
+          component={QuestionnaireScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )
