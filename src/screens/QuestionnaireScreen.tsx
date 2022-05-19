@@ -1,8 +1,10 @@
-import { useState } from 'react'
-import { Deals } from '../types'
+import { FC, useState } from 'react'
+import { RootStackScreenProps, Deals } from '../types'
 import { QuestionnaireView } from '../views/QuestionnaireView'
 
-export const QuestionnaireScreen = () => {
+export const QuestionnaireScreen: FC<
+  RootStackScreenProps<'Questionnaire'>
+> = () => {
   const [activeDeals, setActiveDeals] = useState<Array<Deals>>([])
 
   const handleToggleButton = (buttonValue: Deals) => {
