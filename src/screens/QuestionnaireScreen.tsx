@@ -17,7 +17,8 @@ export const QuestionnaireScreen: FC<RootStackScreenProps<'Questionnaire'>> = ({
         dispatch(dealsActions.setActiveDeals(deal))
       }}
       isDealActive={isDealActive}
-      onContinue={() => activeDeals.length && navigation.navigate('Dashboard')}
+      onContinue={() => navigation.navigate('Dashboard')}
+      disableContinue={!activeDeals.length}
     />
   )
 }
