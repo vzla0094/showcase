@@ -9,6 +9,16 @@ export type RootStackParamList = {
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>
 
-export type Deals = 'Food' | 'Activities' | 'Events' | 'Stay' | 'Transportation'
+export type DealCategories =
+  | 'Food'
+  | 'Activities'
+  | 'Events'
+  | 'Stay'
+  | 'Transportation'
 
-export type ToggleButtonOnPress = (buttonValue: Deals) => void
+export type ToggleButtonOnPress = (buttonValue: DealCategories) => void
+
+export interface IDealProps {
+  title: string
+  description: string
+}

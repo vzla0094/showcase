@@ -1,16 +1,21 @@
-import { Deals } from '../types'
+import { DealCategories } from '../types'
 import { FC } from 'react'
-import { Center, Container, Heading } from 'native-base'
+import { Center, Container } from 'native-base'
+import { DealCategory } from '../components/DealCategory'
 
 interface IDashboardView {
-  activeDeals: Array<Deals>
+  activeDealCategories: Array<DealCategories>
 }
 
-export const DashboardView: FC<IDashboardView> = ({ activeDeals }) => (
+export const DashboardView: FC<IDashboardView> = ({ activeDealCategories }) => (
   <Center flex={1}>
     <Container safeArea flex={1} w="100%">
-      {activeDeals.map(deal => (
-        <Heading key={deal}>{deal}</Heading>
+      {activeDealCategories.map(dealCategory => (
+        <DealCategory
+          key={dealCategory}
+          category={dealCategory}
+          deals={Array(5).fill({ title: 'title', description: 'description' })}
+        />
       ))}
     </Container>
   </Center>
