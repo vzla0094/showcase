@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { RootStackScreenProps, Deals } from '../types'
+import { RootStackScreenProps, DealCategories } from '../types'
 import { QuestionnaireView } from '../views/QuestionnaireView'
 import { dealsActions } from '../redux/slices/deals'
 import { useAppDispatch, useAppSelector } from '../hooks'
@@ -7,9 +7,10 @@ import { useAppDispatch, useAppSelector } from '../hooks'
 export const QuestionnaireScreen: FC<RootStackScreenProps<'Questionnaire'>> = ({
   navigation,
 }) => {
-  const activeDeals = useAppSelector(state => state.deals.activeDeals)
+  const activeDeals = useAppSelector(state => state.deals.activeDealCategories)
   const dispatch = useAppDispatch()
-  const isDealActive = (buttonValue: Deals) => activeDeals.includes(buttonValue)
+  const isDealActive = (buttonValue: DealCategories) =>
+    activeDeals.includes(buttonValue)
 
   return (
     <QuestionnaireView
