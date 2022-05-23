@@ -41,7 +41,7 @@ interface IReview {
 }
 
 export interface IDeal {
-  category: string
+  category: DealCategories
   timeSlots?: Partial<ITimeSlots>
   dealId: string
   active: boolean

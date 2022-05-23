@@ -14,6 +14,20 @@ export const dealsApi = createApi({
 
         return { data }
       },
+      async onQueryStarted(deal, { dispatch, queryFulfilled }) {
+        // update cache directly instead of waiting for server response giving the user 'instant update' experience
+        // docs: https://redux-toolkit.js.org/rtk-query/usage/manual-cache-updates#optimistic-updates
+        const createDealResult = dispatch(
+          dealsApi.util.updateQueryData('getDeals', deal.category, draft => {
+            draft.push(deal)
+          })
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          createDealResult.undo()
+        }
+      },
     }),
     getDeals: build.query<Array<IDeal>, DealCategories>({
       async queryFn(dealCategory) {
