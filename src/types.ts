@@ -22,3 +22,37 @@ export interface IDealProps {
   title: string
   description: string
 }
+
+type TimeSlot = [{ start: string; end: string }]
+interface ITimeSlots {
+  sunday: TimeSlot
+  monday: TimeSlot
+  tuesday: TimeSlot
+  wednesday: TimeSlot
+  thursday: TimeSlot
+  friday: TimeSlot
+  saturday: TimeSlot
+}
+
+interface IReview {
+  uuid: string
+  comment: string
+  rating: string
+}
+
+export interface IDeal {
+  category: string
+  timeSlots?: Partial<ITimeSlots>
+  dealId: string
+  active: boolean
+  validatedUsers: Array<string>
+  title: string
+  description: string
+  imageGallery: Array<string>
+  thumbnail: string
+  coverImage: string
+  startDate: string
+  endDate: string
+  quantityLimit: string
+  reviews: Array<IReview>
+}
