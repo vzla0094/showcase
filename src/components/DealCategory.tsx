@@ -9,7 +9,7 @@ interface IDealCategoryProps {
 
 export const DealCategory: FC<IDealCategoryProps> = ({ dealCategory }) => (
   <Box mb={5}>
-    <Heading>{dealCategory.category}</Heading>
+    <Heading>{dealCategory.name}</Heading>
     <FlatList
       flexGrow={0}
       horizontal

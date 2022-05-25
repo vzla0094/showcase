@@ -17,7 +17,7 @@ export type DealCategoryNames =
   | 'Transportation'
 
 export interface IDealCategory {
-  category: DealCategoryNames
+  name: DealCategoryNames
   deals: Array<IDeal>
 }
 

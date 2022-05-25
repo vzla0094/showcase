@@ -11,7 +11,7 @@ export const DashboardView: FC<IDashboardView> = ({ activeDealCategories }) => (
   <Center flex={1}>
     <Container safeArea flex={1} w="100%">
       {activeDealCategories.map(dealCategory => (
-        <DealCategory key={dealCategory.category} dealCategory={dealCategory} />
+        <DealCategory key={dealCategory.name} dealCategory={dealCategory} />
       ))}
     </Container>
   </Center>
