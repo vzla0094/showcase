@@ -55,21 +55,6 @@ export const createDeal = async (dealWithoutId: IDeal) => {
   }
 }
 
-export const getDeals = async (dealCategory: DealCategoryNames) => {
-  try {
-    const dealsQuery = query(
-      collection(db, 'deals'),
-      where('category', '==', dealCategory)
-    )
-    const data = await getDocs(dealsQuery)
-    return [data, null]
-  } catch (e) {
-    console.error('Error getting deals: ', e)
-
-    return [null, e]
-  }
-}
-
 export const getActiveDeals = async (
   activeDealCategories: Array<DealCategoryNames>
 ) => {

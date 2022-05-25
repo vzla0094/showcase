@@ -1,10 +1,11 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/dist/query/react'
-import { getDeals, createDeal, getActiveDeals } from '../../../firebase'
+import { createDeal, getActiveDeals } from '../../../firebase'
 import { DealCategoryNames, IDeal, IDealCategory } from '../../types'
 
 export const dealsApi = createApi({
   reducerPath: 'dealsApi',
   baseQuery: fakeBaseQuery(),
+  tagTypes: ['Food', 'Activities', 'Events', 'Stay', 'Transportation'],
   endpoints: build => ({
     createDeal: build.mutation<IDeal, IDeal>({
       async queryFn(deal) {
@@ -14,28 +15,8 @@ export const dealsApi = createApi({
 
         return { data }
       },
-      async onQueryStarted(deal, { dispatch, queryFulfilled }) {
-        // update cache directly instead of waiting for server response giving the user 'instant update' experience
-        // docs: https://redux-toolkit.js.org/rtk-query/usage/manual-cache-updates#optimistic-updates
-        const createDealResult = dispatch(
-          dealsApi.util.updateQueryData('getDeals', deal.category, draft => {
-            draft.push(deal)
-          })
-        )
-        try {
-          await queryFulfilled
-        } catch {
-          createDealResult.undo()
-        }
-      },
-    }),
-    getDeals: build.query<Array<IDeal>, DealCategoryNames>({
-      async queryFn(dealCategory) {
-        const [data, error] = await getDeals(dealCategory)
-
-        if (error) return { error }
-
-        return { data }
+      invalidatesTags(response, error, deal) {
+        return [deal.category]
       },
     }),
     getActiveDeals: build.query<Array<IDealCategory>, Array<DealCategoryNames>>(
@@ -53,13 +34,12 @@ export const dealsApi = createApi({
 
           return { data: normalizedData }
         },
+        providesTags(response, error, activeDealsCategories) {
+          return activeDealsCategories
+        },
       }
     ),
   }),
 })
 
-export const {
-  useCreateDealMutation,
-  useGetDealsQuery,
-  useGetActiveDealsQuery,
-} = dealsApi
+export const { useCreateDealMutation, useGetActiveDealsQuery } = dealsApi

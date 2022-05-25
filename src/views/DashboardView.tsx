@@ -1,4 +1,4 @@
-import { DealCategoryNames, IDealCategory } from '../types'
+import { IDealCategory } from '../types'
 import { FC } from 'react'
 import { Center, Container } from 'native-base'
 import { DealCategory } from '../components/DealCategory'
