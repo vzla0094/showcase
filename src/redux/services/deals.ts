@@ -1,6 +1,6 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/dist/query/react'
 import { getDeals, createDeal, getActiveDeals } from '../../../firebase'
-import { DealCategories, IDeal } from '../../types'
+import { DealCategoryNames, IDeal, IDealCategory } from '../../types'
 
 export const dealsApi = createApi({
   reducerPath: 'dealsApi',
@@ -29,7 +29,7 @@ export const dealsApi = createApi({
         }
       },
     }),
-    getDeals: build.query<Array<IDeal>, DealCategories>({
+    getDeals: build.query<Array<IDeal>, DealCategoryNames>({
       async queryFn(dealCategory) {
         const [data, error] = await getDeals(dealCategory)
 
@@ -38,15 +38,23 @@ export const dealsApi = createApi({
         return { data }
       },
     }),
-    getActiveDeals: build.query<Array<IDeal>, Array<DealCategories>>({
-      async queryFn(activeDealCategories) {
-        const [data, error] = await getActiveDeals(activeDealCategories)
+    getActiveDeals: build.query<Array<IDealCategory>, Array<DealCategoryNames>>(
+      {
+        async queryFn(activeDealCategories) {
+          const [data, error] = await getActiveDeals(activeDealCategories)
 
-        if (error) return { error }
+          if (error) return { error }
 
-        return { data }
-      },
-    }),
+          // TODO: optimize loop
+          const normalizedData = activeDealCategories.map(dealCategory => ({
+            category: dealCategory,
+            deals: data.filter((deal: IDeal) => deal.category === dealCategory),
+          }))
+
+          return { data: normalizedData }
+        },
+      }
+    ),
   }),
 })
 

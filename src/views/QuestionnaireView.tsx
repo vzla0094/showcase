@@ -1,11 +1,11 @@
 import { Button, Center, Container, Heading, VStack } from 'native-base'
 import { ToggleButton } from '../components/ToggleButton'
-import { ToggleButtonOnPress, DealCategories } from '../types'
+import { ToggleButtonOnPress, DealCategoryNames } from '../types'
 import { FC } from 'react'
 
 interface IQuestionnaireView {
   handleToggleButton: ToggleButtonOnPress
-  isDealActive: (buttonValue: DealCategories) => boolean
+  isDealActive: (buttonValue: DealCategoryNames) => boolean
   onContinue: () => void
   disableContinue: boolean
 }

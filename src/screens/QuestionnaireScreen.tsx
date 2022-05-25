@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { RootStackScreenProps, DealCategories } from '../types'
+import { RootStackScreenProps, DealCategoryNames } from '../types'
 import { QuestionnaireView } from '../views/QuestionnaireView'
 import { dealsActions } from '../redux/slices/deals'
 import { useAppDispatch, useAppSelector } from '../hooks'
@@ -8,10 +8,12 @@ import { useCreateDealMutation } from '../redux/services/deals'
 export const QuestionnaireScreen: FC<RootStackScreenProps<'Questionnaire'>> = ({
   navigation,
 }) => {
-  const activeDeals = useAppSelector(state => state.deals.activeDealCategories)
+  const activeDeals = useAppSelector(
+    state => state.deals.activeDealCategoryNames
+  )
   const dispatch = useAppDispatch()
   const [createDeal] = useCreateDealMutation()
-  const isDealActive = (buttonValue: DealCategories) =>
+  const isDealActive = (buttonValue: DealCategoryNames) =>
     activeDeals.includes(buttonValue)
 
   return (

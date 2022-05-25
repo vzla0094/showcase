@@ -8,7 +8,7 @@ import {
   query,
   where,
 } from 'firebase/firestore'
-import { DealCategories, IDeal } from './src/types'
+import { DealCategoryNames, IDeal } from './src/types'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAhWL-VE6px-42zW-veEUddTpIstjtxzJM',
@@ -47,7 +47,7 @@ export const createDeal = async (dealWithoutId: IDeal) => {
     // Save deal with ID
     await setDoc(newDealRef, dealWithId)
 
-    return [dealWithId, false]
+    return [dealWithId, null]
   } catch (e) {
     console.error('Error setting deal: ', e)
 
@@ -55,14 +55,14 @@ export const createDeal = async (dealWithoutId: IDeal) => {
   }
 }
 
-export const getDeals = async (dealCategory: DealCategories) => {
+export const getDeals = async (dealCategory: DealCategoryNames) => {
   try {
     const dealsQuery = query(
       collection(db, 'deals'),
       where('category', '==', dealCategory)
     )
     const data = await getDocs(dealsQuery)
-    return [data, false]
+    return [data, null]
   } catch (e) {
     console.error('Error getting deals: ', e)
 
@@ -71,7 +71,7 @@ export const getDeals = async (dealCategory: DealCategories) => {
 }
 
 export const getActiveDeals = async (
-  activeDealCategories: Array<DealCategories>
+  activeDealCategories: Array<DealCategoryNames>
 ) => {
   try {
     const activeDealsQuery = query(
@@ -80,7 +80,7 @@ export const getActiveDeals = async (
     )
     const data = await getDocs(activeDealsQuery)
 
-    return [data, false]
+    return [data, null]
   } catch (e) {
     console.error('Error getting active deals: ', e)
 
