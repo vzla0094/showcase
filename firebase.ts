@@ -5,6 +5,8 @@ import {
   collection,
   getDocs as FBGetDocs,
   getFirestore,
+  query,
+  where,
 } from 'firebase/firestore'
 import { DealCategories, IDeal } from './src/types'
 
@@ -21,10 +23,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 
-const getDocs = async (collectionName: string) => {
+const getDocs = async (query: any) => {
   try {
     const docs: Array<unknown> = []
-    const querySnapshot = await FBGetDocs(collection(db, collectionName))
+    const querySnapshot = await FBGetDocs(query)
     querySnapshot.forEach(doc => {
       docs.push(doc.data())
     })
@@ -37,7 +39,7 @@ const getDocs = async (collectionName: string) => {
 export const createDeal = async (dealWithoutId: IDeal) => {
   try {
     // Add a new document with a generated id
-    const newDealRef = doc(collection(db, dealWithoutId.category))
+    const newDealRef = doc(collection(db, 'deals'))
 
     // Add the firebase generated id to the deal
     const dealWithId: IDeal = { ...dealWithoutId, dealId: newDealRef.id }
@@ -53,9 +55,13 @@ export const createDeal = async (dealWithoutId: IDeal) => {
   }
 }
 
-export const getDeals = async (category: DealCategories) => {
+export const getDeals = async (dealCategory: DealCategories) => {
   try {
-    const data = await getDocs(category)
+    const dealsQuery = query(
+      collection(db, 'deals'),
+      where('category', '==', dealCategory)
+    )
+    const data = await getDocs(dealsQuery)
     return [data, false]
   } catch (e) {
     console.error('Error getting deals: ', e)
