@@ -23,6 +23,7 @@ export const QuestionnaireScreen: FC<RootStackScreenProps<'Questionnaire'>> = ({
       }}
       isDealActive={isDealActive}
       onContinue={() => {
+        // TODO: Deal creation to be removed from here after Business section gets built
         activeDeals.map(dealCategory => {
           createDeal({
             category: dealCategory,
