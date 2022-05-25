@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/dist/query/react'
-import { getDeals, createDeal } from '../../../firebase'
+import { getDeals, createDeal, getActiveDeals } from '../../../firebase'
 import { DealCategories, IDeal } from '../../types'
 
 export const dealsApi = createApi({
@@ -38,7 +38,20 @@ export const dealsApi = createApi({
         return { data }
       },
     }),
+    getActiveDeals: build.query<Array<IDeal>, Array<DealCategories>>({
+      async queryFn(activeDealCategories) {
+        const [data, error] = await getActiveDeals(activeDealCategories)
+
+        if (error) return { error }
+
+        return { data }
+      },
+    }),
   }),
 })
 
-export const { useCreateDealMutation, useGetDealsQuery } = dealsApi
+export const {
+  useCreateDealMutation,
+  useGetDealsQuery,
+  useGetActiveDealsQuery,
+} = dealsApi

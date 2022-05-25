@@ -69,3 +69,21 @@ export const getDeals = async (dealCategory: DealCategories) => {
     return [null, e]
   }
 }
+
+export const getActiveDeals = async (
+  activeDealCategories: Array<DealCategories>
+) => {
+  try {
+    const activeDealsQuery = query(
+      collection(db, 'deals'),
+      where('category', 'in', activeDealCategories)
+    )
+    const data = await getDocs(activeDealsQuery)
+
+    return [data, false]
+  } catch (e) {
+    console.error('Error getting active deals: ', e)
+
+    return [null, e]
+  }
+}
