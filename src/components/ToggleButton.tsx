@@ -1,9 +1,9 @@
 import { Button } from 'native-base'
 import { FC } from 'react'
-import { ToggleButtonOnPress, DealCategories } from '../types'
+import { ToggleButtonOnPress, DealCategoryNames } from '../types'
 
 interface IToggleButton {
-  value: DealCategories
+  value: DealCategoryNames
   onPress: ToggleButtonOnPress
   active: boolean
 }

@@ -1,20 +1,19 @@
 import { FC } from 'react'
 import { Heading, FlatList, Box } from 'native-base'
-import { DealCategories } from '../types'
+import { IDealCategory } from '../types'
 import { Deal } from './Deal'
 
 interface IDealCategoryProps {
-  category: DealCategories
-  deals: Array<{ title: string; description: string }>
+  dealCategory: IDealCategory
 }
 
-export const DealCategory: FC<IDealCategoryProps> = ({ category, deals }) => (
+export const DealCategory: FC<IDealCategoryProps> = ({ dealCategory }) => (
   <Box mb={5}>
-    <Heading>{category}</Heading>
+    <Heading>{dealCategory.name}</Heading>
     <FlatList
       flexGrow={0}
       horizontal
-      data={deals}
+      data={dealCategory.deals}
       renderItem={({ item }) => (
         <Box mr={3}>
           <Deal title={item.title} description={item.description} />

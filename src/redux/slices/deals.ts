@@ -1,28 +1,31 @@
-import { DealCategories } from '../../types'
+import { DealCategoryNames } from '../../types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface IDealsState {
-  activeDealCategories: Array<DealCategories>
+  activeDealCategoryNames: Array<DealCategoryNames>
 }
 
 const initialState: IDealsState = {
-  activeDealCategories: [],
+  activeDealCategoryNames: [],
 }
 
 export const dealsSlice = createSlice({
   name: 'deals',
   initialState,
   reducers: {
-    setActiveDeals: (state, action: PayloadAction<DealCategories>) => {
-      const { activeDealCategories } = state
-      const index = activeDealCategories.indexOf(action.payload)
+    setActiveDeals: (state, action: PayloadAction<DealCategoryNames>) => {
+      const { activeDealCategoryNames } = state
+      const index = activeDealCategoryNames.indexOf(action.payload)
 
       if (index !== -1) {
-        state.activeDealCategories = activeDealCategories.filter(
+        state.activeDealCategoryNames = activeDealCategoryNames.filter(
           dealCategory => dealCategory !== action.payload
         )
       } else {
-        state.activeDealCategories = [...activeDealCategories, action.payload]
+        state.activeDealCategoryNames = [
+          ...activeDealCategoryNames,
+          action.payload,
+        ]
       }
     },
   },
