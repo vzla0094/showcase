@@ -28,7 +28,7 @@ export const dealsApi = createApi({
 
           // TODO: optimize loop
           const normalizedData = activeDealCategories.map(dealCategory => ({
-            category: dealCategory,
+            name: dealCategory,
             deals: data.filter((deal: IDeal) => deal.category === dealCategory),
           }))
 
