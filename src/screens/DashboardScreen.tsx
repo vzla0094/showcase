@@ -9,9 +9,9 @@ export const DashboardScreen = () => {
   )
   const { data, isLoading } = useGetActiveDealsQuery(activeDealCategoryNames)
 
-  return isLoading ? (
+  return isLoading || !data ? (
     <Text>Loading...</Text>
   ) : (
-    data && <DashboardView activeDealCategories={data} />
+    <DashboardView activeDealCategories={data} />
   )
 }
