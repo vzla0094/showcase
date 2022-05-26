@@ -4,6 +4,7 @@ import { LandingScreen } from '../screens/LandingScreen'
 import { QuestionnaireScreen } from '../screens/QuestionnaireScreen'
 import { DashboardScreen } from '../screens/DashboardScreen'
 import { RootStackParamList } from '../types'
+import { DashboardHeader } from '../headers/DashboardHeader'
 
 export default function RootNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -23,7 +24,7 @@ export default function RootNavigator() {
         />
         <Stack.Screen
           name="Dashboard"
-          options={{ headerShown: false }}
+          options={{ header: () => <DashboardHeader /> }}
           component={DashboardScreen}
         />
       </Stack.Navigator>
