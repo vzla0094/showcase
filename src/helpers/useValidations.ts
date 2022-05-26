@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useToast } from './useToast'
 
-type CreateValidation = (
-  validator: () => boolean,
-  errorMessage?: string,
+interface ICreateValidation {
+  validator: () => boolean
+  errorMessage?: string
   successMessage?: string
-) => void
+}
+
+type CreateValidation = (config: ICreateValidation) => void
 
 type Validation = (createValidation: CreateValidation) => void
 
@@ -19,7 +21,7 @@ export const useValidations = () => {
 
   const validate = (validations: Validations) => {
     for (const validation in validations) {
-      validations[validation]((validator, errorMessage, successMessage) => {
+      validations[validation](({ validator, errorMessage, successMessage }) => {
         if (validator() && successMessage) {
           toast.show({ description: successMessage, variant: 'success' })
           return true
