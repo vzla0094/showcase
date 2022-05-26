@@ -1,7 +1,10 @@
 import { FC } from 'react'
 import { Button, Text, Container, Center } from 'native-base'
+import { RootStackScreenProps } from '../types'
 
-export const DashboardHeader: FC = () => (
+export const DashboardHeader: FC<RootStackScreenProps<'Dashboard'>> = ({
+  navigation,
+}) => (
   <Center borderBottomWidth={1}>
     <Container
       w="100%"
@@ -10,7 +13,9 @@ export const DashboardHeader: FC = () => (
       flexDirection="row"
       alignItems="center"
     >
-      <Button mr={5}>Login</Button>
+      <Button mr={5} onPress={() => navigation.navigate('SigninLogin')}>
+        Login
+      </Button>
       <Text>Login to track or create deals</Text>
     </Container>
   </Center>

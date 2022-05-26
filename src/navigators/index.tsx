@@ -5,6 +5,7 @@ import { QuestionnaireScreen } from '../screens/QuestionnaireScreen'
 import { DashboardScreen } from '../screens/DashboardScreen'
 import { RootStackParamList } from '../types'
 import { DashboardHeader } from '../headers/DashboardHeader'
+import { SigninLoginScreen } from '../screens/SigninLoginScreen'
 
 export default function RootNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -24,8 +25,15 @@ export default function RootNavigator() {
         />
         <Stack.Screen
           name="Dashboard"
-          options={{ header: () => <DashboardHeader /> }}
+          options={props => ({
+            header: () => <DashboardHeader {...props} />,
+          })}
           component={DashboardScreen}
+        />
+        <Stack.Screen
+          name="SigninLogin"
+          options={{ headerShown: false }}
+          component={SigninLoginScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
