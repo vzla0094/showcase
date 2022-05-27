@@ -17,10 +17,15 @@ type Validations = Record<string, Validation>
 // TODO: type validationName with generics
 type Errors = { [validationName: string]: string } | Record<string, never>
 
+type CleanAllErrorsType = () => void
+
+type CleanErrorType = (error: string) => void
+
 type UseValidationsReturnType = {
   errors: Errors
   validate: (validations: Validations) => boolean
-  cleanErrors: () => void
+  cleanAllErrors: CleanAllErrorsType
+  cleanError: CleanErrorType
 }
 
 export const useValidations = (): UseValidationsReturnType => {
@@ -62,7 +67,13 @@ export const useValidations = (): UseValidationsReturnType => {
     return !!isValid
   }
 
-  const cleanErrors = () => setErrors({})
+  const cleanAllErrors: CleanAllErrorsType = () => setErrors({})
 
-  return { errors, validate, cleanErrors }
+  const cleanError: CleanErrorType = error =>
+    setErrors(prevState => {
+      const { [error]: removedError, ...newState } = prevState
+      return newState
+    })
+
+  return { errors, validate, cleanAllErrors, cleanError }
 }
