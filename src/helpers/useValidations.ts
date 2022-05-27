@@ -17,11 +17,19 @@ type Validations = Record<string, Validation>
 // TODO: type validationName with generics
 type Errors = { [validationName: string]: string } | Record<string, never>
 
-export const useValidations = () => {
+type UseValidationsReturnType = {
+  errors: Errors
+  validate: (validations: Validations) => boolean
+  cleanErrors: () => void
+}
+
+export const useValidations = (): UseValidationsReturnType => {
   const [errors, setErrors] = useState<Errors>({})
   const toast = useToast()
 
   const validate = (validations: Validations) => {
+    let isValid: boolean | undefined = undefined
+
     for (const validation in validations) {
       validations[validation](
         ({
@@ -33,7 +41,7 @@ export const useValidations = () => {
           if (validator() && successMessage) {
             showToast &&
               toast.show({ description: successMessage, variant: 'success' })
-            return true
+            isValid = isValid !== false // This will show subsequent errors in validations without returning a false positive
           }
           if (!validator()) {
             // TODO: type validationName with generics
@@ -44,18 +52,17 @@ export const useValidations = () => {
                 description: errorMessage,
                 variant: 'error',
               })
-            return false
+            isValid = false
+            return
           }
         }
       )
     }
+
+    return !!isValid
   }
 
   const cleanErrors = () => setErrors({})
 
-  return [errors, validate, cleanErrors] as [
-    Errors,
-    (validations: Validations) => boolean,
-    () => void
-  ]
+  return { errors, validate, cleanErrors }
 }
