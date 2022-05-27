@@ -5,6 +5,7 @@ interface ICreateValidation {
   validator: () => boolean
   errorMessage?: string
   successMessage?: string
+  showToast?: boolean
 }
 
 type CreateValidation = (config: ICreateValidation) => void
@@ -13,7 +14,8 @@ type Validation = (createValidation: CreateValidation) => void
 
 type Validations = Record<string, Validation>
 
-type Errors = { name: string } | Record<string, never>
+// TODO: type validationName with generics
+type Errors = { [validationName: string]: string } | Record<string, never>
 
 export const useValidations = () => {
   const [errors, setErrors] = useState<Errors>({})
@@ -21,20 +23,31 @@ export const useValidations = () => {
 
   const validate = (validations: Validations) => {
     for (const validation in validations) {
-      validations[validation](({ validator, errorMessage, successMessage }) => {
-        if (validator() && successMessage) {
-          toast.show({ description: successMessage, variant: 'success' })
-          return true
+      validations[validation](
+        ({
+          validator,
+          errorMessage = 'error',
+          successMessage,
+          showToast = true,
+        }) => {
+          if (validator() && successMessage) {
+            showToast &&
+              toast.show({ description: successMessage, variant: 'success' })
+            return true
+          }
+          if (!validator()) {
+            // TODO: type validationName with generics
+            setErrors({ ...errors, [validation]: errorMessage })
+
+            showToast &&
+              toast.show({
+                description: errorMessage,
+                variant: 'error',
+              })
+            return false
+          }
         }
-        if (validator() === false) {
-          setErrors({ ...errors, name: errorMessage || 'error' })
-          toast.show({
-            description: errorMessage || 'error',
-            variant: 'error',
-          })
-          return false
-        }
-      })
+      )
     }
   }
 
