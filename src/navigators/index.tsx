@@ -5,7 +5,7 @@ import { QuestionnaireScreen } from '../screens/QuestionnaireScreen'
 import { DashboardScreen } from '../screens/DashboardScreen'
 import { RootStackParamList } from '../types'
 import { DashboardHeader } from '../headers/DashboardHeader'
-import { SigninLoginScreen } from '../screens/SigninLoginScreen'
+import { LoginOrRegisterScreen } from '../screens/LoginOrRegisterScreen'
 
 export default function RootNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -33,7 +33,7 @@ export default function RootNavigator() {
         <Stack.Screen
           name="SigninLogin"
           options={{ headerShown: false }}
-          component={SigninLoginScreen}
+          component={LoginOrRegisterScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
