@@ -10,7 +10,7 @@ import {
 import { useValidations } from '../helpers/useValidations'
 import { useState } from 'react'
 
-export const SigninLoginScreen = () => {
+export const LoginOrRegisterScreen = () => {
   const { errors, validate, cleanError } = useValidations()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
