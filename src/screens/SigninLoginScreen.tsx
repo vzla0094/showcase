@@ -11,8 +11,9 @@ import { useValidations } from '../helpers/useValidations'
 import { useState } from 'react'
 
 export const SigninLoginScreen = () => {
-  const [errors, validate, cleanErrors] = useValidations()
+  const { errors, validate, cleanError } = useValidations()
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleEmailBlur = (email: string) => {
     // TODO: Add proper email validation
@@ -27,9 +28,26 @@ export const SigninLoginScreen = () => {
     })
   }
 
+  const handlePasswordBlur = (password: string) => {
+    validate({
+      passwordLength: createValidation => {
+        createValidation({
+          validator: () => password?.length > 6,
+          errorMessage: 'Password should have more than 6 characters',
+          showToast: false,
+        })
+      },
+    })
+  }
+
   const handleEmailChange = (text: string) => {
     setEmail(text)
-    cleanErrors()
+    cleanError('requireEmail')
+  }
+
+  const handlePasswordChange = (text: string) => {
+    setPassword(text)
+    cleanError('passwordLength')
   }
 
   return (
@@ -50,16 +68,26 @@ export const SigninLoginScreen = () => {
               value={email}
               onChangeText={handleEmailChange}
               onBlur={() => handleEmailBlur(email)}
-            ></Input>
+            />
             {'requireEmail' in errors ? (
               <FormControl.ErrorMessage>
                 {errors.requireEmail}
               </FormControl.ErrorMessage>
             ) : null}
           </FormControl>
-          <FormControl>
+          <FormControl isInvalid={'passwordLength' in errors}>
             <FormControl.Label>Password</FormControl.Label>
-            <Input type="password"></Input>
+            <Input
+              type="password"
+              value={password}
+              onChangeText={handlePasswordChange}
+              onBlur={() => handlePasswordBlur(password)}
+            />
+            {'passwordLength' in errors ? (
+              <FormControl.ErrorMessage>
+                {errors.passwordLength}
+              </FormControl.ErrorMessage>
+            ) : null}
           </FormControl>
         </Stack>
         <Button>Register</Button>
