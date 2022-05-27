@@ -1,5 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { User } from 'firebase/auth'
 
+// Navigation
 export type RootStackParamList = {
   SigninLogin: undefined
   Landing: undefined
@@ -10,6 +12,7 @@ export type RootStackParamList = {
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>
 
+// Deals
 export type DealCategoryNames =
   | 'Food'
   | 'Activities'
@@ -61,4 +64,12 @@ export interface IDeal {
   endDate: string
   quantityLimit: string
   reviews: Array<IReview>
+}
+
+// Authentication
+export interface IFBUser extends User {}
+export interface IAuth {
+  authType: 'login' | 'register'
+  email: string
+  password: string
 }
