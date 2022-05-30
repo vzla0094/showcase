@@ -16,7 +16,7 @@ export const LoginOrRegisterScreen = () => {
   const [login] = useSigninOrLoginMutation()
 
   const handleEmailBlur = (email: string) => {
-    // TODO: Add proper email validation
+    // TODO: Add proper email validation with yup
     validate({
       requireEmail: createValidation => {
         createValidation({
