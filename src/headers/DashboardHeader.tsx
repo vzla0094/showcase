@@ -13,7 +13,7 @@ export const DashboardHeader: FC<RootStackScreenProps<'Dashboard'>> = ({
       flexDirection="row"
       alignItems="center"
     >
-      <Button mr={5} onPress={() => navigation.navigate('SigninLogin')}>
+      <Button mr={5} onPress={() => navigation.navigate('LoginOrRegister')}>
         Login
       </Button>
       <Text>Login to track or create deals</Text>

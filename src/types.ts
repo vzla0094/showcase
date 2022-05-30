@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 // Navigation
 export type RootStackParamList = {
-  SigninLogin: undefined
+  LoginOrRegister: undefined
   Landing: undefined
   Questionnaire: undefined
   Dashboard: undefined

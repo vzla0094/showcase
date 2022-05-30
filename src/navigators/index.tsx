@@ -31,7 +31,7 @@ export default function RootNavigator() {
           component={DashboardScreen}
         />
         <Stack.Screen
-          name="SigninLogin"
+          name="LoginOrRegister"
           options={{ headerShown: false }}
           component={LoginOrRegisterScreen}
         />
