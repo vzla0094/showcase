@@ -86,9 +86,9 @@ export const register = async (email: string, password: string) => {
   try {
     const { user } = await createUserWithEmailAndPassword(auth, email, password)
 
-    return [user, null]
+    return [user.uid, null]
   } catch (e) {
-    console.error('Error signing up: ', e)
+    console.error('Error registering : ', e)
 
     return [null, e]
   }
@@ -98,7 +98,7 @@ export const login = async (email: string, password: string) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password)
 
-    return [user, null]
+    return [user.uid, null]
   } catch (e) {
     console.error('Error logging in: ', e)
 

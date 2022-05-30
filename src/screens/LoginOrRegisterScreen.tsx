@@ -9,11 +9,16 @@ import {
 } from 'native-base'
 import { useValidations } from '../helpers/useValidations'
 import { useState } from 'react'
+import { useSigninOrLoginMutation } from '../redux/services/auth'
+import { IAuth } from '../types'
+import { useToast } from '../helpers/useToast'
 
 export const LoginOrRegisterScreen = () => {
   const { errors, validate, cleanError } = useValidations()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const toast = useToast()
+  const [login] = useSigninOrLoginMutation()
 
   const handleEmailBlur = (email: string) => {
     // TODO: Add proper email validation
@@ -50,6 +55,26 @@ export const LoginOrRegisterScreen = () => {
     cleanError('passwordLength')
   }
 
+  const handleRegisterPress = async (auth: IAuth) => {
+    if (Object.keys(errors).length) {
+      toast.show({
+        description: 'Please complete all fields properly',
+        variant: 'error',
+      })
+      return
+    }
+
+    try {
+      await login(auth).unwrap()
+    } catch (e) {
+      toast.show({
+        description: e.message,
+        variant: 'error',
+      })
+      console.error('Error registering: ', e)
+    }
+  }
+
   return (
     <Center flex={1}>
       <Container
@@ -66,6 +91,7 @@ export const LoginOrRegisterScreen = () => {
             <Input
               type="text"
               value={email}
+              autoCapitalize="none"
               onChangeText={handleEmailChange}
               onBlur={() => handleEmailBlur(email)}
             />
@@ -90,7 +116,13 @@ export const LoginOrRegisterScreen = () => {
             ) : null}
           </FormControl>
         </Stack>
-        <Button>Register</Button>
+        <Button
+          onPress={() =>
+            handleRegisterPress({ authType: 'register', email, password })
+          }
+        >
+          Register
+        </Button>
       </Container>
     </Center>
   )

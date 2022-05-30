@@ -6,7 +6,7 @@ export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fakeBaseQuery(),
   endpoints: build => ({
-    signinOrLogin: build.mutation<IFBUser, IAuth>({
+    signinOrLogin: build.mutation<IFBUser['uid'], IAuth>({
       async queryFn(auth) {
         let data, error
 
