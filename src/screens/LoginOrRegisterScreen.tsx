@@ -1,19 +1,14 @@
-import {
-  Button,
-  Center,
-  Container,
-  FormControl,
-  Heading,
-  Input,
-  Stack,
-} from 'native-base'
 import { useValidations } from '../helpers/useValidations'
 import { useState } from 'react'
 import { useSigninOrLoginMutation } from '../redux/services/auth'
 import { IAuth } from '../types'
 import { useToast } from '../helpers/useToast'
+import { LoginOrRegisterView } from '../views/LoginOrRegisterView'
 
 export const LoginOrRegisterScreen = () => {
+  const [loginOrRegister, setLoginOrRegister] = useState<'login' | 'register'>(
+    'register'
+  )
   const { errors, validate, cleanError } = useValidations()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -55,7 +50,7 @@ export const LoginOrRegisterScreen = () => {
     cleanError('passwordLength')
   }
 
-  const handleRegisterPress = async (auth: IAuth) => {
+  const handleSubmit = async (auth: IAuth) => {
     if (Object.keys(errors).length) {
       toast.show({
         description: 'Please complete all fields properly',
@@ -76,54 +71,23 @@ export const LoginOrRegisterScreen = () => {
   }
 
   return (
-    <Center flex={1}>
-      <Container
-        centerContent
-        safeArea
-        w={'100%'}
-        flex={1}
-        justifyContent="center"
-      >
-        <Heading mb={12}>Register to Taisho</Heading>
-        <Stack w="100%" mb={12} space={5}>
-          <FormControl isInvalid={'requireEmail' in errors}>
-            <FormControl.Label>Email</FormControl.Label>
-            <Input
-              type="text"
-              value={email}
-              autoCapitalize="none"
-              onChangeText={handleEmailChange}
-              onBlur={() => handleEmailBlur(email)}
-            />
-            {'requireEmail' in errors ? (
-              <FormControl.ErrorMessage>
-                {errors.requireEmail}
-              </FormControl.ErrorMessage>
-            ) : null}
-          </FormControl>
-          <FormControl isInvalid={'passwordLength' in errors}>
-            <FormControl.Label>Password</FormControl.Label>
-            <Input
-              type="password"
-              value={password}
-              onChangeText={handlePasswordChange}
-              onBlur={() => handlePasswordBlur(password)}
-            />
-            {'passwordLength' in errors ? (
-              <FormControl.ErrorMessage>
-                {errors.passwordLength}
-              </FormControl.ErrorMessage>
-            ) : null}
-          </FormControl>
-        </Stack>
-        <Button
-          onPress={() =>
-            handleRegisterPress({ authType: 'register', email, password })
-          }
-        >
-          Register
-        </Button>
-      </Container>
-    </Center>
+    <LoginOrRegisterView
+      variant={loginOrRegister}
+      errors={errors}
+      email={email}
+      onEmailChange={handleEmailChange}
+      onEmailBlur={() => handleEmailBlur(email)}
+      password={password}
+      onPasswordChange={handlePasswordChange}
+      onPasswordBlur={() => handlePasswordBlur(password)}
+      onSubmit={() =>
+        handleSubmit({ authType: loginOrRegister, email, password })
+      }
+      onChangeFormType={() =>
+        setLoginOrRegister(prevState =>
+          prevState === 'login' ? 'register' : 'login'
+        )
+      }
+    />
   )
 }

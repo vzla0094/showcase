@@ -15,7 +15,9 @@ type Validation = (createValidation: CreateValidation) => void
 type Validations = Record<string, Validation>
 
 // TODO: type validationName with generics
-type Errors = { [validationName: string]: string } | Record<string, never>
+export type Errors =
+  | { [validationName: string]: string }
+  | Record<string, never>
 
 type CleanAllErrorsType = () => void
 
