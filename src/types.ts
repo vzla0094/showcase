@@ -1,5 +1,4 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { User } from 'firebase/auth'
 
 // Navigation
 export type RootStackParamList = {
@@ -67,7 +66,6 @@ export interface IDeal {
 }
 
 // Authentication
-export interface IFBUser extends User {}
 export interface IAuth {
   authType: 'login' | 'register'
   email: string

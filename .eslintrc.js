@@ -22,6 +22,5 @@ module.exports = {
   plugins: ['react', '@typescript-eslint'],
   rules: {
     'react/prop-types': 'off',
-    '@typescript-eslint/no-empty-interface': 'off',
   },
 }

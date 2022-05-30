@@ -1,6 +1,7 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/dist/query/react'
 import { login, register } from '../../../firebase'
-import { IAuth, IFBUser } from '../../types'
+import { IAuth } from '../../types'
+import { User as IFBUser } from 'firebase/auth'
 
 export const authApi = createApi({
   reducerPath: 'authApi',
