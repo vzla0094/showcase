@@ -7,7 +7,7 @@ export const LandingScreen: FC<RootStackScreenProps<'Landing'>> = ({
 }) => (
   <Center flex={1}>
     <Container>
-      <Pressable>
+      <Pressable onPress={() => navigation.navigate('LoginOrRegister')}>
         <Square bg={'gray.400'} w="300" h="300" mb={10} shadow={3}>
           <Heading>Promote your business</Heading>
         </Square>

@@ -2,7 +2,6 @@ import { useAppSelector } from '../hooks'
 import { DashboardView } from '../views/DashboardView'
 import { useGetActiveDealsQuery } from '../redux/services/deals'
 import { Text } from 'native-base'
-import { IDealCategory } from '../types'
 
 export const DashboardScreen = () => {
   const activeDealCategoryNames = useAppSelector(
@@ -10,9 +9,9 @@ export const DashboardScreen = () => {
   )
   const { data, isLoading } = useGetActiveDealsQuery(activeDealCategoryNames)
 
-  return isLoading ? (
+  return isLoading || !data ? (
     <Text>Loading...</Text>
   ) : (
-    <DashboardView activeDealCategories={data as Array<IDealCategory>} />
+    <DashboardView activeDealCategories={data} />
   )
 }

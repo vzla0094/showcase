@@ -1,6 +1,8 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
+// Navigation
 export type RootStackParamList = {
+  LoginOrRegister: undefined
   Landing: undefined
   Questionnaire: undefined
   Dashboard: undefined
@@ -9,6 +11,7 @@ export type RootStackParamList = {
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>
 
+// Deals
 export type DealCategoryNames =
   | 'Food'
   | 'Activities'
@@ -60,4 +63,11 @@ export interface IDeal {
   endDate: string
   quantityLimit: string
   reviews: Array<IReview>
+}
+
+// Authentication
+export interface IAuth {
+  authType: 'login' | 'register'
+  email: string
+  password: string
 }

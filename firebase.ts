@@ -8,6 +8,11 @@ import {
   query,
   where,
 } from 'firebase/firestore'
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth'
 import { DealCategoryNames, IDeal } from './src/types'
 
 const firebaseConfig = {
@@ -23,6 +28,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 
+// Deals
 const getDocs = async (query: any) => {
   try {
     const docs: Array<unknown> = []
@@ -68,6 +74,33 @@ export const getActiveDeals = async (
     return [data, null]
   } catch (e) {
     console.error('Error getting active deals: ', e)
+
+    return [null, e]
+  }
+}
+
+// Authentication
+const auth = getAuth()
+
+export const register = async (email: string, password: string) => {
+  try {
+    const { user } = await createUserWithEmailAndPassword(auth, email, password)
+
+    return [user.uid, null]
+  } catch (e) {
+    console.error('Error registering : ', e)
+
+    return [null, e]
+  }
+}
+
+export const login = async (email: string, password: string) => {
+  try {
+    const { user } = await signInWithEmailAndPassword(auth, email, password)
+
+    return [user.uid, null]
+  } catch (e) {
+    console.error('Error logging in: ', e)
 
     return [null, e]
   }
