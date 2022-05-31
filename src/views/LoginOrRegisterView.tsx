@@ -38,13 +38,7 @@ export const LoginOrRegisterView: FC<ILoginOrRegisterView> = ({
   onChangeFormType,
 }) => (
   <Center flex={1}>
-    <Container
-      centerContent
-      safeArea
-      w={'100%'}
-      flex={1}
-      justifyContent="center"
-    >
+    <Container centerContent safeArea w="100%" flex={1} justifyContent="center">
       <Heading mb={12}>
         {variant === 'register' ? 'Register' : 'Login'} to Taisho
       </Heading>
