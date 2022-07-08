@@ -1,19 +1,22 @@
 import { initializeApp } from 'firebase/app'
 import {
-  doc,
-  setDoc,
   collection,
+  doc,
+  getDoc,
   getDocs as FBGetDocs,
   getFirestore,
   query,
+  setDoc,
   where,
 } from 'firebase/firestore'
 import {
-  getAuth,
   createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
 } from 'firebase/auth'
-import { DealCategoryNames, IDeal } from './src/types'
+import { DealCategoryNames, IDeal, IUser } from './src/types'
+import { useEffect, useState } from 'react'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAhWL-VE6px-42zW-veEUddTpIstjtxzJM',
@@ -82,26 +85,77 @@ export const getActiveDeals = async (
 // Authentication
 const auth = getAuth()
 
-export const register = async (email: string, password: string) => {
+export const FBRegister = async (email: string, password: string) => {
   try {
-    const { user } = await createUserWithEmailAndPassword(auth, email, password)
+    const { user: FBUser } = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    )
 
-    return [user.uid, null]
+    return await setUser({
+      uid: FBUser.uid,
+      companyInfo: {
+        companyName: '',
+        deals: [],
+      },
+    })
   } catch (e) {
     console.error('Error registering : ', e)
 
-    return [null, e]
+    return e
   }
 }
 
-export const login = async (email: string, password: string) => {
+export const FBLogin = async (email: string, password: string) => {
   try {
-    const { user } = await signInWithEmailAndPassword(auth, email, password)
+    const { user: FBUser } = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    )
 
-    return [user.uid, null]
+    return await getUser(FBUser.uid)
   } catch (e) {
     console.error('Error logging in: ', e)
 
-    return [null, e]
+    return e
   }
+}
+
+// Users
+export const setUser = async (user: IUser) => {
+  try {
+    await setDoc(doc(db, 'users', user.uid), user)
+
+    return user
+  } catch (e) {
+    console.error('Error setting user: ', e)
+
+    return e
+  }
+}
+
+export const getUser = async (userId: IUser['uid']) => {
+  try {
+    const userSnap = await getDoc(doc(db, 'users', userId))
+    return userSnap.data()
+  } catch (e) {
+    console.error('Error getting user: ', e)
+
+    return e
+  }
+}
+
+export const useAuth = () => {
+  const [authenticated, setAuthenticated] = useState<boolean>(false)
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, async fbUser => {
+      if (fbUser) setAuthenticated(true)
+      setAuthenticated(false)
+    })
+  }, [])
+
+  return authenticated
 }

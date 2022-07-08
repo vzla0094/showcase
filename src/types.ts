@@ -63,11 +63,40 @@ export interface IDeal {
   endDate: string
   quantityLimit: string
   reviews: Array<IReview>
+  companyId?: ICompany['companyId']
 }
 
-// Authentication
+// Users
+export interface IUser {
+  uid: string
+  companyInfo: {
+    companyName: ICompany['name']
+    deals: ICompany['deals']
+  }
+}
+
 export interface IAuth {
-  authType: 'login' | 'register'
   email: string
   password: string
+}
+
+// Companies
+export interface ICompany {
+  companyId: string
+  name: string
+  members: Array<IUser['uid']>
+  deals: Array<string>
+  address: {
+    streetAddress: string
+    city: string
+    stateProvince: string
+    country: string
+    zipCode: string
+    latitude: string
+    longitude: string
+  }
+  contactInfo: {
+    telephoneNumber: string
+    cellphoneNumber: string
+  }
 }

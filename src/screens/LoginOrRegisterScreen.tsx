@@ -1,9 +1,10 @@
 import { useValidations } from '../helpers/useValidations'
 import { useState } from 'react'
-import { useSigninOrLoginMutation } from '../redux/services/auth'
 import { IAuth } from '../types'
 import { useToast } from '../helpers/useToast'
 import { LoginOrRegisterView } from '../views/LoginOrRegisterView'
+import { login, register } from '../redux/slices/user'
+import { useAppDispatch } from '../hooks'
 
 export const LoginOrRegisterScreen = () => {
   const [loginOrRegister, setLoginOrRegister] = useState<'login' | 'register'>(
@@ -13,7 +14,7 @@ export const LoginOrRegisterScreen = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const toast = useToast()
-  const [login] = useSigninOrLoginMutation()
+  const dispatch = useAppDispatch()
 
   const handleEmailBlur = (email: string) => {
     // TODO: Add proper email validation with yup
@@ -60,7 +61,9 @@ export const LoginOrRegisterScreen = () => {
     }
 
     try {
-      await login(auth).unwrap()
+      loginOrRegister === 'login'
+        ? dispatch(login(auth))
+        : dispatch(register(auth))
     } catch (e) {
       toast.show({
         description: e.message,
@@ -80,9 +83,7 @@ export const LoginOrRegisterScreen = () => {
       password={password}
       onPasswordChange={handlePasswordChange}
       onPasswordBlur={() => handlePasswordBlur(password)}
-      onSubmit={() =>
-        handleSubmit({ authType: loginOrRegister, email, password })
-      }
+      onSubmit={() => handleSubmit({ email, password })}
       onChangeFormType={() =>
         setLoginOrRegister(prevState =>
           prevState === 'login' ? 'register' : 'login'
