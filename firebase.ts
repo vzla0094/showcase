@@ -152,8 +152,7 @@ export const useAuth = () => {
 
   useEffect(() => {
     return onAuthStateChanged(auth, async fbUser => {
-      if (fbUser) setAuthenticated(true)
-      setAuthenticated(false)
+      fbUser ? setAuthenticated(true) : setAuthenticated(false)
     })
   }, [])
 

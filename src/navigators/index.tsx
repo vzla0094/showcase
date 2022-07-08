@@ -6,9 +6,11 @@ import { DashboardScreen } from '../screens/DashboardScreen'
 import { RootStackParamList } from '../types'
 import { DashboardHeader } from '../headers/DashboardHeader'
 import { LoginOrRegisterScreen } from '../screens/LoginOrRegisterScreen'
+import { useAuth } from '../../firebase'
 
 export default function RootNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
+  const authenticated = useAuth()
 
   return (
     <NavigationContainer>
@@ -26,6 +28,7 @@ export default function RootNavigator() {
         <Stack.Screen
           name="Dashboard"
           options={props => ({
+            headerShown: !authenticated,
             header: () => <DashboardHeader {...props} />,
           })}
           component={DashboardScreen}
