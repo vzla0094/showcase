@@ -70,6 +70,7 @@ export interface IDeal {
 export interface IUser {
   uid: string
   companyInfo: {
+    companyId: ICompany['companyId']
     companyName: ICompany['name']
     deals: ICompany['deals']
   }
