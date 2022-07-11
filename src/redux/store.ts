@@ -2,18 +2,17 @@ import { configureStore } from '@reduxjs/toolkit'
 import { reducers } from './slices'
 import { dealsApi } from './services/deals'
 import { setupListeners } from '@reduxjs/toolkit/query'
-import { authApi } from './services/auth'
 
 export const store = configureStore({
   reducer: {
     deals: reducers.deals,
+    user: reducers.user,
     [dealsApi.reducerPath]: dealsApi.reducer,
-    [authApi.reducerPath]: authApi.reducer,
   },
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({ serializableCheck: false })
-      .concat(dealsApi.middleware)
-      .concat(authApi.middleware),
+    getDefaultMiddleware({ serializableCheck: false }).concat(
+      dealsApi.middleware
+    ),
 })
 
 setupListeners(store.dispatch)
