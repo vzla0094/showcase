@@ -16,6 +16,14 @@ export default function RootNavigator() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
+          name="Discovery"
+          options={props => ({
+            headerShown: !authenticated,
+            header: () => <DashboardHeader {...props} />,
+          })}
+          component={DiscoveryScreen}
+        />
+        <Stack.Screen
           name="Landing"
           options={{ headerShown: false }}
           component={LandingScreen}
@@ -24,14 +32,6 @@ export default function RootNavigator() {
           name="Questionnaire"
           options={{ headerShown: false }}
           component={QuestionnaireScreen}
-        />
-        <Stack.Screen
-          name="Discovery"
-          options={props => ({
-            headerShown: !authenticated,
-            header: () => <DashboardHeader {...props} />,
-          })}
-          component={DiscoveryScreen}
         />
         <Stack.Screen
           name="LoginOrRegister"
