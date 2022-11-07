@@ -1,9 +1,9 @@
 import { useAppSelector } from '../hooks'
-import { DashboardView } from '../views/DashboardView'
+import { DiscoveryView } from '../views/DiscoveryView'
 import { useGetActiveDealsQuery } from '../redux/services/deals'
 import { Text } from 'native-base'
 
-export const DashboardScreen = () => {
+export const DiscoveryScreen = () => {
   const activeDealCategoryNames = useAppSelector(
     state => state.deals.activeDealCategoryNames
   )
@@ -12,6 +12,6 @@ export const DashboardScreen = () => {
   return isLoading || !data ? (
     <Text>Loading...</Text>
   ) : (
-    <DashboardView activeDealCategories={data} />
+    <DiscoveryView activeDealCategories={data} />
   )
 }

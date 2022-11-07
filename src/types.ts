@@ -5,7 +5,7 @@ export type RootStackParamList = {
   LoginOrRegister: undefined
   Landing: undefined
   Questionnaire: undefined
-  Dashboard: undefined
+  Discovery: undefined
 }
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

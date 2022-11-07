@@ -50,7 +50,7 @@ export const QuestionnaireScreen: FC<RootStackScreenProps<'Questionnaire'>> = ({
             ],
           })
         })
-        navigation.navigate('Dashboard')
+        navigation.navigate('Discovery')
       }}
       disableContinue={!activeDeals.length}
     />

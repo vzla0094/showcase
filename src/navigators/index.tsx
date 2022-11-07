@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from '@react-navigation/native'
 import { LandingScreen } from '../screens/LandingScreen'
 import { QuestionnaireScreen } from '../screens/QuestionnaireScreen'
-import { DashboardScreen } from '../screens/DashboardScreen'
+import { DiscoveryScreen } from '../screens/DiscoveryScreen'
 import { RootStackParamList } from '../types'
 import { DashboardHeader } from '../headers/DashboardHeader'
 import { LoginOrRegisterScreen } from '../screens/LoginOrRegisterScreen'
@@ -26,12 +26,12 @@ export default function RootNavigator() {
           component={QuestionnaireScreen}
         />
         <Stack.Screen
-          name="Dashboard"
+          name="Discovery"
           options={props => ({
             headerShown: !authenticated,
             header: () => <DashboardHeader {...props} />,
           })}
-          component={DashboardScreen}
+          component={DiscoveryScreen}
         />
         <Stack.Screen
           name="LoginOrRegister"

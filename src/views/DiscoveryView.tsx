@@ -7,7 +7,7 @@ interface IDashboardView {
   activeDealCategories: Array<IDealCategory>
 }
 
-export const DashboardView: FC<IDashboardView> = ({ activeDealCategories }) => (
+export const DiscoveryView: FC<IDashboardView> = ({ activeDealCategories }) => (
   <Center flex={1}>
     <Container safeArea flex={1} w="100%">
       {activeDealCategories.map(dealCategory => (
