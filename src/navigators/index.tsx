@@ -1,44 +1,41 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
-import { LandingScreen } from '../screens/LandingScreen'
-import { QuestionnaireScreen } from '../screens/QuestionnaireScreen'
 import { DiscoveryScreen } from '../screens/DiscoveryScreen'
 import { RootStackParamList } from '../types'
-import { DashboardHeader } from '../headers/DashboardHeader'
 import { LoginOrRegisterScreen } from '../screens/LoginOrRegisterScreen'
 import { useAuth } from '../../firebase'
+import { LoginBottomNavigation } from '../components/LoginBottomNavigation'
 
 export default function RootNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
+  const Tab = createBottomTabNavigator<RootStackParamList>()
   const authenticated = useAuth()
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Discovery"
-          options={props => ({
-            headerShown: !authenticated,
-            header: () => <DashboardHeader {...props} />,
-          })}
-          component={DiscoveryScreen}
-        />
-        <Stack.Screen
-          name="Landing"
-          options={{ headerShown: false }}
-          component={LandingScreen}
-        />
-        <Stack.Screen
-          name="Questionnaire"
-          options={{ headerShown: false }}
-          component={QuestionnaireScreen}
-        />
-        <Stack.Screen
-          name="LoginOrRegister"
-          options={{ headerShown: false }}
-          component={LoginOrRegisterScreen}
-        />
-      </Stack.Navigator>
+      {authenticated ? (
+        <Tab.Navigator screenOptions={{ headerShown: false }}>
+          <Tab.Screen name="Discovery" component={DiscoveryScreen} />
+        </Tab.Navigator>
+      ) : (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Tab.Screen name="Discovery">
+            {({ navigation }) => {
+              return (
+                <>
+                  <DiscoveryScreen />
+                  <LoginBottomNavigation navigation={navigation} />
+                </>
+              )
+            }}
+          </Tab.Screen>
+          <Tab.Screen
+            name="LoginOrRegister"
+            component={LoginOrRegisterScreen}
+          />
+        </Stack.Navigator>
+      )}
     </NavigationContainer>
   )
 }
