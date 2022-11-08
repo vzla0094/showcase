@@ -5,9 +5,11 @@ import { DiscoveryScreen } from '../screens/DiscoveryScreen'
 import { SearchScreen } from '../screens/SearchScreen'
 import { ProfileScreen } from '../screens/Profile'
 import { SettingsScreen } from '../screens/SettingsScreen'
+import { PromotionScreen } from '../screens/PromotionScreen'
 
 export const BottomNavigator = () => {
   const Tab = createBottomTabNavigator<RootStackParamList>()
+  const hasCompany = true // TODO: wire up to Profile if the user filled company details
 
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
@@ -47,6 +49,17 @@ export const BottomNavigator = () => {
         name="Settings"
         component={SettingsScreen}
       />
+      {hasCompany && (
+        <Tab.Screen
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="tags" color={color} size={size} />
+            ),
+          }}
+          name="Promotion"
+          component={PromotionScreen}
+        />
+      )}
     </Tab.Navigator>
   )
 }

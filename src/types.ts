@@ -9,6 +9,7 @@ export type RootStackParamList = {
   Search: undefined
   Profile: undefined
   Settings: undefined
+  Promotion: undefined
 }
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
