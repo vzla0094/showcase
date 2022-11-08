@@ -1,4 +1,3 @@
-import { FC } from 'react'
 import { Button, Box } from 'native-base'
 import { RootStackScreenProps } from '../types'
 
@@ -6,9 +5,9 @@ interface ILoginBottomNavigationProps {
   navigation: RootStackScreenProps<'Discovery'>['navigation']
 }
 
-export const LoginBottomNavigation: FC<ILoginBottomNavigationProps> = ({
+export const LoginBottomNavigation = ({
   navigation,
-}) => {
+}: ILoginBottomNavigationProps) => {
   return (
     <Box
       height={20}

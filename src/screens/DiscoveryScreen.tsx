@@ -1,4 +1,3 @@
-import { FC } from 'react'
 import { Text } from 'native-base'
 
 import { useAppSelector } from '../hooks'
@@ -12,10 +11,10 @@ interface IDiscoveryScreenProps {
   loginBottom: boolean
 }
 
-export const DiscoveryScreen: FC<IDiscoveryScreenProps> = ({
+export const DiscoveryScreen = ({
   navigation,
   loginBottom = false,
-}) => {
+}: IDiscoveryScreenProps) => {
   const activeDealCategoryNames = useAppSelector(
     state => state.deals.activeDealCategoryNames
   )

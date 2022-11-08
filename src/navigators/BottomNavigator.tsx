@@ -3,7 +3,7 @@ import { RootStackParamList } from '../types'
 import { FontAwesome } from '@expo/vector-icons'
 import { DiscoveryScreen } from '../screens/DiscoveryScreen'
 import { SearchScreen } from '../screens/SearchScreen'
-import { ProfileScreen } from '../screens/Profile'
+import { ProfileScreen } from '../screens/ProfileScree'
 import { PromotionScreen } from '../screens/PromotionScreen'
 
 export const BottomNavigator = () => {
