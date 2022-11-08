@@ -1,9 +1,21 @@
+import { FC } from 'react'
+import { Text } from 'native-base'
+
 import { useAppSelector } from '../hooks'
 import { DiscoveryView } from '../views/DiscoveryView'
 import { useGetActiveDealsQuery } from '../redux/services/deals'
-import { Text } from 'native-base'
+import { LoginBottomNavigation } from '../components/LoginBottomNavigation'
+import { RootStackScreenProps } from '../types'
 
-export const DiscoveryScreen = () => {
+interface IDiscoveryScreenProps {
+  navigation: RootStackScreenProps<'Discovery'>['navigation']
+  loginBottom: boolean
+}
+
+export const DiscoveryScreen: FC<IDiscoveryScreenProps> = ({
+  navigation,
+  loginBottom = false,
+}) => {
   const activeDealCategoryNames = useAppSelector(
     state => state.deals.activeDealCategoryNames
   )
@@ -12,6 +24,9 @@ export const DiscoveryScreen = () => {
   return isLoading || !data ? (
     <Text>Loading...</Text>
   ) : (
-    <DiscoveryView activeDealCategories={data} />
+    <>
+      <DiscoveryView activeDealCategories={data} />
+      {loginBottom && <LoginBottomNavigation navigation={navigation} />}
+    </>
   )
 }
