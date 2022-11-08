@@ -8,6 +8,7 @@ import { useAuth } from '../../firebase'
 import { LoginBottomNavigation } from '../components/LoginBottomNavigation'
 import { SearchScreen } from '../screens/SearchScreen'
 import { ProfileScreen } from '../screens/Profile'
+import { SettingsScreen } from '../screens/SettingsScreen'
 
 export default function RootNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -21,6 +22,7 @@ export default function RootNavigator() {
           <Tab.Screen name="Discovery" component={DiscoveryScreen} />
           <Tab.Screen name="Search" component={SearchScreen} />
           <Tab.Screen name="Profile" component={ProfileScreen} />
+          <Tab.Screen name="Settings" component={SettingsScreen} />
         </Tab.Navigator>
       ) : (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
