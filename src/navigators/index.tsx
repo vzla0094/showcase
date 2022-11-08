@@ -6,6 +6,7 @@ import { RootStackParamList } from '../types'
 import { LoginOrRegisterScreen } from '../screens/LoginOrRegisterScreen'
 import { useAuth } from '../../firebase'
 import { LoginBottomNavigation } from '../components/LoginBottomNavigation'
+import { SearchScreen } from '../screens/SearchScreen'
 
 export default function RootNavigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -17,6 +18,7 @@ export default function RootNavigator() {
       {authenticated ? (
         <Tab.Navigator screenOptions={{ headerShown: false }}>
           <Tab.Screen name="Discovery" component={DiscoveryScreen} />
+          <Tab.Screen name="Search" component={SearchScreen} />
         </Tab.Navigator>
       ) : (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
