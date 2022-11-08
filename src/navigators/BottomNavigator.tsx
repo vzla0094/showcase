@@ -4,7 +4,6 @@ import { FontAwesome } from '@expo/vector-icons'
 import { DiscoveryScreen } from '../screens/DiscoveryScreen'
 import { SearchScreen } from '../screens/SearchScreen'
 import { ProfileScreen } from '../screens/Profile'
-import { SettingsScreen } from '../screens/SettingsScreen'
 import { PromotionScreen } from '../screens/PromotionScreen'
 
 export const BottomNavigator = () => {
@@ -39,15 +38,6 @@ export const BottomNavigator = () => {
         }}
         name="Profile"
         component={ProfileScreen}
-      />
-      <Tab.Screen
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="gear" color={color} size={size} />
-          ),
-        }}
-        name="Settings"
-        component={SettingsScreen}
       />
       {hasCompany && (
         <Tab.Screen

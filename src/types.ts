@@ -8,7 +8,6 @@ export type RootStackParamList = {
   Discovery: undefined
   Search: undefined
   Profile: undefined
-  Settings: undefined
   Promotion: undefined
 }
 
