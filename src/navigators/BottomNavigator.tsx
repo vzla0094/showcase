@@ -6,8 +6,9 @@ import { SearchScreen } from '../screens/SearchScreen'
 import { ProfileScreen } from '../screens/ProfileScree'
 import { PromotionScreen } from '../screens/PromotionScreen'
 
+const Tab = createBottomTabNavigator<RootStackParamList>()
+
 export const BottomNavigator = () => {
-  const Tab = createBottomTabNavigator<RootStackParamList>()
   const hasCompany = true // TODO: wire up to Profile if the user filled company details
 
   return (
