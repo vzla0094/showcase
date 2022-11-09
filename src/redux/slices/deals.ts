@@ -6,7 +6,13 @@ interface IDealsState {
 }
 
 const initialState: IDealsState = {
-  activeDealCategoryNames: [],
+  activeDealCategoryNames: [
+    'Food',
+    'Activities',
+    'Events',
+    'Stay',
+    'Transportation',
+  ],
 }
 
 export const dealsSlice = createSlice({

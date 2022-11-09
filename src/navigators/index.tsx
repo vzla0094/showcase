@@ -1,44 +1,16 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from '@react-navigation/native'
-import { LandingScreen } from '../screens/LandingScreen'
-import { QuestionnaireScreen } from '../screens/QuestionnaireScreen'
-import { DashboardScreen } from '../screens/DashboardScreen'
-import { RootStackParamList } from '../types'
-import { DashboardHeader } from '../headers/DashboardHeader'
-import { LoginOrRegisterScreen } from '../screens/LoginOrRegisterScreen'
+
+import { BottomNavigator } from './BottomNavigator'
+
 import { useAuth } from '../../firebase'
+import { StackNavigator } from './StackNavigator'
 
 export default function RootNavigator() {
-  const Stack = createNativeStackNavigator<RootStackParamList>()
   const authenticated = useAuth()
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Landing"
-          options={{ headerShown: false }}
-          component={LandingScreen}
-        />
-        <Stack.Screen
-          name="Questionnaire"
-          options={{ headerShown: false }}
-          component={QuestionnaireScreen}
-        />
-        <Stack.Screen
-          name="Dashboard"
-          options={props => ({
-            headerShown: !authenticated,
-            header: () => <DashboardHeader {...props} />,
-          })}
-          component={DashboardScreen}
-        />
-        <Stack.Screen
-          name="LoginOrRegister"
-          options={{ headerShown: false }}
-          component={LoginOrRegisterScreen}
-        />
-      </Stack.Navigator>
+      {authenticated ? <BottomNavigator /> : <StackNavigator />}
     </NavigationContainer>
   )
 }
