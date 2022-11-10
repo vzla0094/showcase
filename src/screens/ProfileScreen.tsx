@@ -37,7 +37,7 @@ export const ProfileScreen = () => {
             .typeError('Must be a number')
             .test(
               'length',
-              'Must be exactly 4 characters',
+              'Must be exactly 4 digits',
               value =>
                 Boolean(!value) ||
                 Boolean(value && value.toString().length === 4)
@@ -141,15 +141,40 @@ export const ProfileScreen = () => {
               'Must be exactly 5 digits',
               value =>
                 Boolean(!value) ||
-                Boolean(value && value.toString().length === 4)
+                Boolean(value && value.toString().length === 5)
             ),
           telephoneNumber: Yup.number().typeError('Must be a number'),
           cellphoneNumber: Yup.number().typeError('Must be a number'),
           email: Yup.string().email(),
         })}
-        onSubmit={data => {
-          console.log('submitting data: ', data)
-          // dispatch(actions.user.setUserDetails(data))
+        onSubmit={({
+          name,
+          streetAddress,
+          city,
+          stateProvince,
+          country,
+          zipCode,
+          telephoneNumber,
+          cellphoneNumber,
+          email,
+        }) => {
+          dispatch(
+            actions.company.setCompany({
+              name,
+              address: {
+                streetAddress,
+                city,
+                stateProvince,
+                country,
+                zipCode,
+              },
+              contactInfo: {
+                telephoneNumber,
+                cellphoneNumber,
+                email,
+              },
+            })
+          )
         }}
       >
         {({ handleBlur, handleChange, handleSubmit, values, errors }) => (

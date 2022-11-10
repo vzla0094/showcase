@@ -95,18 +95,18 @@ export interface IAuth {
 
 // Companies
 export interface ICompany {
-  companyId: string
+  companyId?: string
   name: string
-  members: Array<IUser['uid']>
-  deals: Array<string>
+  members?: Array<IUser['uid']>
+  deals?: Array<string>
   address: {
     streetAddress: string
     city: string
     stateProvince: string
     country: string
     zipCode: string
-    latitude: string
-    longitude: string
+    latitude?: string
+    longitude?: string
   }
   contactInfo: {
     telephoneNumber: string

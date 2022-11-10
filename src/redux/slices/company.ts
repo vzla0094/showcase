@@ -26,7 +26,12 @@ export const companySlice = createSlice({
   name: 'company',
   initialState,
   reducers: {
-    setCompany: (state, action: PayloadAction<ICompany>) => action.payload,
+    setCompany: (state, action: PayloadAction<ICompany>) => ({
+      ...state,
+      ...action.payload,
+      address: { ...state.address, ...action.payload.address },
+      contactInfo: { ...state.contactInfo, ...action.payload.contactInfo },
+    }), // TODO, add uuid for companyId for the first time
   },
 })
 
