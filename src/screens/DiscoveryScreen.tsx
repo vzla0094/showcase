@@ -1,4 +1,4 @@
-import { Text } from 'native-base'
+import { ScrollView, Text } from 'native-base'
 
 import { useAppSelector } from '../hooks'
 import { DiscoveryView } from '../views/DiscoveryView'
@@ -23,9 +23,9 @@ export const DiscoveryScreen = ({
   return isLoading || !data ? (
     <Text>Loading...</Text>
   ) : (
-    <>
+    <ScrollView>
       <DiscoveryView activeDealCategories={data} />
       {loginBottom && <LoginBottomNavigation navigation={navigation} />}
-    </>
+    </ScrollView>
   )
 }

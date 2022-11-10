@@ -95,6 +95,13 @@ export const FBRegister = async (email: string, password: string) => {
 
     return await setUser({
       uid: FBUser.uid,
+      details: {
+        username: '',
+        birthDay: '',
+        birthMonth: '',
+        birthYear: '',
+        phoneNumber: '',
+      },
       companyInfo: {
         companyId: '',
         companyName: '',

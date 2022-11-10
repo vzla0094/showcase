@@ -72,11 +72,20 @@ export interface IDeal {
 // Users
 export interface IUser {
   uid: string
-  companyInfo: {
+  details: IUserDetails
+  companyInfo?: {
     companyId: ICompany['companyId']
     companyName: ICompany['name']
     deals: ICompany['deals']
   }
+}
+
+interface IUserDetails {
+  username: string
+  birthDay: string
+  birthMonth: string
+  birthYear: string
+  phoneNumber: string
 }
 
 export interface IAuth {
@@ -86,21 +95,22 @@ export interface IAuth {
 
 // Companies
 export interface ICompany {
-  companyId: string
+  companyId?: string
   name: string
-  members: Array<IUser['uid']>
-  deals: Array<string>
+  members?: Array<IUser['uid']>
+  deals?: Array<string>
   address: {
     streetAddress: string
     city: string
     stateProvince: string
     country: string
     zipCode: string
-    latitude: string
-    longitude: string
+    latitude?: string
+    longitude?: string
   }
   contactInfo: {
     telephoneNumber: string
     cellphoneNumber: string
+    email: string
   }
 }
