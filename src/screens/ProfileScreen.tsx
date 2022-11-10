@@ -8,8 +8,11 @@ import {
 } from 'native-base'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import { useAppDispatch } from '../hooks'
+import { actions } from '../redux/slices'
 
 export const ProfileScreen = () => {
+  const dispatch = useAppDispatch()
   return (
     <Container centerContent safeArea flex={1} alignSelf="center" width="100%">
       <Formik
@@ -41,7 +44,9 @@ export const ProfileScreen = () => {
             ),
           phoneNumber: Yup.number().typeError('Must be a number'),
         })}
-        onSubmit={data => console.log('Submitting data: ', data)}
+        onSubmit={data => {
+          dispatch(actions.user.setUserDetails(data))
+        }}
       >
         {({ handleBlur, handleChange, handleSubmit, values, errors }) => (
           <VStack width="100%" space={2}>

@@ -33,6 +33,9 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<IUser>) => action.payload,
+    setUserDetails: (state, action: PayloadAction<IUser['details']>) => {
+      state.details = action.payload
+    },
   },
   extraReducers: builder => {
     builder.addCase(login.fulfilled, (state, { payload }) => payload)
