@@ -72,11 +72,20 @@ export interface IDeal {
 // Users
 export interface IUser {
   uid: string
-  companyInfo: {
+  details?: IUserDetails
+  companyInfo?: {
     companyId: ICompany['companyId']
     companyName: ICompany['name']
     deals: ICompany['deals']
   }
+}
+
+interface IUserDetails {
+  username: string
+  birthDay: string
+  birthMonth: string
+  birthYear: string
+  phoneNumber: string
 }
 
 export interface IAuth {

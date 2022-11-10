@@ -4,6 +4,13 @@ import { FBLogin, FBRegister } from '../../../firebase'
 
 const initialState: IUser = {
   uid: '',
+  details: {
+    username: '',
+    birthDay: '',
+    birthMonth: '',
+    birthYear: '',
+    phoneNumber: '',
+  },
   companyInfo: {
     companyId: '',
     companyName: '',

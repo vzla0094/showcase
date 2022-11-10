@@ -7,6 +7,7 @@ import {
   VStack,
 } from 'native-base'
 import { Formik } from 'formik'
+import * as Yup from 'yup'
 
 export const ProfileScreen = () => {
   return (
@@ -19,6 +20,27 @@ export const ProfileScreen = () => {
           birthYear: '',
           phoneNumber: '',
         }}
+        validationSchema={Yup.object({
+          username: Yup.string(),
+          birthDay: Yup.number()
+            .typeError('Must be a number')
+            .min(1, 'Must be between 1 and 31')
+            .max(31, 'Must be between 1 and 31'),
+          birthMonth: Yup.number()
+            .typeError('Must be a number')
+            .min(1, 'Must be between 1 and 12')
+            .max(12, 'Must be between 1 and 12'),
+          birthYear: Yup.number()
+            .typeError('Must be a number')
+            .test(
+              'length',
+              'Must be exactly 4 characters',
+              value =>
+                Boolean(!value) ||
+                Boolean(value && value.toString().length === 4)
+            ),
+          phoneNumber: Yup.number().typeError('Must be a number'),
+        })}
         onSubmit={data => console.log('Submitting data: ', data)}
       >
         {({ handleBlur, handleChange, handleSubmit, values, errors }) => (
@@ -29,7 +51,7 @@ export const ProfileScreen = () => {
                 onBlur={handleBlur('username')}
                 onChangeText={handleChange('username')}
                 value={values.username}
-                placeholder="Name"
+                placeholder="Display name"
                 size="lg"
               />
               <FormControl.ErrorMessage>
