@@ -40,61 +40,61 @@ export const UserDetailsForm = ({
       {({ handleBlur, handleChange, handleSubmit, values, errors }) => (
         <VStack width="100%" space={2}>
           <Heading>User details</Heading>
-          <FormControl isRequired isInvalid={'username' in errors}>
+          <FormControl isInvalid={'username' in errors}>
+            <FormControl.Label>Display name</FormControl.Label>
             <Input
               onBlur={handleBlur('username')}
               onChangeText={handleChange('username')}
               value={values.username}
               placeholder="Display name"
-              size="lg"
             />
             <FormControl.ErrorMessage>
               {errors.username}
             </FormControl.ErrorMessage>
           </FormControl>
-          <FormControl isRequired isInvalid={'birthDay' in errors}>
+          <FormControl isInvalid={'birthDay' in errors}>
+            <FormControl.Label>Day of birth</FormControl.Label>
             <Input
               onBlur={handleBlur('birthDay')}
               onChangeText={handleChange('birthDay')}
               value={values.birthDay}
               placeholder="Day of birth"
-              size="lg"
             />
             <FormControl.ErrorMessage>
               {errors.birthDay}
             </FormControl.ErrorMessage>
           </FormControl>
-          <FormControl isRequired isInvalid={'birthMonth' in errors}>
+          <FormControl isInvalid={'birthMonth' in errors}>
+            <FormControl.Label>Month of birth</FormControl.Label>
             <Input
               onBlur={handleBlur('birthMonth')}
               onChangeText={handleChange('birthMonth')}
               value={values.birthMonth}
               placeholder="Month of birth"
-              size="lg"
             />
             <FormControl.ErrorMessage>
               {errors.birthMonth}
             </FormControl.ErrorMessage>
           </FormControl>
-          <FormControl isRequired isInvalid={'birthYear' in errors}>
+          <FormControl isInvalid={'birthYear' in errors}>
+            <FormControl.Label>Year of birth</FormControl.Label>
             <Input
               onBlur={handleBlur('birthYear')}
               onChangeText={handleChange('birthYear')}
               value={values.birthYear}
               placeholder="Year of birth"
-              size="lg"
             />
             <FormControl.ErrorMessage>
               {errors.birthYear}
             </FormControl.ErrorMessage>
           </FormControl>
-          <FormControl isRequired isInvalid={'phoneNumber' in errors}>
+          <FormControl isInvalid={'phoneNumber' in errors}>
+            <FormControl.Label>Phone number</FormControl.Label>
             <Input
               onBlur={handleBlur('phoneNumber')}
               onChangeText={handleChange('phoneNumber')}
               value={values.phoneNumber}
               placeholder="Phone number"
-              size="lg"
             />
             <FormControl.ErrorMessage>
               {errors.phoneNumber}

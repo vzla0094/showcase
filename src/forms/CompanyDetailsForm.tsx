@@ -48,103 +48,103 @@ export const CompanyDetailsForm = ({
     onSubmit={onSubmit}
   >
     {({ handleBlur, handleChange, handleSubmit, values, errors }) => (
-      <VStack width="100%" space={2}>
+      <VStack width="100%" space={1}>
         <Heading>Company details</Heading>
         <FormControl isRequired isInvalid={'name' in errors}>
+          <FormControl.Label>Company name</FormControl.Label>
           <Input
             onBlur={handleBlur('name')}
             onChangeText={handleChange('name')}
             value={values.name}
             placeholder="Company name"
-            size="lg"
           />
           <FormControl.ErrorMessage>{errors.name}</FormControl.ErrorMessage>
         </FormControl>
         <FormControl isRequired isInvalid={'streetAddress' in errors}>
+          <FormControl.Label>Street address</FormControl.Label>
           <Input
             onBlur={handleBlur('streetAddress')}
             onChangeText={handleChange('streetAddress')}
             value={values.streetAddress}
             placeholder="Street address"
-            size="lg"
           />
           <FormControl.ErrorMessage>
             {errors.streetAddress}
           </FormControl.ErrorMessage>
         </FormControl>
         <FormControl isRequired isInvalid={'city' in errors}>
+          <FormControl.Label>City</FormControl.Label>
           <Input
             onBlur={handleBlur('city')}
             onChangeText={handleChange('city')}
             value={values.city}
             placeholder="City"
-            size="lg"
           />
           <FormControl.ErrorMessage>{errors.city}</FormControl.ErrorMessage>
         </FormControl>
         <FormControl isRequired isInvalid={'stateProvince' in errors}>
+          <FormControl.Label>State / Province</FormControl.Label>
           <Input
             onBlur={handleBlur('stateProvince')}
             onChangeText={handleChange('stateProvince')}
             value={values.stateProvince}
             placeholder="State / Province"
-            size="lg"
           />
           <FormControl.ErrorMessage>
             {errors.stateProvince}
           </FormControl.ErrorMessage>
         </FormControl>
         <FormControl isRequired isInvalid={'country' in errors}>
+          <FormControl.Label>Country</FormControl.Label>
           <Input
             onBlur={handleBlur('country')}
             onChangeText={handleChange('country')}
             value={values.country}
             placeholder="Country"
-            size="lg"
           />
           <FormControl.ErrorMessage>{errors.country}</FormControl.ErrorMessage>
         </FormControl>
         <FormControl isRequired isInvalid={'zipCode' in errors}>
+          <FormControl.Label>Zip Code</FormControl.Label>
           <Input
             onBlur={handleBlur('zipCode')}
             onChangeText={handleChange('zipCode')}
             value={values.zipCode}
             placeholder="Zip Code"
-            size="lg"
           />
           <FormControl.ErrorMessage>{errors.zipCode}</FormControl.ErrorMessage>
         </FormControl>
-        <FormControl isRequired isInvalid={'telephoneNumber' in errors}>
+        <FormControl isInvalid={'telephoneNumber' in errors}>
+          <FormControl.Label>Telephone number</FormControl.Label>
           <Input
             onBlur={handleBlur('telephoneNumber')}
             onChangeText={handleChange('telephoneNumber')}
             value={values.telephoneNumber}
             placeholder="Telephone number"
-            size="lg"
           />
           <FormControl.ErrorMessage>
             {errors.telephoneNumber}
           </FormControl.ErrorMessage>
         </FormControl>
-        <FormControl isRequired isInvalid={'cellphoneNumber' in errors}>
+        <FormControl isInvalid={'cellphoneNumber' in errors}>
+          <FormControl.Label>Cellphone number</FormControl.Label>
           <Input
             onBlur={handleBlur('cellphoneNumber')}
             onChangeText={handleChange('cellphoneNumber')}
             value={values.cellphoneNumber}
             placeholder="Cellphone number"
-            size="lg"
           />
           <FormControl.ErrorMessage>
             {errors.cellphoneNumber}
           </FormControl.ErrorMessage>
         </FormControl>
-        <FormControl isRequired isInvalid={'email' in errors}>
+        <FormControl isInvalid={'email' in errors}>
+          <FormControl.Label>Email</FormControl.Label>
           <Input
             onBlur={handleBlur('email')}
             onChangeText={handleChange('email')}
             value={values.email}
             placeholder="Email"
-            size="lg"
           />
           <FormControl.ErrorMessage>{errors.email}</FormControl.ErrorMessage>
         </FormControl>
