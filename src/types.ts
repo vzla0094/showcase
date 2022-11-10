@@ -72,7 +72,7 @@ export interface IDeal {
 // Users
 export interface IUser {
   uid: string
-  details?: IUserDetails
+  details: IUserDetails
   companyInfo?: {
     companyId: ICompany['companyId']
     companyName: ICompany['name']
