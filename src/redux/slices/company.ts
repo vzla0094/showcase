@@ -18,6 +18,7 @@ const initialState: ICompany = {
   contactInfo: {
     telephoneNumber: '',
     cellphoneNumber: '',
+    email: '',
   },
 }
 

@@ -111,5 +111,6 @@ export interface ICompany {
   contactInfo: {
     telephoneNumber: string
     cellphoneNumber: string
+    email: string
   }
 }
