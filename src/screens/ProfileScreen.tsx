@@ -8,6 +8,7 @@ export const ProfileScreen = () => {
   const dispatch = useAppDispatch()
   const userDetails = useAppSelector(state => state.user.details)
   const company = useAppSelector(state => state.company)
+
   return (
     <ScrollView>
       <Container
