@@ -1,4 +1,4 @@
-import * as Yup from 'yup'
+import * as yup from 'yup'
 import { Button, FormControl, Heading, Input, VStack } from 'native-base'
 import { Formik } from 'formik'
 import { IUser } from '../types'
@@ -15,17 +15,20 @@ export const UserDetailsForm = ({
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={Yup.object({
-        username: Yup.string(),
-        birthDay: Yup.number()
+      validationSchema={yup.object({
+        username: yup.string(),
+        birthDay: yup
+          .number()
           .typeError('Must be a number')
           .min(1, 'Must be between 1 and 31')
           .max(31, 'Must be between 1 and 31'),
-        birthMonth: Yup.number()
+        birthMonth: yup
+          .number()
           .typeError('Must be a number')
           .min(1, 'Must be between 1 and 12')
           .max(12, 'Must be between 1 and 12'),
-        birthYear: Yup.number()
+        birthYear: yup
+          .number()
           .typeError('Must be a number')
           .test(
             'length',
@@ -33,7 +36,7 @@ export const UserDetailsForm = ({
             value =>
               Boolean(!value) || Boolean(value && value.toString().length === 4)
           ),
-        phoneNumber: Yup.number().typeError('Must be a number'),
+        phoneNumber: yup.number().typeError('Must be a number'),
       })}
       onSubmit={onSubmit}
     >

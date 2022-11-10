@@ -1,4 +1,4 @@
-import * as Yup from 'yup'
+import * as yup from 'yup'
 import { Button, FormControl, Heading, Input, VStack } from 'native-base'
 import { Formik } from 'formik'
 import { ICompany } from '../types'
@@ -26,13 +26,14 @@ export const CompanyDetailsForm = ({
 }: ICompanyDetailsFormProps) => (
   <Formik
     initialValues={initialValues}
-    validationSchema={Yup.object({
-      name: Yup.string().required('Required'),
-      streetAddress: Yup.string().required('Required'),
-      city: Yup.string().required('Required'),
-      stateProvince: Yup.string().required('Required'),
-      country: Yup.string().required('Required'),
-      zipCode: Yup.number()
+    validationSchema={yup.object({
+      name: yup.string().required('Required'),
+      streetAddress: yup.string().required('Required'),
+      city: yup.string().required('Required'),
+      stateProvince: yup.string().required('Required'),
+      country: yup.string().required('Required'),
+      zipCode: yup
+        .number()
         .typeError('Must be a number')
         .test(
           'length',
@@ -41,9 +42,9 @@ export const CompanyDetailsForm = ({
             Boolean(!value) || Boolean(value && value.toString().length === 5)
         )
         .required('Required'),
-      telephoneNumber: Yup.number().typeError('Must be a number'),
-      cellphoneNumber: Yup.number().typeError('Must be a number'),
-      email: Yup.string().email(),
+      telephoneNumber: yup.number().typeError('Must be a number'),
+      cellphoneNumber: yup.number().typeError('Must be a number'),
+      email: yup.string().email(),
     })}
     onSubmit={onSubmit}
   >
