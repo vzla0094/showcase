@@ -7,6 +7,7 @@ export const store = configureStore({
   reducer: {
     deals: reducers.deals,
     user: reducers.user,
+    company: reducers.company,
     [dealsApi.reducerPath]: dealsApi.reducer,
   },
   middleware: getDefaultMiddleware =>
