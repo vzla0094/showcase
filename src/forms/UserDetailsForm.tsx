@@ -3,7 +3,7 @@ import { Button, FormControl, Heading, Input, VStack } from 'native-base'
 import { Formik } from 'formik'
 import { IUser } from '../types'
 
-interface UserDetailsFormProps {
+interface IUserDetailsFormProps {
   onSubmit: (data: IUser['details']) => void
   initialValues: IUser['details']
 }
@@ -11,7 +11,7 @@ interface UserDetailsFormProps {
 export const UserDetailsForm = ({
   onSubmit,
   initialValues,
-}: UserDetailsFormProps) => {
+}: IUserDetailsFormProps) => {
   return (
     <Formik
       initialValues={initialValues}
