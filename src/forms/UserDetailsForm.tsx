@@ -41,7 +41,7 @@ export const UserDetailsForm = ({
       onSubmit={onSubmit}
     >
       {({ handleBlur, handleChange, handleSubmit, values, errors }) => (
-        <VStack width="100%" space={2}>
+        <VStack space={2}>
           <Heading>User details</Heading>
           <FormControl isInvalid={'username' in errors}>
             <FormControl.Label>Display name</FormControl.Label>

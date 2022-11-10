@@ -12,10 +12,11 @@ export const ProfileScreen = () => {
   return (
     <ScrollView>
       <Container
-        centerContent
         safeArea
+        centerContent
         flex={1}
         alignSelf="center"
+        alignItems="stretch"
         width="100%"
       >
         <UserDetailsForm

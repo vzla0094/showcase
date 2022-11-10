@@ -49,7 +49,7 @@ export const CompanyDetailsForm = ({
     onSubmit={onSubmit}
   >
     {({ handleBlur, handleChange, handleSubmit, values, errors }) => (
-      <VStack width="100%" space={1}>
+      <VStack space={1}>
         <Heading>Company details</Heading>
         <FormControl isRequired isInvalid={'name' in errors}>
           <FormControl.Label>Company name</FormControl.Label>
