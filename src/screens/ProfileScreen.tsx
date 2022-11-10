@@ -129,11 +129,11 @@ export const ProfileScreen = () => {
           email: '',
         }}
         validationSchema={Yup.object({
-          name: Yup.string(),
-          streetAddress: Yup.string(),
-          city: Yup.string(),
-          stateProvince: Yup.string(),
-          country: Yup.string(),
+          name: Yup.string().required('Required'),
+          streetAddress: Yup.string().required('Required'),
+          city: Yup.string().required('Required'),
+          stateProvince: Yup.string().required('Required'),
+          country: Yup.string().required('Required'),
           zipCode: Yup.number()
             .typeError('Must be a number')
             .test(
@@ -142,7 +142,8 @@ export const ProfileScreen = () => {
               value =>
                 Boolean(!value) ||
                 Boolean(value && value.toString().length === 5)
-            ),
+            )
+            .required('Required'),
           telephoneNumber: Yup.number().typeError('Must be a number'),
           cellphoneNumber: Yup.number().typeError('Must be a number'),
           email: Yup.string().email(),
