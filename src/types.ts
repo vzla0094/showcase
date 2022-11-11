@@ -72,7 +72,7 @@ export interface IDeal {
 // Users
 export interface IUser {
   uid: string
-  details: IUserDetails
+  details: UserDetailsType
   companyInfo?: {
     companyId: ICompany['companyId']
     companyName: ICompany['name']
@@ -80,12 +80,18 @@ export interface IUser {
   }
 }
 
-interface IUserDetails {
-  username: string
-  birthDay: string
-  birthMonth: string
-  birthYear: string
-  phoneNumber: string
+export type UserDetailType = Partial<IUser['details']>
+
+export enum USER_DETAILS {
+  username = 'username',
+  birthDay = 'birthDay',
+  birthMonth = 'birthMonth',
+  birthYear = 'birthYear',
+  phoneNumber = 'phoneNumber',
+}
+
+type UserDetailsType = {
+  [key in USER_DETAILS]: string
 }
 
 export interface IAuth {
