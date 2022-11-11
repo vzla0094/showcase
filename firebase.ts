@@ -15,8 +15,10 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
 } from 'firebase/auth'
-import { DealCategoryNames, IDeal, IUser } from './src/types'
+import { DealCategoryNames, IDeal, IUser, UserDetailType } from './src/types'
 import { useEffect, useState } from 'react'
+import { useAppDispatch } from './src/hooks'
+import { actions } from './src/redux/slices'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAhWL-VE6px-42zW-veEUddTpIstjtxzJM',
@@ -144,6 +146,19 @@ export const setUser = async (user: IUser) => {
   }
 }
 
+export const FBSetUserDetails = async (
+  uid: IUser['uid'],
+  userDetail: UserDetailType
+) => {
+  try {
+    console.log('setUserDetails', { userDetail, uid })
+  } catch (e) {
+    console.error('Error setting user details: ', e)
+
+    return e
+  }
+}
+
 export const getUser = async (userId: IUser['uid']) => {
   try {
     const userSnap = await getDoc(doc(db, 'users', userId))
@@ -157,10 +172,17 @@ export const getUser = async (userId: IUser['uid']) => {
 
 export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     return onAuthStateChanged(auth, async fbUser => {
-      fbUser ? setAuthenticated(true) : setAuthenticated(false)
+      if (fbUser) {
+        dispatch(actions.user.setUID(fbUser.uid))
+        setAuthenticated(true)
+      } else {
+        dispatch(actions.user.removeUID())
+        setAuthenticated(false)
+      }
     })
   }, [])
 
