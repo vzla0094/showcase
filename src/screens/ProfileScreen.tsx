@@ -3,11 +3,16 @@ import { useAppDispatch, useAppSelector } from '../hooks'
 import { actions } from '../redux/slices'
 import { UserDetailsForm } from '../forms/UserDetailsForm'
 import { CompanyDetailsForm } from '../forms/CompanyDetailsForm'
+import { setUserDetail } from '../redux/slices/user'
+import { UserDetailType } from '../types'
 
 export const ProfileScreen = () => {
   const dispatch = useAppDispatch()
   const userDetails = useAppSelector(state => state.user.details)
   const company = useAppSelector(state => state.company)
+
+  const handleUserDetailsSubmit = (userDetail: UserDetailType) =>
+    dispatch(setUserDetail(userDetail))
 
   return (
     <ScrollView>
@@ -20,7 +25,7 @@ export const ProfileScreen = () => {
         width="100%"
       >
         <UserDetailsForm
-          onSubmit={data => dispatch(actions.user.setUserDetails(data))}
+          onSubmit={handleUserDetailsSubmit}
           initialValues={userDetails}
         />
         <CompanyDetailsForm
