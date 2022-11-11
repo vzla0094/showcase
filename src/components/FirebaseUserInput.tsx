@@ -5,23 +5,19 @@ import { AnySchema } from 'yup'
 
 import { IUser } from '../types'
 
-interface IValue {
-  value: string
-}
-
 interface FirebaseUserInputProps extends IFormControlProps {
-  userKey: keyof IUser['details']
+  userDetailKey: keyof IUser['details']
   label?: string
   placeholder?: string
   multiline?: boolean
   initialValue?: string
   visibility?: 'PUBLIC' | 'PRIVATE'
   validationSchema: AnySchema
-  onSubmit: (data: IValue) => void
+  onSubmit: (data: any) => void
 }
 
 export const FirebaseUserInput = ({
-  userKey,
+  userDetailKey,
   label,
   placeholder,
   multiline,
@@ -36,7 +32,7 @@ export const FirebaseUserInput = ({
     <Formik
       initialValues={{ value: initialValue }}
       validationSchema={validationSchema}
-      onSubmit={onSubmit}
+      onSubmit={({ value }) => onSubmit({ [userDetailKey]: value })}
     >
       {({ handleChange, handleSubmit, values, errors }) => (
         <FormControl
