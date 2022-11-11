@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IAuth, IUser } from '../../types'
-import { FBLogin, FBRegister } from '../../../firebase'
+import { IAuth, IUser, UserDetailType } from '../../types'
+import { FBLogin, FBRegister, FBSetUserDetails } from '../../../firebase'
+import { RootState } from '../store'
 
 const initialState: IUser = {
   uid: '',
@@ -28,14 +29,24 @@ export const register = createAsyncThunk(
   async (auth: IAuth) => await FBRegister(auth.email, auth.password)
 )
 
+export const setUserDetail = createAsyncThunk(
+  'user/setUserDetail',
+  async (userDetail: UserDetailType, thunkAPI) => {
+    const { user } = thunkAPI.getState() as RootState
+    await FBSetUserDetails(user.uid, userDetail)
+  }
+)
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<IUser>) => action.payload,
-    setUserDetails: (state, action: PayloadAction<IUser['details']>) => {
-      state.details = action.payload
-    },
+    setUID: (state, action: PayloadAction<IUser['uid']>) => ({
+      ...state,
+      uid: action.payload,
+    }),
+    removeUID: state => ({ ...state, uid: '' }),
   },
   extraReducers: builder => {
     builder.addCase(login.fulfilled, (state, { payload }) => payload)
