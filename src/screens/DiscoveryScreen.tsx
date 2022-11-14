@@ -23,9 +23,11 @@ export const DiscoveryScreen = ({
   return isLoading || !data ? (
     <Text>Loading...</Text>
   ) : (
-    <ScrollView>
-      <DiscoveryView activeDealCategories={data} />
+    <>
+      <ScrollView>
+        <DiscoveryView activeDealCategories={data} />
+      </ScrollView>
       {loginBottom && <LoginBottomNavigation navigation={navigation} />}
-    </ScrollView>
+    </>
   )
 }
