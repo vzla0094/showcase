@@ -1,6 +1,6 @@
 import { Heading, VStack } from 'native-base'
 import { USER_DETAILS, UserDetailsType, UserDetailType } from '../../types'
-import { FirebaseUserInput } from '../../components/FirebaseUserInput'
+import { FirebaseInput } from '../../components'
 import { UserDetailsSchema } from './schema'
 
 interface IUserDetailsFormProps {
@@ -24,8 +24,8 @@ export const UserDetailsForm = ({
     <VStack space={2}>
       <Heading>User details</Heading>
       {userDetailsData.map(({ key, label }) => (
-        <FirebaseUserInput
-          userDetailKey={key}
+        <FirebaseInput
+          fieldKey={key}
           validationSchema={UserDetailsSchema[key]}
           onSubmit={onSubmit}
           label={label}

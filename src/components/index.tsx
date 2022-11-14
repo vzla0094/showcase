@@ -4,7 +4,7 @@ import { Input, FormControl, IFormControlProps } from 'native-base'
 import * as yup from 'yup'
 
 interface FirebaseUserInputProps extends IFormControlProps {
-  userDetailKey: string
+  fieldKey: string
   label?: string
   placeholder?: string
   multiline?: boolean
@@ -14,8 +14,8 @@ interface FirebaseUserInputProps extends IFormControlProps {
   onSubmit: (data: any) => void
 }
 
-export const FirebaseUserInput = ({
-  userDetailKey,
+export const FirebaseInput = ({
+  fieldKey,
   label,
   placeholder,
   multiline,
@@ -30,7 +30,7 @@ export const FirebaseUserInput = ({
     <Formik
       initialValues={{ value: initialValue }}
       validationSchema={yup.object({ value: validationSchema })}
-      onSubmit={({ value }) => onSubmit({ [userDetailKey]: value })}
+      onSubmit={({ value }) => onSubmit({ [fieldKey]: value })}
     >
       {({ handleChange, handleSubmit, values, errors }) => (
         <FormControl

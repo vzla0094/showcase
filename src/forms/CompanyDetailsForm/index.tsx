@@ -7,7 +7,7 @@ import {
   CompanyDetailsType,
   CompanyDetailType,
 } from '../../types'
-import { FirebaseUserInput } from '../../components/FirebaseUserInput'
+import { FirebaseInput } from '../../components'
 import { CompanyDetailsSchema } from './schema'
 
 interface ICompanyDetailsFormProps {
@@ -42,16 +42,16 @@ export const CompanyDetailsForm = ({
   return (
     <VStack space={2}>
       <Heading>Company details</Heading>
-      <FirebaseUserInput
-        userDetailKey="name"
+      <FirebaseInput
+        fieldKey="name"
         validationSchema={CompanyDetailsSchema['name']}
         onSubmit={onSubmitCompanyName}
         label="Company name"
         key="name"
       />
       {companyAddressData.map(({ key, label }) => (
-        <FirebaseUserInput
-          userDetailKey={key}
+        <FirebaseInput
+          fieldKey={key}
           validationSchema={CompanyDetailsSchema[key]}
           onSubmit={onSubmitCompanyAddress}
           label={label}
@@ -60,8 +60,8 @@ export const CompanyDetailsForm = ({
         />
       ))}
       {companyContactData.map(({ key, label }) => (
-        <FirebaseUserInput
-          userDetailKey={key}
+        <FirebaseInput
+          fieldKey={key}
           validationSchema={CompanyDetailsSchema[key]}
           onSubmit={onSubmitCompanyContact}
           label={label}
