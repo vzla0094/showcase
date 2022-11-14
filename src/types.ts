@@ -80,8 +80,6 @@ export interface IUser {
   }
 }
 
-export type UserDetailType = Partial<IUser['details']>
-
 export enum USER_DETAILS {
   username = 'username',
   birthDay = 'birthDay',
@@ -90,9 +88,11 @@ export enum USER_DETAILS {
   phoneNumber = 'phoneNumber',
 }
 
-type UserDetailsType = {
+export type UserDetailsType = {
   [key in USER_DETAILS]: string
 }
+
+export type UserDetailType = Partial<UserDetailsType>
 
 export interface IAuth {
   email: string
@@ -120,3 +120,36 @@ export interface ICompany {
     email: string
   }
 }
+
+export enum COMPANY_DETAILS {
+  name = 'name',
+}
+
+export enum COMPANY_ADDRESS_DETAILS {
+  streetAddress = 'streetAddress',
+  city = 'city',
+  stateProvince = 'stateProvince',
+  country = 'country',
+  zipCode = 'zipCode',
+}
+
+export enum COMPANY_CONTACT_DETAILS {
+  telephoneNumber = 'telephoneNumber',
+  cellphoneNumber = 'cellphoneNumber',
+  email = 'email',
+}
+
+export type CompanyAddressType = {
+  [key in COMPANY_ADDRESS_DETAILS]: string
+}
+
+export type CompanyContactInfoType = {
+  [key in COMPANY_CONTACT_DETAILS]: string
+}
+
+export type CompanyDetailsType = {
+  name: string
+} & CompanyAddressType &
+  CompanyContactInfoType
+
+export type CompanyDetailType = Partial<CompanyDetailsType>
