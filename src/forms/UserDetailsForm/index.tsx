@@ -1,45 +1,36 @@
 import { Heading, VStack } from 'native-base'
-import { IUser, USER_DETAILS, UserDetailType } from '../../types'
+import { USER_DETAILS, UserDetailsType, UserDetailType } from '../../types'
 import { FirebaseUserInput } from '../../components/FirebaseUserInput'
 import { UserDetailsSchema } from './schema'
 
 interface IUserDetailsFormProps {
   onSubmit: (userDetail: UserDetailType) => void
-  initialValues: IUser['details']
+  initialValues: UserDetailsType
 }
 
 export const UserDetailsForm = ({
   onSubmit,
   initialValues,
 }: IUserDetailsFormProps) => {
-  const userDetailsKeys = [
-    USER_DETAILS.username,
-    USER_DETAILS.birthDay,
-    USER_DETAILS.birthMonth,
-    USER_DETAILS.birthYear,
-    USER_DETAILS.phoneNumber,
+  const userDetailsData = [
+    { key: USER_DETAILS.username, label: 'Display name' },
+    { key: USER_DETAILS.birthDay, label: 'Day of birth' },
+    { key: USER_DETAILS.birthMonth, label: 'Month of birth' },
+    { key: USER_DETAILS.birthYear, label: 'Year of birth' },
+    { key: USER_DETAILS.phoneNumber, label: 'Phone number' },
   ]
-
-  const labels = {
-    [USER_DETAILS.username]: 'Display name',
-    [USER_DETAILS.birthDay]: 'Day of birth',
-    [USER_DETAILS.birthMonth]: 'Month of birth',
-    [USER_DETAILS.birthYear]: 'Year of birth',
-    [USER_DETAILS.phoneNumber]: 'Phone number',
-  }
 
   return (
     <VStack space={2}>
       <Heading>User details</Heading>
-      {userDetailsKeys.map(userDetailKey => (
+      {userDetailsData.map(({ key, label }) => (
         <FirebaseUserInput
-          userDetailKey={userDetailKey}
-          validationSchema={UserDetailsSchema[userDetailKey]}
+          userDetailKey={key}
+          validationSchema={UserDetailsSchema[key]}
           onSubmit={onSubmit}
-          label={labels[userDetailKey]}
-          placeholder={labels[userDetailKey]}
-          initialValue={initialValues[userDetailKey]}
-          key={userDetailKey}
+          label={label}
+          initialValue={initialValues[key]}
+          key={key}
         />
       ))}
     </VStack>

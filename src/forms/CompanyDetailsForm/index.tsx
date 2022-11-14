@@ -25,32 +25,19 @@ export const CompanyDetailsForm = ({
   onSubmitCompanyContact,
   initialValues,
 }: ICompanyDetailsFormProps) => {
-  const companyAddressKeys = [
-    COMPANY_ADDRESS_DETAILS.streetAddress,
-    COMPANY_ADDRESS_DETAILS.city,
-    COMPANY_ADDRESS_DETAILS.stateProvince,
-    COMPANY_ADDRESS_DETAILS.country,
-    COMPANY_ADDRESS_DETAILS.zipCode,
+  const companyAddressData = [
+    { key: COMPANY_ADDRESS_DETAILS.streetAddress, label: 'Street address' },
+    { key: COMPANY_ADDRESS_DETAILS.city, label: 'City' },
+    { key: COMPANY_ADDRESS_DETAILS.stateProvince, label: 'State / Province' },
+    { key: COMPANY_ADDRESS_DETAILS.country, label: 'Country' },
+    { key: COMPANY_ADDRESS_DETAILS.zipCode, label: 'Zip code' },
   ]
 
-  const companyAddressLabels = {
-    [COMPANY_ADDRESS_DETAILS.streetAddress]: 'Street address',
-    [COMPANY_ADDRESS_DETAILS.city]: 'City',
-    [COMPANY_ADDRESS_DETAILS.stateProvince]: 'State / Province',
-    [COMPANY_ADDRESS_DETAILS.country]: 'Country',
-    [COMPANY_ADDRESS_DETAILS.zipCode]: 'Zip code',
-  }
-  const companyContactKeys = [
-    COMPANY_CONTACT_DETAILS.telephoneNumber,
-    COMPANY_CONTACT_DETAILS.cellphoneNumber,
-    COMPANY_CONTACT_DETAILS.email,
+  const companyContactData = [
+    { key: COMPANY_CONTACT_DETAILS.telephoneNumber, label: 'Telephone number' },
+    { key: COMPANY_CONTACT_DETAILS.cellphoneNumber, label: 'Cellphone number' },
+    { key: COMPANY_CONTACT_DETAILS.email, label: 'Email' },
   ]
-
-  const companyContactLabels = {
-    [COMPANY_CONTACT_DETAILS.telephoneNumber]: 'Telephone number',
-    [COMPANY_CONTACT_DETAILS.cellphoneNumber]: 'Cellphone number',
-    [COMPANY_CONTACT_DETAILS.email]: 'Email',
-  }
 
   return (
     <VStack space={2}>
@@ -62,24 +49,24 @@ export const CompanyDetailsForm = ({
         label="Company name"
         key="name"
       />
-      {companyAddressKeys.map(companyAddressKey => (
+      {companyAddressData.map(({ key, label }) => (
         <FirebaseUserInput
-          userDetailKey={companyAddressKey}
-          validationSchema={CompanyDetailsSchema[companyAddressKey]}
+          userDetailKey={key}
+          validationSchema={CompanyDetailsSchema[key]}
           onSubmit={onSubmitCompanyAddress}
-          label={companyAddressLabels[companyAddressKey]}
-          initialValue={initialValues[companyAddressKey]}
-          key={companyAddressKey}
+          label={label}
+          initialValue={initialValues[key]}
+          key={key}
         />
       ))}
-      {companyContactKeys.map(companyContactKey => (
+      {companyContactData.map(({ key, label }) => (
         <FirebaseUserInput
-          userDetailKey={companyContactKey}
-          validationSchema={CompanyDetailsSchema[companyContactKey]}
+          userDetailKey={key}
+          validationSchema={CompanyDetailsSchema[key]}
           onSubmit={onSubmitCompanyContact}
-          label={companyContactLabels[companyContactKey]}
-          initialValue={initialValues[companyContactKey]}
-          key={companyContactKey}
+          label={label}
+          initialValue={initialValues[key]}
+          key={key}
         />
       ))}
     </VStack>
