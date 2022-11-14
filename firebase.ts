@@ -152,6 +152,7 @@ export const FBSetUserDetails = async (
 ) => {
   try {
     console.log('setUserDetails', { userDetail, uid })
+    return userDetail
   } catch (e) {
     console.error('Error setting user details: ', e)
 

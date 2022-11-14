@@ -33,7 +33,7 @@ export const setUserDetail = createAsyncThunk(
   'user/setUserDetail',
   async (userDetail: UserDetailType, thunkAPI) => {
     const { user } = thunkAPI.getState() as RootState
-    await FBSetUserDetails(user.uid, userDetail)
+    return await FBSetUserDetails(user.uid, userDetail)
   }
 )
 
@@ -51,6 +51,9 @@ export const userSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(login.fulfilled, (state, { payload }) => payload)
     builder.addCase(register.fulfilled, (state, { payload }) => payload)
+    builder.addCase(setUserDetail.fulfilled, (state, { payload }) => {
+      state.details = { ...state.details, ...payload }
+    })
   },
 })
 
