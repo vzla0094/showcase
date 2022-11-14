@@ -7,7 +7,7 @@ import {
   CompanyDetailsType,
   CompanyDetailType,
 } from '../../types'
-import { FirebaseInput } from '../../components'
+import { FirebaseInput } from '../../firebaseComponents/FirebaseInput'
 import { CompanyDetailsSchema } from './schema'
 
 interface ICompanyDetailsFormProps {

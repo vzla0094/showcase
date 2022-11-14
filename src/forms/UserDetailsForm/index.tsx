@@ -1,6 +1,6 @@
 import { Heading, VStack } from 'native-base'
 import { USER_DETAILS, UserDetailsType, UserDetailType } from '../../types'
-import { FirebaseInput } from '../../components'
+import { FirebaseInput } from '../../firebaseComponents/FirebaseInput'
 import { UserDetailsSchema } from './schema'
 
 interface IUserDetailsFormProps {
