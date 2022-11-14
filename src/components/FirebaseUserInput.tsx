@@ -1,18 +1,16 @@
 import { FormEvent } from 'react'
 import { Formik } from 'formik'
 import { Input, FormControl, IFormControlProps } from 'native-base'
-import { AnySchema } from 'yup'
-
-import { IUser } from '../types'
+import * as yup from 'yup'
 
 interface FirebaseUserInputProps extends IFormControlProps {
-  userDetailKey: keyof IUser['details']
+  userDetailKey: string
   label?: string
   placeholder?: string
   multiline?: boolean
   initialValue?: string
   visibility?: 'PUBLIC' | 'PRIVATE'
-  validationSchema: AnySchema
+  validationSchema: yup.AnySchema
   onSubmit: (data: any) => void
 }
 
@@ -31,7 +29,7 @@ export const FirebaseUserInput = ({
   return (
     <Formik
       initialValues={{ value: initialValue }}
-      validationSchema={validationSchema}
+      validationSchema={yup.object({ value: validationSchema })}
       onSubmit={({ value }) => onSubmit({ [userDetailKey]: value })}
     >
       {({ handleChange, handleSubmit, values, errors }) => (
