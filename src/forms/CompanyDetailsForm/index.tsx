@@ -11,7 +11,7 @@ import { FirebaseInput } from '../../components'
 import { CompanyDetailsSchema } from './schema'
 
 interface ICompanyDetailsFormProps {
-  onSubmitCompanyName: (companyName: CompanyDetailType['name']) => void
+  onSubmitCompanyName: (name: CompanyDetailType['name']) => void
   onSubmitCompanyAddress: (companyAddress: Partial<CompanyAddressType>) => void
   onSubmitCompanyContact: (
     companyContactInfo: Partial<CompanyContactInfoType>

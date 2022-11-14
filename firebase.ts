@@ -15,7 +15,16 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
 } from 'firebase/auth'
-import { DealCategoryNames, IDeal, IUser, UserDetailType } from './src/types'
+import {
+  CompanyAddressType,
+  CompanyContactInfoType,
+  CompanyDetailType,
+  DealCategoryNames,
+  ICompany,
+  IDeal,
+  IUser,
+  UserDetailType,
+} from './src/types'
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from './src/hooks'
 import { actions } from './src/redux/slices'
@@ -188,4 +197,50 @@ export const useAuth = () => {
   }, [])
 
   return authenticated
+}
+
+// company
+export const FBSetCompanyName = async (
+  companyId: ICompany['companyId'],
+  name: CompanyDetailType['name']
+) => {
+  try {
+    console.log('setCompanyName', { name, companyId })
+
+    return name
+  } catch (e) {
+    console.error('Error setting company name')
+
+    return e
+  }
+}
+
+export const FBSetCompanyAddress = async (
+  companyId: ICompany['companyId'],
+  companyAddress: Partial<CompanyAddressType>
+) => {
+  try {
+    console.log('setCompanyAddress', { companyAddress, companyId })
+
+    return companyAddress
+  } catch (e) {
+    console.error('Error setting company address: ', e)
+
+    return e
+  }
+}
+
+export const FBSetCompanyContactInfo = async (
+  companyId: ICompany['companyId'],
+  companyContactInfo: Partial<CompanyContactInfoType>
+) => {
+  try {
+    console.log('setCompanyContactInfo', { companyContactInfo, companyId })
+
+    return companyContactInfo
+  } catch (e) {
+    console.error('Error setting company contact information: ', e)
+
+    return e
+  }
 }

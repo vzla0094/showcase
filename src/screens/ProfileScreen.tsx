@@ -9,6 +9,11 @@ import {
   CompanyDetailType,
   UserDetailType,
 } from '../types'
+import {
+  setCompanyAddress,
+  setCompanyContactInfo,
+  setCompanyName,
+} from '../redux/slices/company'
 
 export const ProfileScreen = () => {
   const dispatch = useAppDispatch()
@@ -26,19 +31,16 @@ export const ProfileScreen = () => {
   const handleUserDetailsSubmit = (userDetail: UserDetailType) =>
     dispatch(setUserDetail(userDetail))
 
-  const handleCompanyNameSubmit = (companyName: CompanyDetailType['name']) => {
-    console.log('handleCompanyNameSubmit: ', companyName)
-  }
+  const handleCompanyNameSubmit = (name: CompanyDetailType['name']) =>
+    dispatch(setCompanyName(name))
 
   const handleCompanyAddressSubmit = (
     companyAddress: Partial<CompanyAddressType>
-  ) => {
-    console.log('handleCompanyAddressSubmit: ', companyAddress)
-  }
+  ) => dispatch(setCompanyAddress(companyAddress))
 
   const handleCompanyContactSubmit = (
     companyContactInfo: Partial<CompanyContactInfoType>
-  ) => console.log('handleCompanyContactSubmit: ', companyContactInfo)
+  ) => dispatch(setCompanyContactInfo(companyContactInfo))
 
   return (
     <ScrollView>
