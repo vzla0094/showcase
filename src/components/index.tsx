@@ -9,7 +9,6 @@ interface FirebaseUserInputProps extends IFormControlProps {
   placeholder?: string
   multiline?: boolean
   initialValue?: string
-  visibility?: 'PUBLIC' | 'PRIVATE'
   validationSchema: yup.AnySchema
   onSubmit: (data: any) => void
 }
@@ -20,7 +19,6 @@ export const FirebaseInput = ({
   placeholder,
   multiline,
   initialValue = '',
-  visibility = 'PRIVATE',
   validationSchema,
   onSubmit,
   isRequired,
