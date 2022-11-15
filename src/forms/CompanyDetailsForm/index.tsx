@@ -46,6 +46,7 @@ export const CompanyDetailsForm = ({
         onSubmit={onSubmitCompanyName}
         label="Company name"
         key="name"
+        initialValue={initialValues.name}
       />
       {companyAddressData.map(({ key, label }) => (
         <FirebaseInput
