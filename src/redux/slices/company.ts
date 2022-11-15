@@ -42,14 +42,14 @@ export const initializeCompany = createAsyncThunk(
     const { user } = thunkAPI.getState() as RootState
 
     // uses companyId from user to determine whether to generate companyId
-    const companyId = await FBInitializeCompany(
+    const company = await FBInitializeCompany(
       user.companyInfo.companyId,
       user.uid
     )
 
-    thunkAPI.dispatch(actions.user.setCompanyId(companyId))
+    thunkAPI.dispatch(actions.user.setCompanyId(company.companyId))
 
-    return companyId
+    return company
   }
 )
 
@@ -95,9 +95,10 @@ export const companySlice = createSlice({
         [payload.fieldKey]: payload.value,
       }
     })
-    builder.addCase(initializeCompany.fulfilled, (state, { payload }) => {
-      state.companyId = payload
-    })
+    builder.addCase(
+      initializeCompany.fulfilled,
+      (state, { payload }) => payload
+    )
   },
 })
 

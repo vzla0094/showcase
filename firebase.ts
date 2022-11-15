@@ -209,25 +209,34 @@ export const useAuth = () => {
 
 // Creates a new company document and generates companyId.
 // Updates company document and user document with generated companyId
+// Hydrates company redux state from firebase data
 export const FBInitializeCompany = async (
   companyId: ICompany['companyId'],
   uid: IUser['uid']
-): Promise<ICompany['companyId']> => {
+): Promise<ICompany> => {
   try {
-    if (companyId) return companyId
+    if (companyId) {
+      // Hydrate redux state with existing company data from firebase
+      const companySnap = await getDoc(doc(db, 'companies', companyId))
+
+      return companySnap.data() as ICompany
+    }
 
     // Adds a new company document with a generated id
     const companyRef = await doc(collection(db, 'companies'))
     const generatedCompanyId = companyRef.id
 
     // Adds initial data shape to company document including new generated id
-    await setDoc(companyRef, { ...initialState, companyId: generatedCompanyId })
+    const newCompanyData = { ...initialState, companyId: generatedCompanyId }
+    await setDoc(companyRef, newCompanyData)
 
     // Adds companyId to user.companyInfo
     const userRef = doc(db, 'users', uid)
-    await updateDoc(userRef, { [`companyInfo.companyId`]: generatedCompanyId })
+    await updateDoc(userRef, {
+      [`companyInfo.companyId`]: generatedCompanyId,
+    })
 
-    return generatedCompanyId
+    return newCompanyData
   } catch (e) {
     console.error('Error initializing company', e)
 
