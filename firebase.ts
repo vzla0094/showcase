@@ -29,6 +29,7 @@ import {
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from './src/hooks'
 import { actions } from './src/redux/slices'
+import { initializeCompany, initialState } from './src/redux/slices/company'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAhWL-VE6px-42zW-veEUddTpIstjtxzJM',
@@ -236,14 +237,16 @@ export const FBInitializeCompany = async (
 // company
 export const FBSetCompanyName = async (
   companyId: ICompany['companyId'],
-  companyField: ICompanyNameField
+  companyNameField: ICompanyNameField
 ): Promise<ICompanyNameField> => {
   try {
-    console.log('setCompanyName', { companyField, companyId })
+    const companyRef = doc(db, 'companies', companyId)
 
-    return companyField
+    await updateDoc(companyRef, { name: companyNameField.value })
+
+    return companyNameField
   } catch (e) {
-    console.error('Error setting company name')
+    console.error('Error setting company name', e)
 
     return e
   }

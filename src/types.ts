@@ -108,6 +108,7 @@ export interface ICompany {
   name: string
   members?: Array<IUser['uid']>
   deals?: Array<string>
+  active: boolean
   address: {
     streetAddress: string
     city: string
