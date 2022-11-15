@@ -1,10 +1,10 @@
 import { Heading, VStack } from 'native-base'
-import { IUserField, USER_DETAILS, UserDetailsType } from '../../types'
+import { IUserDetailsField, USER_DETAILS, UserDetailsType } from '../../types'
 import { FirebaseInput } from '../../firebaseComponents/FirebaseInput'
 import { UserDetailsSchema } from './schema'
 
 interface IUserDetailsFormProps {
-  onSubmit: (userDetail: IUserField) => void
+  onSubmit: (userDetail: IUserDetailsField) => void
   initialValues: UserDetailsType
 }
 

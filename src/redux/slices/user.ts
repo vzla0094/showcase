@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IAuth, IUser, IUserField } from '../../types'
+import { IAuth, IUser, IUserDetailsField } from '../../types'
 import { FBLogin, FBRegister, FBSetUserDetail } from '../../../firebase'
 import { RootState } from '../store'
 
@@ -31,7 +31,7 @@ export const register = createAsyncThunk(
 
 export const setUserDetail = createAsyncThunk(
   'user/setUserDetail',
-  async (userField: IUserField, thunkAPI) => {
+  async (userField: IUserDetailsField, thunkAPI) => {
     const { user } = thunkAPI.getState() as RootState
     return await FBSetUserDetail(user.uid, userField)
   }

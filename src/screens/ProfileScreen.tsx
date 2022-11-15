@@ -7,7 +7,7 @@ import {
   ICompanyAddressField,
   ICompanyContactField,
   ICompanyNameField,
-  IUserField,
+  IUserDetailsField,
 } from '../types'
 import {
   setCompanyAddress,
@@ -28,14 +28,15 @@ export const ProfileScreen = () => {
     ...company.contactInfo,
   }))
 
-  const handleUserDetailsSubmit = (userField: IUserField) =>
-    dispatch(setUserDetail(userField))
+  const handleUserDetailsSubmit = (userDetailsField: IUserDetailsField) =>
+    dispatch(setUserDetail(userDetailsField))
 
-  const handleCompanyNameSubmit = (companyField: ICompanyNameField) =>
-    dispatch(setCompanyName(companyField))
+  const handleCompanyNameSubmit = (companyNameField: ICompanyNameField) =>
+    dispatch(setCompanyName(companyNameField))
 
-  const handleCompanyAddressSubmit = (companyAddress: ICompanyAddressField) =>
-    dispatch(setCompanyAddress(companyAddress))
+  const handleCompanyAddressSubmit = (
+    companyAddressField: ICompanyAddressField
+  ) => dispatch(setCompanyAddress(companyAddressField))
 
   const handleCompanyContactSubmit = (
     companyContactInfo: ICompanyContactField

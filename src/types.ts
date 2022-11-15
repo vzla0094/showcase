@@ -92,7 +92,7 @@ export type UserDetailsType = {
   [key in USER_DETAILS]: string
 }
 
-export interface IUserField {
+export interface IUserDetailsField {
   fieldKey: USER_DETAILS
   value: string
 }

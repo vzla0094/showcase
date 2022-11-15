@@ -24,7 +24,7 @@ import {
   ICompanyNameField,
   IDeal,
   IUser,
-  IUserField,
+  IUserDetailsField,
 } from './src/types'
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from './src/hooks'
@@ -159,8 +159,8 @@ export const setUser = async (user: IUser) => {
 
 export const FBSetUserDetail = async (
   uid: IUser['uid'],
-  userField: IUserField
-): Promise<IUserField> => {
+  userField: IUserDetailsField
+): Promise<IUserDetailsField> => {
   try {
     await updateDoc(doc(db, 'users', uid), {
       [`details.${userField.fieldKey}`]: userField.value,
@@ -254,12 +254,16 @@ export const FBSetCompanyName = async (
 
 export const FBSetCompanyAddress = async (
   companyId: ICompany['companyId'],
-  companyAddress: ICompanyAddressField
+  companyAddressField: ICompanyAddressField
 ): Promise<ICompanyAddressField> => {
   try {
-    console.log('setCompanyAddress', { companyAddress, companyId })
+    const companyRef = doc(db, 'companies', companyId)
 
-    return companyAddress
+    await updateDoc(companyRef, {
+      [`address.${companyAddressField.fieldKey}`]: companyAddressField.value,
+    })
+
+    return companyAddressField
   } catch (e) {
     console.error('Error setting company address: ', e)
 
