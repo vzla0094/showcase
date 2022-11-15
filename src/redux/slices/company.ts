@@ -7,16 +7,19 @@ import {
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 import {
+  FBInitializeCompany,
   FBSetCompanyAddress,
   FBSetCompanyContactInfo,
   FBSetCompanyName,
 } from '../../../firebase'
+import { actions } from './index'
 
-const initialState: ICompany = {
+export const initialState: ICompany = {
   companyId: '',
   name: '',
   members: [],
   deals: [],
+  active: false,
   address: {
     streetAddress: '',
     city: '',
@@ -32,6 +35,23 @@ const initialState: ICompany = {
     email: '',
   },
 }
+
+export const initializeCompany = createAsyncThunk(
+  'company/initializeCompany',
+  async (_, thunkAPI) => {
+    const { user } = thunkAPI.getState() as RootState
+
+    // uses companyId from user to determine whether to generate companyId
+    const companyId = await FBInitializeCompany(
+      user.companyInfo.companyId,
+      user.uid
+    )
+
+    thunkAPI.dispatch(actions.user.setCompanyId(companyId))
+
+    return companyId
+  }
+)
 
 export const setCompanyName = createAsyncThunk(
   'company/setCompanyName',
@@ -74,6 +94,9 @@ export const companySlice = createSlice({
         ...state.contactInfo,
         [payload.fieldKey]: payload.value,
       }
+    })
+    builder.addCase(initializeCompany.fulfilled, (state, { payload }) => {
+      state.companyId = payload
     })
   },
 })

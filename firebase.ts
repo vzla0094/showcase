@@ -193,6 +193,7 @@ export const useAuth = () => {
       if (fbUser) {
         const user = await getUser(fbUser.uid)
         dispatch(actions.user.setUser(user))
+        dispatch(initializeCompany())
         setAuthenticated(true)
       } else {
         dispatch(actions.user.resetUser())
@@ -202,6 +203,34 @@ export const useAuth = () => {
   }, [])
 
   return authenticated
+}
+
+// Creates a new company document and generates companyId.
+// Updates company document and user document with generated companyId
+export const FBInitializeCompany = async (
+  companyId: ICompany['companyId'],
+  uid: IUser['uid']
+): Promise<ICompany['companyId']> => {
+  try {
+    if (companyId) return companyId
+
+    // Adds a new company document with a generated id
+    const companyRef = await doc(collection(db, 'companies'))
+    const generatedCompanyId = companyRef.id
+
+    // Adds initial data shape to company document including new generated id
+    await setDoc(companyRef, { ...initialState, companyId: generatedCompanyId })
+
+    // Adds companyId to user.companyInfo
+    const userRef = doc(db, 'users', uid)
+    await updateDoc(userRef, { [`companyInfo.companyId`]: generatedCompanyId })
+
+    return generatedCompanyId
+  } catch (e) {
+    console.error('Error initializing company', e)
+
+    return e
+  }
 }
 
 // company

@@ -73,7 +73,7 @@ export interface IDeal {
 export interface IUser {
   uid: string
   details: UserDetailsType
-  companyInfo?: {
+  companyInfo: {
     companyId: ICompany['companyId']
     companyName: ICompany['name']
     deals: ICompany['deals']
@@ -104,7 +104,7 @@ export interface IAuth {
 
 // Companies
 export interface ICompany {
-  companyId?: string
+  companyId: string
   name: string
   members?: Array<IUser['uid']>
   deals?: Array<string>
