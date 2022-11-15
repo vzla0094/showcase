@@ -3,14 +3,19 @@ import { Formik } from 'formik'
 import { Input, FormControl, IFormControlProps } from 'native-base'
 import * as yup from 'yup'
 
-interface FirebaseUserInputProps extends IFormControlProps {
+interface IField {
+  fieldKey: any
+  value: any
+}
+
+interface IFirebaseInputProps extends IFormControlProps {
   fieldKey: string
   label?: string
   placeholder?: string
   multiline?: boolean
   initialValue?: string
   validationSchema: yup.AnySchema
-  onSubmit: (data: any) => void
+  onSubmit: (field: IField) => void
 }
 
 export const FirebaseInput = ({
@@ -23,12 +28,12 @@ export const FirebaseInput = ({
   onSubmit,
   isRequired,
   ...props
-}: FirebaseUserInputProps) => {
+}: IFirebaseInputProps) => {
   return (
     <Formik
       initialValues={{ value: initialValue }}
       validationSchema={yup.object({ value: validationSchema })}
-      onSubmit={({ value }) => onSubmit({ [fieldKey]: value })}
+      onSubmit={({ value }) => onSubmit({ fieldKey, value })}
     >
       {({ handleChange, handleSubmit, values, errors }) => (
         <FormControl

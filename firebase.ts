@@ -3,6 +3,7 @@ import {
   collection,
   doc,
   getDoc,
+  updateDoc,
   getDocs as FBGetDocs,
   getFirestore,
   query,
@@ -16,14 +17,14 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth'
 import {
-  CompanyAddressType,
-  CompanyContactInfoType,
-  CompanyDetailType,
   DealCategoryNames,
   ICompany,
+  ICompanyAddressField,
+  ICompanyContactField,
+  ICompanyNameField,
   IDeal,
   IUser,
-  UserDetailType,
+  IUserField,
 } from './src/types'
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from './src/hooks'
@@ -155,13 +156,16 @@ export const setUser = async (user: IUser) => {
   }
 }
 
-export const FBSetUserDetails = async (
+export const FBSetUserDetail = async (
   uid: IUser['uid'],
-  userDetail: UserDetailType
-) => {
+  userField: IUserField
+): Promise<IUserField> => {
   try {
-    console.log('setUserDetails', { userDetail, uid })
-    return userDetail
+    await updateDoc(doc(db, 'users', uid), {
+      [`details.${userField.fieldKey}`]: userField.value,
+    })
+
+    return userField
   } catch (e) {
     console.error('Error setting user details: ', e)
 
@@ -187,10 +191,11 @@ export const useAuth = () => {
   useEffect(() => {
     return onAuthStateChanged(auth, async fbUser => {
       if (fbUser) {
-        dispatch(actions.user.setUID(fbUser.uid))
+        const user = await getUser(fbUser.uid)
+        dispatch(actions.user.setUser(user))
         setAuthenticated(true)
       } else {
-        dispatch(actions.user.removeUID())
+        dispatch(actions.user.resetUser())
         setAuthenticated(false)
       }
     })
@@ -202,12 +207,12 @@ export const useAuth = () => {
 // company
 export const FBSetCompanyName = async (
   companyId: ICompany['companyId'],
-  name: CompanyDetailType['name']
-) => {
+  companyField: ICompanyNameField
+): Promise<ICompanyNameField> => {
   try {
-    console.log('setCompanyName', { name, companyId })
+    console.log('setCompanyName', { companyField, companyId })
 
-    return name
+    return companyField
   } catch (e) {
     console.error('Error setting company name')
 
@@ -217,8 +222,8 @@ export const FBSetCompanyName = async (
 
 export const FBSetCompanyAddress = async (
   companyId: ICompany['companyId'],
-  companyAddress: Partial<CompanyAddressType>
-) => {
+  companyAddress: ICompanyAddressField
+): Promise<ICompanyAddressField> => {
   try {
     console.log('setCompanyAddress', { companyAddress, companyId })
 
@@ -232,8 +237,8 @@ export const FBSetCompanyAddress = async (
 
 export const FBSetCompanyContactInfo = async (
   companyId: ICompany['companyId'],
-  companyContactInfo: Partial<CompanyContactInfoType>
-) => {
+  companyContactInfo: ICompanyContactField
+): Promise<ICompanyContactField> => {
   try {
     console.log('setCompanyContactInfo', { companyContactInfo, companyId })
 

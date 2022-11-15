@@ -1,8 +1,8 @@
 import {
-  CompanyAddressType,
-  CompanyContactInfoType,
-  CompanyDetailType,
   ICompany,
+  ICompanyAddressField,
+  ICompanyContactField,
+  ICompanyNameField,
 } from '../../types'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
@@ -35,15 +35,15 @@ const initialState: ICompany = {
 
 export const setCompanyName = createAsyncThunk(
   'company/setCompanyName',
-  async (name: CompanyDetailType['name'], thunkAPI) => {
+  async (companyField: ICompanyNameField, thunkAPI) => {
     const { company } = thunkAPI.getState() as RootState
-    return await FBSetCompanyName(company.companyId, name)
+    return await FBSetCompanyName(company.companyId, companyField)
   }
 )
 
 export const setCompanyAddress = createAsyncThunk(
   'company/setCompanyAddress',
-  async (companyAddress: Partial<CompanyAddressType>, thunkAPI) => {
+  async (companyAddress: ICompanyAddressField, thunkAPI) => {
     const { company } = thunkAPI.getState() as RootState
     return await FBSetCompanyAddress(company.companyId, companyAddress)
   }
@@ -51,7 +51,7 @@ export const setCompanyAddress = createAsyncThunk(
 
 export const setCompanyContactInfo = createAsyncThunk(
   'company/setCompanyContact',
-  async (companyContactInfo: Partial<CompanyContactInfoType>, thunkAPI) => {
+  async (companyContactInfo: ICompanyContactField, thunkAPI) => {
     const { company } = thunkAPI.getState() as RootState
     return await FBSetCompanyContactInfo(company.companyId, companyContactInfo)
   }
@@ -63,14 +63,17 @@ export const companySlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(setCompanyAddress.fulfilled, (state, { payload }) => {
-      state.address = { ...state.address, ...payload }
-    })
     builder.addCase(setCompanyName.fulfilled, (state, { payload }) => {
-      state.name = payload.name
+      state.name = payload.value
+    })
+    builder.addCase(setCompanyAddress.fulfilled, (state, { payload }) => {
+      state.address = { ...state.address, [payload.fieldKey]: payload.value }
     })
     builder.addCase(setCompanyContactInfo.fulfilled, (state, { payload }) => {
-      state.contactInfo = { ...state.contactInfo, ...payload }
+      state.contactInfo = {
+        ...state.contactInfo,
+        [payload.fieldKey]: payload.value,
+      }
     })
   },
 })

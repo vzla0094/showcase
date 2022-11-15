@@ -4,10 +4,10 @@ import { UserDetailsForm } from '../forms/UserDetailsForm'
 import { CompanyDetailsForm } from '../forms/CompanyDetailsForm'
 import { setUserDetail } from '../redux/slices/user'
 import {
-  CompanyAddressType,
-  CompanyContactInfoType,
-  CompanyDetailType,
-  UserDetailType,
+  ICompanyAddressField,
+  ICompanyContactField,
+  ICompanyNameField,
+  IUserField,
 } from '../types'
 import {
   setCompanyAddress,
@@ -28,18 +28,17 @@ export const ProfileScreen = () => {
     ...company.contactInfo,
   }))
 
-  const handleUserDetailsSubmit = (userDetail: UserDetailType) =>
-    dispatch(setUserDetail(userDetail))
+  const handleUserDetailsSubmit = (userField: IUserField) =>
+    dispatch(setUserDetail(userField))
 
-  const handleCompanyNameSubmit = (name: CompanyDetailType['name']) =>
-    dispatch(setCompanyName(name))
+  const handleCompanyNameSubmit = (companyField: ICompanyNameField) =>
+    dispatch(setCompanyName(companyField))
 
-  const handleCompanyAddressSubmit = (
-    companyAddress: Partial<CompanyAddressType>
-  ) => dispatch(setCompanyAddress(companyAddress))
+  const handleCompanyAddressSubmit = (companyAddress: ICompanyAddressField) =>
+    dispatch(setCompanyAddress(companyAddress))
 
   const handleCompanyContactSubmit = (
-    companyContactInfo: Partial<CompanyContactInfoType>
+    companyContactInfo: ICompanyContactField
   ) => dispatch(setCompanyContactInfo(companyContactInfo))
 
   return (

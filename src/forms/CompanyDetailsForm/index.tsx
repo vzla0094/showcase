@@ -2,20 +2,18 @@ import { Heading, VStack } from 'native-base'
 import {
   COMPANY_ADDRESS_DETAILS,
   COMPANY_CONTACT_DETAILS,
-  CompanyAddressType,
-  CompanyContactInfoType,
   CompanyDetailsType,
-  CompanyDetailType,
+  ICompanyAddressField,
+  ICompanyContactField,
+  ICompanyNameField,
 } from '../../types'
 import { FirebaseInput } from '../../firebaseComponents/FirebaseInput'
 import { CompanyDetailsSchema } from './schema'
 
 interface ICompanyDetailsFormProps {
-  onSubmitCompanyName: (name: CompanyDetailType['name']) => void
-  onSubmitCompanyAddress: (companyAddress: Partial<CompanyAddressType>) => void
-  onSubmitCompanyContact: (
-    companyContactInfo: Partial<CompanyContactInfoType>
-  ) => void
+  onSubmitCompanyName: (name: ICompanyNameField) => void
+  onSubmitCompanyAddress: (companyAddress: ICompanyAddressField) => void
+  onSubmitCompanyContact: (companyContactInfo: ICompanyContactField) => void
   initialValues: CompanyDetailsType
 }
 

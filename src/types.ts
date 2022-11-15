@@ -92,7 +92,10 @@ export type UserDetailsType = {
   [key in USER_DETAILS]: string
 }
 
-export type UserDetailType = Partial<UserDetailsType>
+export interface IUserField {
+  fieldKey: USER_DETAILS
+  value: string
+}
 
 export interface IAuth {
   email: string
@@ -119,10 +122,6 @@ export interface ICompany {
     cellphoneNumber: string
     email: string
   }
-}
-
-export enum COMPANY_DETAILS {
-  name = 'name',
 }
 
 export enum COMPANY_ADDRESS_DETAILS {
@@ -152,4 +151,17 @@ export type CompanyDetailsType = {
 } & CompanyAddressType &
   CompanyContactInfoType
 
-export type CompanyDetailType = Partial<CompanyDetailsType>
+export interface ICompanyNameField {
+  fieldKey: 'name'
+  value: string
+}
+
+export interface ICompanyAddressField {
+  fieldKey: COMPANY_ADDRESS_DETAILS
+  value: string
+}
+
+export interface ICompanyContactField {
+  fieldKey: COMPANY_CONTACT_DETAILS
+  value: string
+}
