@@ -39,8 +39,8 @@ export const ProfileScreen = () => {
   ) => dispatch(setCompanyAddress(companyAddressField))
 
   const handleCompanyContactSubmit = (
-    companyContactInfo: ICompanyContactField
-  ) => dispatch(setCompanyContactInfo(companyContactInfo))
+    companyContactField: ICompanyContactField
+  ) => dispatch(setCompanyContactInfo(companyContactField))
 
   return (
     <ScrollView>

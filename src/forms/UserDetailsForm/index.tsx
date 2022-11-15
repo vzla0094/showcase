@@ -4,7 +4,7 @@ import { FirebaseInput } from '../../firebaseComponents/FirebaseInput'
 import { UserDetailsSchema } from './schema'
 
 interface IUserDetailsFormProps {
-  onSubmit: (userDetail: IUserDetailsField) => void
+  onSubmit: (userDetailsField: IUserDetailsField) => void
   initialValues: UserDetailsType
 }
 

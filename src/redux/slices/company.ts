@@ -71,9 +71,9 @@ export const setCompanyAddress = createAsyncThunk(
 
 export const setCompanyContactInfo = createAsyncThunk(
   'company/setCompanyContact',
-  async (companyContactInfo: ICompanyContactField, thunkAPI) => {
+  async (companyContactField: ICompanyContactField, thunkAPI) => {
     const { company } = thunkAPI.getState() as RootState
-    return await FBSetCompanyContactInfo(company.companyId, companyContactInfo)
+    return await FBSetCompanyContactInfo(company.companyId, companyContactField)
   }
 )
 

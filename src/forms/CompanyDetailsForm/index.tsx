@@ -12,8 +12,8 @@ import { CompanyDetailsSchema } from './schema'
 
 interface ICompanyDetailsFormProps {
   onSubmitCompanyName: (name: ICompanyNameField) => void
-  onSubmitCompanyAddress: (companyAddress: ICompanyAddressField) => void
-  onSubmitCompanyContact: (companyContactInfo: ICompanyContactField) => void
+  onSubmitCompanyAddress: (companyAddressField: ICompanyAddressField) => void
+  onSubmitCompanyContact: (companyContactField: ICompanyContactField) => void
   initialValues: CompanyDetailsType
 }
 

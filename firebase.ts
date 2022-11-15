@@ -159,14 +159,15 @@ export const setUser = async (user: IUser) => {
 
 export const FBSetUserDetail = async (
   uid: IUser['uid'],
-  userField: IUserDetailsField
+  userDetailsField: IUserDetailsField
 ): Promise<IUserDetailsField> => {
+  const { fieldKey, value } = userDetailsField
   try {
     await updateDoc(doc(db, 'users', uid), {
-      [`details.${userField.fieldKey}`]: userField.value,
+      [`details.${fieldKey}`]: value,
     })
 
-    return userField
+    return userDetailsField
   } catch (e) {
     console.error('Error setting user details: ', e)
 
@@ -256,11 +257,12 @@ export const FBSetCompanyAddress = async (
   companyId: ICompany['companyId'],
   companyAddressField: ICompanyAddressField
 ): Promise<ICompanyAddressField> => {
+  const { fieldKey, value } = companyAddressField
   try {
     const companyRef = doc(db, 'companies', companyId)
 
     await updateDoc(companyRef, {
-      [`address.${companyAddressField.fieldKey}`]: companyAddressField.value,
+      [`address.${fieldKey}`]: value,
     })
 
     return companyAddressField
@@ -273,12 +275,17 @@ export const FBSetCompanyAddress = async (
 
 export const FBSetCompanyContactInfo = async (
   companyId: ICompany['companyId'],
-  companyContactInfo: ICompanyContactField
+  companyContactField: ICompanyContactField
 ): Promise<ICompanyContactField> => {
+  const { fieldKey, value } = companyContactField
   try {
-    console.log('setCompanyContactInfo', { companyContactInfo, companyId })
+    const companyRef = doc(db, 'companies', companyId)
 
-    return companyContactInfo
+    await updateDoc(companyRef, {
+      [`contactInfo.${fieldKey}`]: value,
+    })
+
+    return companyContactField
   } catch (e) {
     console.error('Error setting company contact information: ', e)
 
