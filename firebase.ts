@@ -23,13 +23,18 @@ import {
   ICompanyContactField,
   ICompanyNameField,
   IDeal,
+  IInitializeCompanyData,
   IUser,
   IUserDetailsField,
 } from './src/types'
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from './src/hooks'
 import { actions } from './src/redux/slices'
-import { initializeCompany, initialState } from './src/redux/slices/company'
+import {
+  initializeCompany,
+  companyInitialState,
+} from './src/redux/slices/company'
+import { userInitialState } from './src/redux/slices/user'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAhWL-VE6px-42zW-veEUddTpIstjtxzJM',
@@ -107,19 +112,8 @@ export const FBRegister = async (email: string, password: string) => {
     )
 
     return await setUser({
+      ...userInitialState,
       uid: FBUser.uid,
-      details: {
-        username: '',
-        birthDay: '',
-        birthMonth: '',
-        birthYear: '',
-        phoneNumber: '',
-      },
-      companyInfo: {
-        companyId: '',
-        companyName: '',
-        deals: [],
-      },
     })
   } catch (e) {
     console.error('Error registering : ', e)
@@ -193,9 +187,18 @@ export const useAuth = () => {
   useEffect(() => {
     return onAuthStateChanged(auth, async fbUser => {
       if (fbUser) {
+        // user hydration
         const user = await getUser(fbUser.uid)
         dispatch(actions.user.setUser(user))
-        dispatch(initializeCompany())
+
+        // company hydration
+        dispatch(
+          initializeCompany({
+            companyId: user.company?.id || '',
+            uid: fbUser.uid,
+          })
+        )
+
         setAuthenticated(true)
       } else {
         dispatch(actions.user.resetUser())
@@ -207,13 +210,13 @@ export const useAuth = () => {
   return authenticated
 }
 
-// Creates a new company document and generates companyId.
-// Updates company document and user document with generated companyId
 // Hydrates company redux state from firebase data
-export const FBInitializeCompany = async (
-  companyId: ICompany['companyId'],
-  uid: IUser['uid']
-): Promise<ICompany> => {
+// Creates a new company document and generates companyId
+// Updates company document with generated companyId
+export const FBInitializeCompany = async ({
+  companyId,
+  uid,
+}: IInitializeCompanyData): Promise<ICompany> => {
   try {
     if (companyId) {
       // Hydrate redux state with existing company data from firebase
@@ -227,13 +230,15 @@ export const FBInitializeCompany = async (
     const generatedCompanyId = companyRef.id
 
     // Adds initial data shape to company document including new generated id
-    const newCompanyData = { ...initialState, companyId: generatedCompanyId }
+    const newCompanyData = {
+      ...companyInitialState,
+      companyId: generatedCompanyId,
+    }
     await setDoc(companyRef, newCompanyData)
 
-    // Adds companyId to user.companyInfo
     const userRef = doc(db, 'users', uid)
     await updateDoc(userRef, {
-      [`companyInfo.companyId`]: generatedCompanyId,
+      company: companyRef,
     })
 
     return newCompanyData

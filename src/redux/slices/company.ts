@@ -3,6 +3,7 @@ import {
   ICompanyAddressField,
   ICompanyContactField,
   ICompanyNameField,
+  IInitializeCompanyData,
 } from '../../types'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
@@ -12,9 +13,8 @@ import {
   FBSetCompanyContactInfo,
   FBSetCompanyName,
 } from '../../../firebase'
-import { actions } from './index'
 
-export const initialState: ICompany = {
+export const companyInitialState: ICompany = {
   companyId: '',
   name: '',
   members: [],
@@ -38,19 +38,7 @@ export const initialState: ICompany = {
 
 export const initializeCompany = createAsyncThunk(
   'company/initializeCompany',
-  async (_, thunkAPI) => {
-    const { user } = thunkAPI.getState() as RootState
-
-    // uses companyId from user to determine whether to generate companyId
-    const company = await FBInitializeCompany(
-      user.companyInfo.companyId,
-      user.uid
-    )
-
-    thunkAPI.dispatch(actions.user.setCompanyId(company.companyId))
-
-    return company
-  }
+  async (data: IInitializeCompanyData) => await FBInitializeCompany(data)
 )
 
 export const setCompanyName = createAsyncThunk(
@@ -80,7 +68,7 @@ export const setCompanyContactInfo = createAsyncThunk(
 // TODO, add uuid for companyId for the first time
 export const companySlice = createSlice({
   name: 'company',
-  initialState,
+  initialState: companyInitialState,
   reducers: {},
   extraReducers: builder => {
     builder.addCase(setCompanyName.fulfilled, (state, { payload }) => {

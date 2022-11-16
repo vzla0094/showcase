@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { DocumentData, DocumentReference } from 'firebase/firestore'
 
 // Navigation
 export type RootStackParamList = {
@@ -73,11 +74,7 @@ export interface IDeal {
 export interface IUser {
   uid: string
   details: UserDetailsType
-  companyInfo: {
-    companyId: ICompany['companyId']
-    companyName: ICompany['name']
-    deals: ICompany['deals']
-  }
+  company: DocumentReference<DocumentData> | ''
 }
 
 export enum USER_DETAILS {
@@ -165,4 +162,9 @@ export interface ICompanyAddressField {
 export interface ICompanyContactField {
   fieldKey: COMPANY_CONTACT_DETAILS
   value: string
+}
+
+export interface IInitializeCompanyData {
+  companyId: ICompany['companyId']
+  uid: IUser['uid']
 }
