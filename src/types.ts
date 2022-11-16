@@ -72,20 +72,29 @@ export interface IDeal {
 // Users
 export interface IUser {
   uid: string
-  details: IUserDetails
-  companyInfo?: {
+  details: UserDetailsType
+  companyInfo: {
     companyId: ICompany['companyId']
     companyName: ICompany['name']
     deals: ICompany['deals']
   }
 }
 
-interface IUserDetails {
-  username: string
-  birthDay: string
-  birthMonth: string
-  birthYear: string
-  phoneNumber: string
+export enum USER_DETAILS {
+  username = 'username',
+  birthDay = 'birthDay',
+  birthMonth = 'birthMonth',
+  birthYear = 'birthYear',
+  phoneNumber = 'phoneNumber',
+}
+
+export type UserDetailsType = {
+  [key in USER_DETAILS]: string
+}
+
+export interface IUserDetailsField {
+  fieldKey: USER_DETAILS
+  value: string
 }
 
 export interface IAuth {
@@ -95,10 +104,11 @@ export interface IAuth {
 
 // Companies
 export interface ICompany {
-  companyId?: string
+  companyId: string
   name: string
   members?: Array<IUser['uid']>
   deals?: Array<string>
+  active: boolean
   address: {
     streetAddress: string
     city: string
@@ -113,4 +123,46 @@ export interface ICompany {
     cellphoneNumber: string
     email: string
   }
+}
+
+export enum COMPANY_ADDRESS_DETAILS {
+  streetAddress = 'streetAddress',
+  city = 'city',
+  stateProvince = 'stateProvince',
+  country = 'country',
+  zipCode = 'zipCode',
+}
+
+export enum COMPANY_CONTACT_DETAILS {
+  telephoneNumber = 'telephoneNumber',
+  cellphoneNumber = 'cellphoneNumber',
+  email = 'email',
+}
+
+export type CompanyAddressType = {
+  [key in COMPANY_ADDRESS_DETAILS]: string
+}
+
+export type CompanyContactInfoType = {
+  [key in COMPANY_CONTACT_DETAILS]: string
+}
+
+export type CompanyDetailsType = {
+  name: string
+} & CompanyAddressType &
+  CompanyContactInfoType
+
+export interface ICompanyNameField {
+  fieldKey: 'name'
+  value: string
+}
+
+export interface ICompanyAddressField {
+  fieldKey: COMPANY_ADDRESS_DETAILS
+  value: string
+}
+
+export interface ICompanyContactField {
+  fieldKey: COMPANY_CONTACT_DETAILS
+  value: string
 }

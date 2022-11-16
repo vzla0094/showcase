@@ -1,13 +1,46 @@
 import { Container, ScrollView } from 'native-base'
 import { useAppDispatch, useAppSelector } from '../hooks'
-import { actions } from '../redux/slices'
 import { UserDetailsForm } from '../forms/UserDetailsForm'
 import { CompanyDetailsForm } from '../forms/CompanyDetailsForm'
+import { setUserDetail } from '../redux/slices/user'
+import {
+  ICompanyAddressField,
+  ICompanyContactField,
+  ICompanyNameField,
+  IUserDetailsField,
+} from '../types'
+import {
+  setCompanyAddress,
+  setCompanyContactInfo,
+  setCompanyName,
+} from '../redux/slices/company'
 
 export const ProfileScreen = () => {
   const dispatch = useAppDispatch()
   const userDetails = useAppSelector(state => state.user.details)
-  const company = useAppSelector(state => state.company)
+  const companyDetails = useAppSelector(({ company }) => ({
+    name: company.name,
+    streetAddress: company.address.streetAddress,
+    city: company.address.city,
+    stateProvince: company.address.stateProvince,
+    country: company.address.country,
+    zipCode: company.address.zipCode,
+    ...company.contactInfo,
+  }))
+
+  const handleUserDetailsSubmit = (userDetailsField: IUserDetailsField) =>
+    dispatch(setUserDetail(userDetailsField))
+
+  const handleCompanyNameSubmit = (companyNameField: ICompanyNameField) =>
+    dispatch(setCompanyName(companyNameField))
+
+  const handleCompanyAddressSubmit = (
+    companyAddressField: ICompanyAddressField
+  ) => dispatch(setCompanyAddress(companyAddressField))
+
+  const handleCompanyContactSubmit = (
+    companyContactField: ICompanyContactField
+  ) => dispatch(setCompanyContactInfo(companyContactField))
 
   return (
     <ScrollView>
@@ -20,48 +53,14 @@ export const ProfileScreen = () => {
         width="100%"
       >
         <UserDetailsForm
-          onSubmit={data => dispatch(actions.user.setUserDetails(data))}
+          onSubmit={handleUserDetailsSubmit}
           initialValues={userDetails}
         />
         <CompanyDetailsForm
-          onSubmit={({
-            name,
-            streetAddress,
-            city,
-            stateProvince,
-            country,
-            zipCode,
-            telephoneNumber,
-            cellphoneNumber,
-            email,
-          }) => {
-            dispatch(
-              actions.company.setCompany({
-                name,
-                address: {
-                  streetAddress,
-                  city,
-                  stateProvince,
-                  country,
-                  zipCode,
-                },
-                contactInfo: {
-                  telephoneNumber,
-                  cellphoneNumber,
-                  email,
-                },
-              })
-            )
-          }}
-          initialValues={{
-            name: company.name,
-            streetAddress: company.address.streetAddress,
-            city: company.address.city,
-            stateProvince: company.address.stateProvince,
-            country: company.address.country,
-            zipCode: company.address.zipCode,
-            ...company.contactInfo,
-          }}
+          onSubmitCompanyName={handleCompanyNameSubmit}
+          onSubmitCompanyAddress={handleCompanyAddressSubmit}
+          onSubmitCompanyContact={handleCompanyContactSubmit}
+          initialValues={companyDetails}
         />
       </Container>
     </ScrollView>
