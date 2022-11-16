@@ -3,7 +3,7 @@ import { IAuth, IUser, IUserDetailsField } from '../../types'
 import { FBLogin, FBRegister, FBSetUserDetail } from '../../../firebase'
 import { RootState } from '../store'
 
-const initialState: IUser = {
+export const userInitialState: IUser = {
   uid: '',
   details: {
     username: '',
@@ -12,11 +12,7 @@ const initialState: IUser = {
     birthYear: '',
     phoneNumber: '',
   },
-  companyInfo: {
-    companyId: '',
-    companyName: '',
-    deals: [],
-  },
+  company: '',
 }
 
 export const login = createAsyncThunk(
@@ -39,16 +35,10 @@ export const setUserDetail = createAsyncThunk(
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState,
+  initialState: userInitialState,
   reducers: {
     setUser: (state, action: PayloadAction<IUser>) => action.payload,
-    resetUser: () => initialState,
-    setCompanyId: (
-      state,
-      action: PayloadAction<IUser['companyInfo']['companyId']>
-    ) => {
-      state.companyInfo.companyId = action.payload
-    },
+    resetUser: () => userInitialState,
   },
   extraReducers: builder => {
     builder.addCase(login.fulfilled, (state, { payload }) => payload)
