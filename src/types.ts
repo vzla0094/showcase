@@ -10,6 +10,7 @@ export type RootStackParamList = {
   Search: undefined
   Profile: undefined
   Promotion: undefined
+  Company: undefined
 }
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -149,22 +150,21 @@ export type CompanyDetailsType = {
 } & CompanyAddressType &
   CompanyContactInfoType
 
-export interface ICompanyNameField {
-  fieldKey: 'name'
-  value: string
-}
-
-export interface ICompanyAddressField {
-  fieldKey: COMPANY_ADDRESS_DETAILS
-  value: string
-}
-
-export interface ICompanyContactField {
-  fieldKey: COMPANY_CONTACT_DETAILS
-  value: string
-}
-
 export interface IInitializeCompanyData {
   companyId: ICompany['companyId']
   uid: IUser['uid']
+}
+
+export interface ICompanyDetailsField {
+  fieldKey:
+    | COMPANY_ADDRESS_DETAILS
+    | COMPANY_CONTACT_DETAILS
+    | 'name'
+    | 'active'
+  value: string | boolean
+}
+
+export interface ICompanyDetailsPayload {
+  detailSection?: 'address' | 'contactInfo'
+  companyDetailsField: ICompanyDetailsField
 }

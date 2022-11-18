@@ -3,17 +3,8 @@ import { useAppDispatch, useAppSelector } from '../hooks'
 import { UserDetailsForm } from '../forms/UserDetailsForm'
 import { CompanyDetailsForm } from '../forms/CompanyDetailsForm'
 import { setUserDetail } from '../redux/slices/user'
-import {
-  ICompanyAddressField,
-  ICompanyContactField,
-  ICompanyNameField,
-  IUserDetailsField,
-} from '../types'
-import {
-  setCompanyAddress,
-  setCompanyContactInfo,
-  setCompanyName,
-} from '../redux/slices/company'
+import { ICompanyDetailsPayload, IUserDetailsField } from '../types'
+import { setCompanyDetails } from '../redux/slices/company'
 
 export const ProfileScreen = () => {
   const dispatch = useAppDispatch()
@@ -31,16 +22,9 @@ export const ProfileScreen = () => {
   const handleUserDetailsSubmit = (userDetailsField: IUserDetailsField) =>
     dispatch(setUserDetail(userDetailsField))
 
-  const handleCompanyNameSubmit = (companyNameField: ICompanyNameField) =>
-    dispatch(setCompanyName(companyNameField))
-
-  const handleCompanyAddressSubmit = (
-    companyAddressField: ICompanyAddressField
-  ) => dispatch(setCompanyAddress(companyAddressField))
-
-  const handleCompanyContactSubmit = (
-    companyContactField: ICompanyContactField
-  ) => dispatch(setCompanyContactInfo(companyContactField))
+  const handleCompanyDetailsSubmit = (
+    companyDetailsPayload: ICompanyDetailsPayload
+  ) => dispatch(setCompanyDetails(companyDetailsPayload))
 
   return (
     <ScrollView>
@@ -57,9 +41,7 @@ export const ProfileScreen = () => {
           initialValues={userDetails}
         />
         <CompanyDetailsForm
-          onSubmitCompanyName={handleCompanyNameSubmit}
-          onSubmitCompanyAddress={handleCompanyAddressSubmit}
-          onSubmitCompanyContact={handleCompanyContactSubmit}
+          onSubmitCompanyDetails={handleCompanyDetailsSubmit}
           initialValues={companyDetails}
         />
       </Container>

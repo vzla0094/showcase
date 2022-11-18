@@ -4,12 +4,13 @@ import { FontAwesome } from '@expo/vector-icons'
 import { DiscoveryScreen } from '../screens/DiscoveryScreen'
 import { SearchScreen } from '../screens/SearchScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
-import { PromotionScreen } from '../screens/PromotionScreen'
+import { CompanyScreen } from '../screens/CompanyScreen'
+import { useAppSelector } from '../hooks'
 
 const Tab = createBottomTabNavigator<RootStackParamList>()
 
 export const BottomNavigator = () => {
-  const hasCompany = true // TODO: wire up to Profile if the user filled company details
+  const hasCompany = useAppSelector(state => state.company.active)
 
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
@@ -44,11 +45,11 @@ export const BottomNavigator = () => {
         <Tab.Screen
           options={{
             tabBarIcon: ({ color, size }) => (
-              <FontAwesome name="tags" color={color} size={size} />
+              <FontAwesome name="building" color={color} size={size} />
             ),
           }}
-          name="Promotion"
-          component={PromotionScreen}
+          name="Company"
+          component={CompanyScreen}
         />
       )}
     </Tab.Navigator>

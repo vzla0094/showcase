@@ -19,13 +19,12 @@ import {
 import {
   DealCategoryNames,
   ICompany,
-  ICompanyAddressField,
-  ICompanyContactField,
-  ICompanyNameField,
   IDeal,
   IInitializeCompanyData,
+  ICompanyDetailsPayload,
   IUser,
   IUserDetailsField,
+  ICompanyDetailsField,
 } from './src/types'
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from './src/hooks'
@@ -210,13 +209,14 @@ export const useAuth = () => {
   return authenticated
 }
 
-// Hydrates company redux state from firebase data
-// Creates a new company document and generates companyId
-// Updates company document with generated companyId
+// Company
 export const FBInitializeCompany = async ({
   companyId,
   uid,
 }: IInitializeCompanyData): Promise<ICompany> => {
+  // Hydrates company redux state from firebase data
+  // Creates a new company document and generates companyId
+  // Updates company document with generated companyId
   try {
     if (companyId) {
       // Hydrate redux state with existing company data from firebase
@@ -249,59 +249,27 @@ export const FBInitializeCompany = async ({
   }
 }
 
-// company
-export const FBSetCompanyName = async (
+export const FBSetCompanyDetails = async (
   companyId: ICompany['companyId'],
-  companyNameField: ICompanyNameField
-): Promise<ICompanyNameField> => {
+  { detailSection, companyDetailsField }: ICompanyDetailsPayload
+): Promise<ICompanyDetailsField> => {
+  const { fieldKey, value } = companyDetailsField
   try {
     const companyRef = doc(db, 'companies', companyId)
 
-    await updateDoc(companyRef, { name: companyNameField.value })
+    if (detailSection) {
+      await updateDoc(companyRef, {
+        [`${detailSection}.${fieldKey}`]: value,
+      })
 
-    return companyNameField
+      return companyDetailsField
+    }
+
+    await updateDoc(companyRef, { [fieldKey]: value })
+
+    return companyDetailsField
   } catch (e) {
-    console.error('Error setting company name', e)
-
-    return e
-  }
-}
-
-export const FBSetCompanyAddress = async (
-  companyId: ICompany['companyId'],
-  companyAddressField: ICompanyAddressField
-): Promise<ICompanyAddressField> => {
-  const { fieldKey, value } = companyAddressField
-  try {
-    const companyRef = doc(db, 'companies', companyId)
-
-    await updateDoc(companyRef, {
-      [`address.${fieldKey}`]: value,
-    })
-
-    return companyAddressField
-  } catch (e) {
-    console.error('Error setting company address: ', e)
-
-    return e
-  }
-}
-
-export const FBSetCompanyContactInfo = async (
-  companyId: ICompany['companyId'],
-  companyContactField: ICompanyContactField
-): Promise<ICompanyContactField> => {
-  const { fieldKey, value } = companyContactField
-  try {
-    const companyRef = doc(db, 'companies', companyId)
-
-    await updateDoc(companyRef, {
-      [`contactInfo.${fieldKey}`]: value,
-    })
-
-    return companyContactField
-  } catch (e) {
-    console.error('Error setting company contact information: ', e)
+    console.error('Error setting company details: ', e)
 
     return e
   }
