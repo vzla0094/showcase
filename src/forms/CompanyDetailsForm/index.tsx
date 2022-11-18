@@ -3,24 +3,20 @@ import {
   COMPANY_ADDRESS_DETAILS,
   COMPANY_CONTACT_DETAILS,
   CompanyDetailsType,
-  ICompanyAddressField,
-  ICompanyContactField,
-  ICompanyNameField,
+  ICompanyDetailsPayload,
 } from '../../types'
 import { FirebaseInput } from '../../firebaseComponents/FirebaseInput'
 import { CompanyDetailsSchema } from './schema'
 
 interface ICompanyDetailsFormProps {
-  onSubmitCompanyName: (name: ICompanyNameField) => void
-  onSubmitCompanyAddress: (companyAddressField: ICompanyAddressField) => void
-  onSubmitCompanyContact: (companyContactField: ICompanyContactField) => void
+  onSubmitCompanyDetails: (
+    companyDetailsPayload: ICompanyDetailsPayload
+  ) => void
   initialValues: CompanyDetailsType
 }
 
 export const CompanyDetailsForm = ({
-  onSubmitCompanyName,
-  onSubmitCompanyAddress,
-  onSubmitCompanyContact,
+  onSubmitCompanyDetails,
   initialValues,
 }: ICompanyDetailsFormProps) => {
   const companyAddressData = [
@@ -43,7 +39,9 @@ export const CompanyDetailsForm = ({
       <FirebaseInput
         fieldKey="name"
         validationSchema={CompanyDetailsSchema['name']}
-        onSubmit={onSubmitCompanyName}
+        onSubmit={companyDetailsField =>
+          onSubmitCompanyDetails({ companyDetailsField })
+        }
         label="Company name"
         key="name"
         initialValue={initialValues.name}
@@ -52,7 +50,12 @@ export const CompanyDetailsForm = ({
         <FirebaseInput
           fieldKey={key}
           validationSchema={CompanyDetailsSchema[key]}
-          onSubmit={onSubmitCompanyAddress}
+          onSubmit={companyDetailsField =>
+            onSubmitCompanyDetails({
+              detailSection: 'address',
+              companyDetailsField,
+            })
+          }
           label={label}
           initialValue={initialValues[key]}
           key={key}
@@ -62,7 +65,12 @@ export const CompanyDetailsForm = ({
         <FirebaseInput
           fieldKey={key}
           validationSchema={CompanyDetailsSchema[key]}
-          onSubmit={onSubmitCompanyContact}
+          onSubmit={companyDetailsField =>
+            onSubmitCompanyDetails({
+              detailSection: 'contactInfo',
+              companyDetailsField,
+            })
+          }
           label={label}
           initialValue={initialValues[key]}
           key={key}
