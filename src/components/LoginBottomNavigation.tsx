@@ -18,7 +18,7 @@ export const LoginBottomNavigation = ({
       }}
     >
       <Button onPress={() => navigation.navigate('LoginOrRegister')}>
-        Login
+        Login / Register
       </Button>
     </Box>
   )
