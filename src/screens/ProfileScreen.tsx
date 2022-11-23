@@ -1,10 +1,10 @@
-import { Container, ScrollView } from 'native-base'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { UserDetailsForm } from '../forms/UserDetailsForm'
 import { CompanyDetailsForm } from '../forms/CompanyDetailsForm'
 import { setUserDetail } from '../redux/slices/user'
 import { ICompanyDetailsPayload, IUserDetailsField } from '../types'
 import { setCompanyDetails } from '../redux/slices/company'
+import { ViewContainer } from '../atoms/ViewContainer'
 
 export const ProfileScreen = () => {
   const dispatch = useAppDispatch()
@@ -27,24 +27,15 @@ export const ProfileScreen = () => {
   ) => dispatch(setCompanyDetails(companyDetailsPayload))
 
   return (
-    <ScrollView>
-      <Container
-        safeArea
-        centerContent
-        flex={1}
-        alignSelf="center"
-        alignItems="stretch"
-        width="100%"
-      >
-        <UserDetailsForm
-          onSubmit={handleUserDetailsSubmit}
-          initialValues={userDetails}
-        />
-        <CompanyDetailsForm
-          onSubmitCompanyDetails={handleCompanyDetailsSubmit}
-          initialValues={companyDetails}
-        />
-      </Container>
-    </ScrollView>
+    <ViewContainer alignment="stretch" scroll>
+      <UserDetailsForm
+        onSubmit={handleUserDetailsSubmit}
+        initialValues={userDetails}
+      />
+      <CompanyDetailsForm
+        onSubmitCompanyDetails={handleCompanyDetailsSubmit}
+        initialValues={companyDetails}
+      />
+    </ViewContainer>
   )
 }

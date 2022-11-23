@@ -1,9 +1,8 @@
-import { Center, Container, Heading } from 'native-base'
+import { Heading } from 'native-base'
+import { ViewContainer } from '../atoms/ViewContainer'
 
 export const SearchScreen = () => (
-  <Center flex={1}>
-    <Container centerContent safeArea flex={1} w="100%">
-      <Heading>Search screen</Heading>
-    </Container>
-  </Center>
+  <ViewContainer>
+    <Heading>Search screen</Heading>
+  </ViewContainer>
 )
