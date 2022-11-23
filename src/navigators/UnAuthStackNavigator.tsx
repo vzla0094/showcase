@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../types'
+import { UnAuthStackParamList } from '../types'
 import { DiscoveryScreen } from '../screens/DiscoveryScreen'
 import { LoginOrRegisterScreen } from '../screens/LoginOrRegisterScreen'
 
-const Stack = createNativeStackNavigator<RootStackParamList>()
+const Stack = createNativeStackNavigator<UnAuthStackParamList>()
 
-export const StackNavigator = () => (
+export const UnAuthStackNavigator = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Discovery">
       {props => <DiscoveryScreen {...props} loginBottom={true} />}

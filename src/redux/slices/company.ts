@@ -11,7 +11,7 @@ export const companyInitialState: ICompany = {
   companyId: '',
   name: '',
   members: [],
-  deals: [],
+  events: [],
   active: false,
   address: {
     streetAddress: '',

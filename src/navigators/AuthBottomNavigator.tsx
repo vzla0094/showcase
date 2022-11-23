@@ -1,15 +1,15 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { RootStackParamList } from '../types'
+import { AuthBottomTabParamList } from '../types'
 import { FontAwesome } from '@expo/vector-icons'
 import { DiscoveryScreen } from '../screens/DiscoveryScreen'
 import { SearchScreen } from '../screens/SearchScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
-import { CompanyScreen } from '../screens/CompanyScreen'
 import { useAppSelector } from '../hooks'
+import { CompanyStackNavigator } from './CompanyNavigator'
 
-const Tab = createBottomTabNavigator<RootStackParamList>()
+const Tab = createBottomTabNavigator<AuthBottomTabParamList>()
 
-export const BottomNavigator = () => {
+export const AuthBottomNavigator = () => {
   const hasCompany = useAppSelector(state => state.company.active)
 
   return (
@@ -48,8 +48,8 @@ export const BottomNavigator = () => {
               <FontAwesome name="building" color={color} size={size} />
             ),
           }}
-          name="Company"
-          component={CompanyScreen}
+          name="CompanyNavigator"
+          component={CompanyStackNavigator}
         />
       )}
     </Tab.Navigator>

@@ -13,11 +13,11 @@ export const UserDetailsForm = ({
   initialValues,
 }: IUserDetailsFormProps) => {
   const userDetailsData = [
-    { key: USER_DETAILS.username, label: 'Display name' },
-    { key: USER_DETAILS.birthDay, label: 'Day of birth' },
-    { key: USER_DETAILS.birthMonth, label: 'Month of birth' },
-    { key: USER_DETAILS.birthYear, label: 'Year of birth' },
-    { key: USER_DETAILS.phoneNumber, label: 'Phone number' },
+    { key: USER_DETAILS.Username, label: 'Display name' },
+    { key: USER_DETAILS.BirthDay, label: 'Day of birth' },
+    { key: USER_DETAILS.BirthMonth, label: 'Month of birth' },
+    { key: USER_DETAILS.BirthYear, label: 'Year of birth' },
+    { key: USER_DETAILS.PhoneNumber, label: 'Phone number' },
   ]
 
   return (

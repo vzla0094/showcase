@@ -1,16 +1,16 @@
 import { NavigationContainer } from '@react-navigation/native'
 
-import { BottomNavigator } from './BottomNavigator'
+import { AuthBottomNavigator } from './AuthBottomNavigator'
 
 import { useAuth } from '../../firebase'
-import { StackNavigator } from './StackNavigator'
+import { UnAuthStackNavigator } from './UnAuthStackNavigator'
 
 export default function RootNavigator() {
   const authenticated = useAuth()
 
   return (
     <NavigationContainer>
-      {authenticated ? <BottomNavigator /> : <StackNavigator />}
+      {authenticated ? <AuthBottomNavigator /> : <UnAuthStackNavigator />}
     </NavigationContainer>
   )
 }

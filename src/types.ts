@@ -2,19 +2,31 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { DocumentData, DocumentReference } from 'firebase/firestore'
 
 // Navigation
-export type RootStackParamList = {
+export type UnAuthStackParamList = {
+  Discovery: undefined
   LoginOrRegister: undefined
-  Landing: undefined
-  Questionnaire: undefined
+}
+
+export type AuthBottomTabParamList = {
   Discovery: undefined
   Search: undefined
   Profile: undefined
-  Promotion: undefined
-  Company: undefined
+  CompanyNavigator: undefined
 }
 
-export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
-  NativeStackScreenProps<RootStackParamList, Screen>
+export type CompanyStackParamList = {
+  Company: undefined
+  CreateEvent: {
+    eventId: string
+  }
+}
+
+export type UnAuthStackScreenProps<Screen extends keyof UnAuthStackParamList> =
+  NativeStackScreenProps<UnAuthStackParamList, Screen>
+
+export type CompanyStackScreenProps<
+  Screen extends keyof CompanyStackParamList
+> = NativeStackScreenProps<CompanyStackParamList, Screen>
 
 // Deals
 export type DealCategoryNames =
@@ -79,11 +91,11 @@ export interface IUser {
 }
 
 export enum USER_DETAILS {
-  username = 'username',
-  birthDay = 'birthDay',
-  birthMonth = 'birthMonth',
-  birthYear = 'birthYear',
-  phoneNumber = 'phoneNumber',
+  Username = 'username',
+  BirthDay = 'birthDay',
+  BirthMonth = 'birthMonth',
+  BirthYear = 'birthYear',
+  PhoneNumber = 'phoneNumber',
 }
 
 export type UserDetailsType = {
@@ -105,7 +117,7 @@ export interface ICompany {
   companyId: string
   name: string
   members?: Array<IUser['uid']>
-  deals?: Array<string>
+  events?: Array<IEvent>
   active: boolean
   address: {
     streetAddress: string
@@ -124,17 +136,17 @@ export interface ICompany {
 }
 
 export enum COMPANY_ADDRESS_DETAILS {
-  streetAddress = 'streetAddress',
-  city = 'city',
-  stateProvince = 'stateProvince',
-  country = 'country',
-  zipCode = 'zipCode',
+  StreetAddress = 'streetAddress',
+  City = 'city',
+  StateProvince = 'stateProvince',
+  Country = 'country',
+  ZipCode = 'zipCode',
 }
 
 export enum COMPANY_CONTACT_DETAILS {
-  telephoneNumber = 'telephoneNumber',
-  cellphoneNumber = 'cellphoneNumber',
-  email = 'email',
+  TelephoneNumber = 'telephoneNumber',
+  CellphoneNumber = 'cellphoneNumber',
+  Email = 'email',
 }
 
 export type CompanyAddressType = {
@@ -167,4 +179,43 @@ export interface ICompanyDetailsField {
 export interface ICompanyDetailsPayload {
   detailSection?: 'address' | 'contactInfo'
   companyDetailsField: ICompanyDetailsField
+}
+
+// Events
+export enum EVENT_FIELD_NAMES {
+  EventName = 'eventName',
+  Description = 'description',
+}
+
+export type EventValuesType = {
+  [key in EVENT_FIELD_NAMES]: string
+}
+
+interface ITicket {
+  reservedTimeStamp: string
+  redeemedTimeStamp: string
+  id: string
+}
+
+export interface IEvent {
+  id: string
+  company: DocumentReference<DocumentData> | ''
+  name: string
+  description: string
+  startDateTime: string
+  endDateTime: string
+  ticketCount: number
+  ticketLimit: number
+  tickets: Array<ITicket>
+  timeSlots: []
+}
+
+export interface IEditEventPayload {
+  id: IEvent['id']
+  data: Partial<IEvent>
+}
+
+export interface IFirebaseInputField {
+  fieldKey: any
+  value: any
 }
