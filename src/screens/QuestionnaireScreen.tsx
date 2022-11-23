@@ -1,13 +1,10 @@
-import { FC } from 'react'
-import { RootStackScreenProps, DealCategoryNames } from '../types'
+import { DealCategoryNames } from '../types'
 import { QuestionnaireView } from '../views/QuestionnaireView'
 import { dealsActions } from '../redux/slices/deals'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { useCreateDealMutation } from '../redux/services/deals'
 
-export const QuestionnaireScreen: FC<RootStackScreenProps<'Questionnaire'>> = ({
-  navigation,
-}) => {
+export const QuestionnaireScreen = () => {
   const activeDeals = useAppSelector(
     state => state.deals.activeDealCategoryNames
   )
@@ -50,7 +47,7 @@ export const QuestionnaireScreen: FC<RootStackScreenProps<'Questionnaire'>> = ({
             ],
           })
         })
-        navigation.navigate('Discovery')
+        // navigation.navigate('Discovery') // TODO: determine new flow
       }}
       disableContinue={!activeDeals.length}
     />

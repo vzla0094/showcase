@@ -4,10 +4,10 @@ import { useAppSelector } from '../hooks'
 import { DiscoveryView } from '../views/DiscoveryView'
 import { useGetActiveDealsQuery } from '../redux/services/deals'
 import { LoginBottomNavigation } from '../components/LoginBottomNavigation'
-import { RootStackScreenProps } from '../types'
+import { UnAuthStackScreenProps } from '../types'
 
 interface IDiscoveryScreenProps {
-  navigation: RootStackScreenProps<'Discovery'>['navigation']
+  navigation: UnAuthStackScreenProps<'Discovery'>['navigation']
   loginBottom: boolean
 }
 

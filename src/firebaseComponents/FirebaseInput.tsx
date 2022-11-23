@@ -1,12 +1,8 @@
 import { FormEvent } from 'react'
 import { Formik } from 'formik'
-import { Input, FormControl, IFormControlProps } from 'native-base'
+import { FormControl, IFormControlProps, Input } from 'native-base'
 import * as yup from 'yup'
-
-interface IField {
-  fieldKey: any
-  value: any
-}
+import { IFirebaseInputField } from '../types'
 
 interface IFirebaseInputProps extends IFormControlProps {
   fieldKey: string
@@ -15,7 +11,7 @@ interface IFirebaseInputProps extends IFormControlProps {
   multiline?: boolean
   initialValue?: string
   validationSchema: yup.AnySchema
-  onSubmit: (field: IField) => void
+  onSubmit: (field: IFirebaseInputField) => void
 }
 
 export const FirebaseInput = ({

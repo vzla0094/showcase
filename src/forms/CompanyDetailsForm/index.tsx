@@ -20,17 +20,17 @@ export const CompanyDetailsForm = ({
   initialValues,
 }: ICompanyDetailsFormProps) => {
   const companyAddressData = [
-    { key: COMPANY_ADDRESS_DETAILS.streetAddress, label: 'Street address' },
-    { key: COMPANY_ADDRESS_DETAILS.city, label: 'City' },
-    { key: COMPANY_ADDRESS_DETAILS.stateProvince, label: 'State / Province' },
-    { key: COMPANY_ADDRESS_DETAILS.country, label: 'Country' },
-    { key: COMPANY_ADDRESS_DETAILS.zipCode, label: 'Zip code' },
+    { key: COMPANY_ADDRESS_DETAILS.StreetAddress, label: 'Street address' },
+    { key: COMPANY_ADDRESS_DETAILS.City, label: 'City' },
+    { key: COMPANY_ADDRESS_DETAILS.StateProvince, label: 'State / Province' },
+    { key: COMPANY_ADDRESS_DETAILS.Country, label: 'Country' },
+    { key: COMPANY_ADDRESS_DETAILS.ZipCode, label: 'Zip code' },
   ]
 
   const companyContactData = [
-    { key: COMPANY_CONTACT_DETAILS.telephoneNumber, label: 'Telephone number' },
-    { key: COMPANY_CONTACT_DETAILS.cellphoneNumber, label: 'Cellphone number' },
-    { key: COMPANY_CONTACT_DETAILS.email, label: 'Email' },
+    { key: COMPANY_CONTACT_DETAILS.TelephoneNumber, label: 'Telephone number' },
+    { key: COMPANY_CONTACT_DETAILS.CellphoneNumber, label: 'Cellphone number' },
+    { key: COMPANY_CONTACT_DETAILS.Email, label: 'Email' },
   ]
 
   return (

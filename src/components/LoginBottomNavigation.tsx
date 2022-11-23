@@ -1,8 +1,8 @@
 import { Button, Box } from 'native-base'
-import { RootStackScreenProps } from '../types'
+import { UnAuthStackScreenProps } from '../types'
 
 interface ILoginBottomNavigationProps {
-  navigation: RootStackScreenProps<'Discovery'>['navigation']
+  navigation: UnAuthStackScreenProps<'Discovery'>['navigation']
 }
 
 export const LoginBottomNavigation = ({

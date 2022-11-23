@@ -1,8 +1,8 @@
 import { FC } from 'react'
 import { Button, Text, Container, Center } from 'native-base'
-import { RootStackScreenProps } from '../types'
+import { UnAuthStackScreenProps } from '../types'
 
-export const DashboardHeader: FC<RootStackScreenProps<'Discovery'>> = ({
+export const DashboardHeader: FC<UnAuthStackScreenProps<'Discovery'>> = ({
   navigation,
 }) => (
   <Center borderBottomWidth={1}>

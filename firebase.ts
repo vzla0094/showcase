@@ -9,6 +9,7 @@ import {
   query,
   setDoc,
   where,
+  arrayUnion,
 } from 'firebase/firestore'
 import {
   createUserWithEmailAndPassword,
@@ -25,6 +26,8 @@ import {
   IUser,
   IUserDetailsField,
   ICompanyDetailsField,
+  IEvent,
+  IEditEventPayload,
 } from './src/types'
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from './src/hooks'
@@ -34,6 +37,7 @@ import {
   companyInitialState,
 } from './src/redux/slices/company'
 import { userInitialState } from './src/redux/slices/user'
+import { emptyEvent } from './src/redux/slices/events'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAhWL-VE6px-42zW-veEUddTpIstjtxzJM',
@@ -269,7 +273,57 @@ export const FBSetCompanyDetails = async (
 
     return companyDetailsField
   } catch (e) {
-    console.error('Error setting company details: ', e)
+    console.error('Error setting company contact information: ', e)
+
+    return e
+  }
+}
+
+// Event
+export const FBCreateEvent = async (
+  companyId: ICompany['companyId']
+): Promise<IEvent> => {
+  try {
+    const companyRef = doc(db, 'companies', companyId)
+
+    // Adds a new event document with a generated id
+    const eventRef = await doc(collection(db, 'events'))
+    const generatedEventId = eventRef.id
+
+    // Adds initial data shape to the  event document including
+    // new generated id and company ref
+    const newEventData = {
+      ...emptyEvent,
+      id: generatedEventId,
+      company: companyRef,
+    }
+    await setDoc(eventRef, newEventData)
+
+    // Adds the event document reference to company.events
+    await updateDoc(companyRef, {
+      events: arrayUnion(eventRef),
+    })
+
+    return newEventData
+  } catch (e) {
+    console.error('Error creating event: ', e)
+
+    return e
+  }
+}
+
+export const FBEditEvent = async (
+  editEventPayload: IEditEventPayload
+): Promise<IEditEventPayload> => {
+  const { id, data } = editEventPayload
+  try {
+    const eventRef = doc(db, 'events', id)
+
+    await updateDoc(eventRef, data)
+
+    return editEventPayload
+  } catch (e) {
+    console.error('Error creating event: ', e)
 
     return e
   }
