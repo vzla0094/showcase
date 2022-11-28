@@ -34,10 +34,8 @@ import {
   ICompany,
   IDeal,
   IInitializeCompanyData,
-  ICompanyDetailsPayload,
   IUser,
   IUserDetailsField,
-  ICompanyDetailsField,
   IEvent,
   IEditEventPayload,
 } from './src/types'
@@ -259,25 +257,16 @@ export const FBCreateCompany = async (uid: IUser['uid']) => {
   }
 }
 
-export const FBSetCompanyDetails = async (
+export const FBSetCompany = async (
   companyId: ICompany['companyId'],
-  { detailSection, companyDetailsField }: ICompanyDetailsPayload
-): Promise<ICompanyDetailsField> => {
-  const { fieldKey, value } = companyDetailsField
+  payload: Partial<ICompany>
+): Promise<Partial<ICompany>> => {
   try {
     const companyRef = doc(db, 'companies', companyId)
 
-    if (detailSection) {
-      await updateDoc(companyRef, {
-        [`${detailSection}.${fieldKey}`]: value,
-      })
+    await updateDoc(companyRef, payload)
 
-      return companyDetailsField
-    }
-
-    await updateDoc(companyRef, { [fieldKey]: value })
-
-    return companyDetailsField
+    return payload
   } catch (e) {
     console.error('Error setting company contact information: ', e)
 

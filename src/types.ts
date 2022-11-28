@@ -127,65 +127,41 @@ export interface ICompany {
   members?: Array<IUser['uid']>
   events?: Array<IEvent>
   active: boolean
-  address: {
-    streetAddress: string
-    city: string
-    stateProvince: string
-    country: string
-    zipCode: string
-    latitude?: string
-    longitude?: string
-  }
-  contactInfo: {
-    telephoneNumber: string
-    cellphoneNumber: string
-    email: string
-  }
+  streetAddress: string
+  city: string
+  stateProvince: string
+  country: string
+  zipCode: string
+  latitude?: string
+  longitude?: string
+  telephoneNumber: string
+  cellphoneNumber: string
+  email: string
 }
 
-export enum COMPANY_ADDRESS_DETAILS {
+export enum COMPANY_DETAILS {
+  Name = 'name',
   StreetAddress = 'streetAddress',
   City = 'city',
   StateProvince = 'stateProvince',
   Country = 'country',
   ZipCode = 'zipCode',
-}
-
-export enum COMPANY_CONTACT_DETAILS {
   TelephoneNumber = 'telephoneNumber',
   CellphoneNumber = 'cellphoneNumber',
   Email = 'email',
 }
 
-export type CompanyAddressType = {
-  [key in COMPANY_ADDRESS_DETAILS]: string
-}
-
-export type CompanyContactInfoType = {
-  [key in COMPANY_CONTACT_DETAILS]: string
-}
-
 export type CompanyDetailsType = {
-  name: string
-} & CompanyAddressType &
-  CompanyContactInfoType
+  [key in COMPANY_DETAILS]: string
+}
 
 export interface IInitializeCompanyData {
   companyId: ICompany['companyId']
 }
 
 export interface ICompanyDetailsField {
-  fieldKey:
-    | COMPANY_ADDRESS_DETAILS
-    | COMPANY_CONTACT_DETAILS
-    | 'name'
-    | 'active'
+  fieldKey: COMPANY_DETAILS
   value: string | boolean
-}
-
-export interface ICompanyDetailsPayload {
-  detailSection?: 'address' | 'contactInfo'
-  companyDetailsField: ICompanyDetailsField
 }
 
 // Events

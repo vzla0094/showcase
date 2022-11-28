@@ -1,31 +1,46 @@
-import { setCompanyDetails } from '../redux/slices/company'
+import { setCompany } from '../redux/slices/company'
 import { useAppDispatch, useAppSelector } from '../hooks'
 
 import { CompanyDetailsForm } from '../forms/CompanyDetailsForm'
 import { ViewContainer } from '../atoms/ViewContainer'
 
-import { ICompanyDetailsPayload } from '../types'
+import { ICompanyDetailsField } from '../types'
 
 export const CompanyDetailsScreen = () => {
   const dispatch = useAppDispatch()
-  const companyDetails = useAppSelector(({ company }) => ({
-    name: company.name,
-    streetAddress: company.address.streetAddress,
-    city: company.address.city,
-    stateProvince: company.address.stateProvince,
-    country: company.address.country,
-    zipCode: company.address.zipCode,
-    ...company.contactInfo,
-  }))
+  const companyDetails = useAppSelector(
+    ({
+      company: {
+        name,
+        streetAddress,
+        city,
+        stateProvince,
+        country,
+        zipCode,
+        telephoneNumber,
+        cellphoneNumber,
+        email,
+      },
+    }) => ({
+      name,
+      streetAddress,
+      city,
+      stateProvince,
+      country,
+      zipCode,
+      telephoneNumber,
+      cellphoneNumber,
+      email,
+    })
+  )
 
-  const handleCompanyDetailsSubmit = (
-    companyDetailsPayload: ICompanyDetailsPayload
-  ) => dispatch(setCompanyDetails(companyDetailsPayload))
+  const handleSubmit = ({ fieldKey, value }: ICompanyDetailsField) =>
+    dispatch(setCompany({ [fieldKey]: value }))
 
   return (
     <ViewContainer alignment="stretch" scroll>
       <CompanyDetailsForm
-        onSubmitCompanyDetails={handleCompanyDetailsSubmit}
+        onSubmit={handleSubmit}
         initialValues={companyDetails}
       />
     </ViewContainer>

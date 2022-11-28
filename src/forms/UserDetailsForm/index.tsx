@@ -1,4 +1,5 @@
 import { Heading, VStack } from 'native-base'
+
 import { IUserDetailsField, USER_DETAILS, UserDetailsType } from '../../types'
 import { FirebaseInput } from '../../firebaseComponents/FirebaseInput'
 import { UserDetailsSchema } from './schema'
