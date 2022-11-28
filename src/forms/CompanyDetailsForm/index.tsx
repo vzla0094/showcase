@@ -1,12 +1,14 @@
-import { Heading, VStack } from 'native-base'
+import { VStack } from 'native-base'
+
+import { FirebaseInput } from '../../firebaseComponents/FirebaseInput'
+import { CompanyDetailsSchema } from './schema'
+
 import {
   COMPANY_ADDRESS_DETAILS,
   COMPANY_CONTACT_DETAILS,
   CompanyDetailsType,
   ICompanyDetailsPayload,
 } from '../../types'
-import { FirebaseInput } from '../../firebaseComponents/FirebaseInput'
-import { CompanyDetailsSchema } from './schema'
 
 interface ICompanyDetailsFormProps {
   onSubmitCompanyDetails: (
@@ -35,7 +37,6 @@ export const CompanyDetailsForm = ({
 
   return (
     <VStack space={2}>
-      <Heading>Company details</Heading>
       <FirebaseInput
         fieldKey="name"
         validationSchema={CompanyDetailsSchema['name']}

@@ -1,11 +1,19 @@
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
+import { RootState } from '../store'
+
+import {
+  FBCreateCompany,
+  FBInitializeCompany,
+  FBSetCompanyDetails,
+} from '../../../firebase'
+
 import {
   ICompany,
   IInitializeCompanyData,
   ICompanyDetailsPayload,
+  IUser,
 } from '../../types'
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { RootState } from '../store'
-import { FBInitializeCompany, FBSetCompanyDetails } from '../../../firebase'
 
 export const companyInitialState: ICompany = {
   companyId: '',
@@ -58,6 +66,11 @@ export const initializeCompany = createAsyncThunk(
   async (data: IInitializeCompanyData) => await FBInitializeCompany(data)
 )
 
+export const createCompany = createAsyncThunk(
+  'company/createCompany',
+  async (uid: IUser['uid']) => await FBCreateCompany(uid)
+)
+
 export const setCompanyDetails = createAsyncThunk(
   'company/setCompanyDetails',
   async (
@@ -106,6 +119,7 @@ export const companySlice = createSlice({
     builder.addCase(setCompanyActive.fulfilled, (state, { payload }) => {
       state.active = payload
     })
+    builder.addCase(createCompany.fulfilled, (state, { payload }) => payload)
   },
 })
 

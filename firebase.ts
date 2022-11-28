@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { initializeApp } from 'firebase/app'
 import {
   collection,
@@ -17,6 +19,16 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
 } from 'firebase/auth'
+
+import { useAppDispatch } from './src/hooks'
+import { actions } from './src/redux/slices'
+import {
+  initializeCompany,
+  companyInitialState,
+} from './src/redux/slices/company'
+import { emptyEvent } from './src/redux/slices/events'
+import { userInitialState } from './src/redux/slices/user'
+
 import {
   DealCategoryNames,
   ICompany,
@@ -29,15 +41,6 @@ import {
   IEvent,
   IEditEventPayload,
 } from './src/types'
-import { useEffect, useState } from 'react'
-import { useAppDispatch } from './src/hooks'
-import { actions } from './src/redux/slices'
-import {
-  initializeCompany,
-  companyInitialState,
-} from './src/redux/slices/company'
-import { userInitialState } from './src/redux/slices/user'
-import { emptyEvent } from './src/redux/slices/events'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAhWL-VE6px-42zW-veEUddTpIstjtxzJM',
@@ -198,7 +201,6 @@ export const useAuth = () => {
         dispatch(
           initializeCompany({
             companyId: user.company?.id || '',
-            uid: fbUser.uid,
           })
         )
 
@@ -216,19 +218,23 @@ export const useAuth = () => {
 // Company
 export const FBInitializeCompany = async ({
   companyId,
-  uid,
 }: IInitializeCompanyData): Promise<ICompany> => {
   // Hydrates company redux state from firebase data
-  // Creates a new company document and generates companyId
-  // Updates company document with generated companyId
+  if (!companyId) return companyInitialState
   try {
-    if (companyId) {
-      // Hydrate redux state with existing company data from firebase
-      const companySnap = await getDoc(doc(db, 'companies', companyId))
+    // Hydrate redux state with existing company data from firebase
+    const companySnap = await getDoc(doc(db, 'companies', companyId))
 
-      return companySnap.data() as ICompany
-    }
+    return companySnap.data() as ICompany
+  } catch (e) {
+    console.error('Error initializing company', e)
 
+    return e
+  }
+}
+
+export const FBCreateCompany = async (uid: IUser['uid']) => {
+  try {
     // Adds a new company document with a generated id
     const companyRef = await doc(collection(db, 'companies'))
     const generatedCompanyId = companyRef.id
@@ -247,7 +253,7 @@ export const FBInitializeCompany = async ({
 
     return newCompanyData
   } catch (e) {
-    console.error('Error initializing company', e)
+    console.error('Error creating company', e)
 
     return e
   }
