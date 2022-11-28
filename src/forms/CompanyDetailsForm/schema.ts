@@ -1,18 +1,9 @@
 import * as yup from 'yup'
-import { COMPANY_ADDRESS_DETAILS, COMPANY_CONTACT_DETAILS } from '../../types'
-
-type CompanyAddressSchemaType = {
-  [key in COMPANY_ADDRESS_DETAILS]: yup.AnySchema
-}
-
-type CompanyContactSchemaType = {
-  [key in COMPANY_CONTACT_DETAILS]: yup.AnySchema
-}
+import { COMPANY_DETAILS } from '../../types'
 
 type CompanyDetailsSchemaType = {
-  name: yup.AnySchema
-} & CompanyAddressSchemaType &
-  CompanyContactSchemaType
+  [key in COMPANY_DETAILS]: yup.AnySchema
+}
 
 export const CompanyDetailsSchema: CompanyDetailsSchemaType = {
   name: yup.string().required('Required'),

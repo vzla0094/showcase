@@ -5,15 +5,10 @@ import { RootState } from '../store'
 import {
   FBCreateCompany,
   FBInitializeCompany,
-  FBSetCompanyDetails,
+  FBSetCompany,
 } from '../../../firebase'
 
-import {
-  ICompany,
-  IInitializeCompanyData,
-  ICompanyDetailsPayload,
-  IUser,
-} from '../../types'
+import { ICompany, IInitializeCompanyData, IUser } from '../../types'
 
 export const companyInitialState: ICompany = {
   companyId: '',
@@ -21,25 +16,25 @@ export const companyInitialState: ICompany = {
   members: [],
   events: [],
   active: false,
-  address: {
-    streetAddress: '',
-    city: '',
-    stateProvince: '',
-    country: '',
-    zipCode: '',
-    latitude: '',
-    longitude: '',
-  },
-  contactInfo: {
-    telephoneNumber: '',
-    cellphoneNumber: '',
-    email: '',
-  },
+  streetAddress: '',
+  city: '',
+  stateProvince: '',
+  country: '',
+  zipCode: '',
+  latitude: '',
+  longitude: '',
+  telephoneNumber: '',
+  cellphoneNumber: '',
+  email: '',
 }
 
 const isCompanyActive = ({
   name,
-  address: { streetAddress, city, stateProvince, country, zipCode },
+  streetAddress,
+  city,
+  stateProvince,
+  country,
+  zipCode,
 }: ICompany) =>
   Boolean(name && streetAddress && city && stateProvince && country && zipCode)
 
@@ -53,9 +48,7 @@ const setCompanyActive = createAsyncThunk(
     if (active === newActiveState) return active
 
     // toggle company active state in firebase
-    await FBSetCompanyDetails(companyId, {
-      companyDetailsField: { fieldKey: 'active', value: newActiveState },
-    })
+    await FBSetCompany(companyId, { active: newActiveState })
 
     return newActiveState
   }
@@ -71,34 +64,17 @@ export const createCompany = createAsyncThunk(
   async (uid: IUser['uid']) => await FBCreateCompany(uid)
 )
 
-export const setCompanyDetails = createAsyncThunk(
-  'company/setCompanyDetails',
-  async (
-    companyDetailsPayload: ICompanyDetailsPayload,
-    { getState, dispatch }
-  ) => {
-    const { detailSection } = companyDetailsPayload
+export const setCompany = createAsyncThunk(
+  'company/setCompany',
+  async (payload: Partial<ICompany>, { getState, dispatch }) => {
     const state = getState() as RootState
     const { company } = state
-    let newCompanyState: ICompany
 
-    const { fieldKey, value } = await FBSetCompanyDetails(
-      company.companyId,
-      companyDetailsPayload
-    )
+    const data = await FBSetCompany(company.companyId, payload)
 
-    if (detailSection) {
-      newCompanyState = {
-        ...company,
-        [detailSection]: { ...company[detailSection], [fieldKey]: value },
-      }
-    } else {
-      newCompanyState = { ...company, [fieldKey]: value }
-    }
+    dispatch(setCompanyActive({ ...company, ...data }))
 
-    dispatch(setCompanyActive(newCompanyState))
-
-    return newCompanyState
+    return data
   }
 )
 
@@ -108,10 +84,10 @@ export const companySlice = createSlice({
   initialState: companyInitialState,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(
-      setCompanyDetails.fulfilled,
-      (state, { payload }) => payload
-    )
+    builder.addCase(setCompany.fulfilled, (state, { payload }) => ({
+      ...state,
+      ...payload,
+    }))
     builder.addCase(
       initializeCompany.fulfilled,
       (state, { payload }) => payload
