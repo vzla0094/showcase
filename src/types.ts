@@ -1,4 +1,7 @@
+import { NavigatorScreenParams } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
+
 import { DocumentData, DocumentReference } from 'firebase/firestore'
 
 // Navigation
@@ -11,18 +14,23 @@ export type AuthBottomTabParamList = {
   Discovery: undefined
   Search: undefined
   Profile: undefined
-  CompanyNavigator: undefined
+  Company: NavigatorScreenParams<CompanyStackParamList>
 }
 
 export type CompanyStackParamList = {
-  Company: undefined
+  Dashboard: undefined
   CreateEvent: {
     eventId: string
   }
+  CompanyDetails: undefined
 }
 
 export type UnAuthStackScreenProps<Screen extends keyof UnAuthStackParamList> =
   NativeStackScreenProps<UnAuthStackParamList, Screen>
+
+export type AuthBottomTabScreenProps<
+  Screen extends keyof AuthBottomTabParamList
+> = BottomTabScreenProps<AuthBottomTabParamList, Screen>
 
 export type CompanyStackScreenProps<
   Screen extends keyof CompanyStackParamList
@@ -164,7 +172,6 @@ export type CompanyDetailsType = {
 
 export interface IInitializeCompanyData {
   companyId: ICompany['companyId']
-  uid: IUser['uid']
 }
 
 export interface ICompanyDetailsField {

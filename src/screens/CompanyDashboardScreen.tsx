@@ -1,16 +1,18 @@
 import { Button } from 'native-base'
 
-import { ViewContainer } from '../atoms/ViewContainer'
-import { CompanyStackScreenProps, IEvent } from '../types'
-import { useAppDispatch } from '../hooks'
 import { createEvent } from '../redux/slices/events'
+import { useAppDispatch } from '../hooks'
 
-export const CompanyScreen = ({
+import { ViewContainer } from '../atoms/ViewContainer'
+
+import { CompanyStackScreenProps, IEvent } from '../types'
+
+export const CompanyDashboardScreen = ({
   navigation,
-}: CompanyStackScreenProps<'Company'>) => {
+}: CompanyStackScreenProps<'Dashboard'>) => {
   const dispatch = useAppDispatch()
 
-  const handlePress = async () => {
+  const handleCreateEvent = async () => {
     const action = await dispatch(createEvent())
     const payload = action.payload as IEvent
 
@@ -19,7 +21,7 @@ export const CompanyScreen = ({
 
   return (
     <ViewContainer>
-      <Button onPress={handlePress}>Create an Event</Button>
+      <Button onPress={handleCreateEvent}>Create an Event</Button>
     </ViewContainer>
   )
 }

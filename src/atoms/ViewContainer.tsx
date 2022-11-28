@@ -1,16 +1,16 @@
 import { ReactNode } from 'react'
-import { Center, Container, ScrollView } from 'native-base'
+import { Center, Container, ScrollView, IContainerProps } from 'native-base'
 
 interface IViewContainerProps {
   children: ReactNode
-  verticalCenterContent?: boolean
+  justifyContent?: IContainerProps['justifyContent']
   alignment?: 'start' | 'center' | 'stretch'
   scroll?: boolean
 }
 
 export const ViewContainer = ({
   children,
-  verticalCenterContent = false,
+  justifyContent = 'auto',
   alignment = 'center',
   scroll = false,
 }: IViewContainerProps) => {
@@ -20,7 +20,7 @@ export const ViewContainer = ({
         safeArea
         flex={1}
         w={'100%'}
-        justifyContent={verticalCenterContent ? 'center' : 'auto'}
+        justifyContent={justifyContent}
         alignItems={alignment}
       >
         {children}
