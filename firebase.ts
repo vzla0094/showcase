@@ -12,6 +12,7 @@ import {
   setDoc,
   where,
   arrayUnion,
+  onSnapshot,
 } from 'firebase/firestore'
 import {
   createUserWithEmailAndPassword,
@@ -36,8 +37,8 @@ import {
   IInitializeCompanyData,
   IUser,
   IUserDetailsField,
-  IEvent,
   IEditEventPayload,
+  IEvent,
 } from './src/types'
 
 const firebaseConfig = {
@@ -274,32 +275,45 @@ export const FBSetCompany = async (
   }
 }
 
+export const FBAddEvent = async (
+  companyId: ICompany['companyId'],
+  eventId: IEvent['id']
+): Promise<IEvent['id']> => {
+  // Adds the event document reference to company.events
+  try {
+    const companyRef = doc(db, 'companies', companyId)
+
+    await updateDoc(companyRef, {
+      events: arrayUnion(eventId),
+    })
+
+    return eventId
+  } catch (e) {
+    console.error('Error adding event to company: ', e)
+
+    return e
+  }
+}
+
 // Event
 export const FBCreateEvent = async (
   companyId: ICompany['companyId']
 ): Promise<IEvent> => {
   try {
-    const companyRef = doc(db, 'companies', companyId)
-
     // Adds a new event document with a generated id
     const eventRef = await doc(collection(db, 'events'))
     const generatedEventId = eventRef.id
 
     // Adds initial data shape to the  event document including
     // new generated id and company ref
-    const newEventData = {
+    const data = {
       ...emptyEvent,
       id: generatedEventId,
-      company: companyRef,
+      company: companyId,
     }
-    await setDoc(eventRef, newEventData)
+    await setDoc(eventRef, data)
 
-    // Adds the event document reference to company.events
-    await updateDoc(companyRef, {
-      events: arrayUnion(eventRef),
-    })
-
-    return newEventData
+    return data
   } catch (e) {
     console.error('Error creating event: ', e)
 
@@ -322,4 +336,39 @@ export const FBEditEvent = async (
 
     return e
   }
+}
+
+export const FBGetEvent = async (eventId: IEvent['id']): Promise<IEvent> => {
+  try {
+    const eventSnap = await getDoc(doc(db, 'events', eventId))
+
+    return eventSnap.data() as IEvent
+  } catch (e) {
+    console.error('Error getting event: ', e)
+
+    return e
+  }
+}
+
+export const useEvents = () => {
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    return onSnapshot(collection(db, 'events'), snapshot => {
+      snapshot.docChanges().forEach(change => {
+        if (change.type === 'added') {
+          const data = change.doc.data() as IEvent
+          dispatch(actions.events.addEvent(data))
+        }
+        if (change.type === 'modified') {
+          const data = change.doc.data() as IEvent
+          dispatch(actions.events.editEvent(data))
+        }
+        if (change.type === 'removed') {
+          console.log('Removed event: ', change.doc.data())
+          // TODO: wire up to event removal CTA if needed
+        }
+      })
+    })
+  }, [])
 }

@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../hooks'
 import { CompanyDetailsForm } from '../forms/CompanyDetailsForm'
 import { ViewContainer } from '../atoms/ViewContainer'
 
-import { ICompanyDetailsField } from '../types'
+import { COMPANY_DETAILS, IFirebaseInputField } from '../types'
 
 export const CompanyDetailsScreen = () => {
   const dispatch = useAppDispatch()
@@ -34,7 +34,10 @@ export const CompanyDetailsScreen = () => {
     })
   )
 
-  const handleSubmit = ({ fieldKey, value }: ICompanyDetailsField) =>
+  const handleSubmit = ({
+    fieldKey,
+    value,
+  }: IFirebaseInputField<COMPANY_DETAILS, string>) =>
     dispatch(setCompany({ [fieldKey]: value }))
 
   return (

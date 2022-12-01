@@ -18,11 +18,14 @@ export type AuthBottomTabParamList = {
 }
 
 export type CompanyStackParamList = {
-  Dashboard: undefined
-  CreateEvent: {
-    eventId: string
+  CompanyDashboard: undefined
+  EditEvent: {
+    id: string
   }
   CompanyDetails: undefined
+  Event: {
+    id: IEvent['id']
+  }
 }
 
 export type UnAuthStackScreenProps<Screen extends keyof UnAuthStackParamList> =
@@ -125,7 +128,7 @@ export interface ICompany {
   companyId: string
   name: string
   members?: Array<IUser['uid']>
-  events?: Array<IEvent>
+  events: Array<IEvent['id']>
   active: boolean
   streetAddress: string
   city: string
@@ -159,14 +162,14 @@ export interface IInitializeCompanyData {
   companyId: ICompany['companyId']
 }
 
-export interface ICompanyDetailsField {
-  fieldKey: COMPANY_DETAILS
-  value: string | boolean
+export interface IAddEventPayload {
+  companyId: ICompany['companyId']
+  eventId: IEvent['id']
 }
 
 // Events
 export enum EVENT_FIELD_NAMES {
-  EventName = 'eventName',
+  Name = 'name',
   Description = 'description',
 }
 
@@ -182,8 +185,10 @@ interface ITicket {
 
 export interface IEvent {
   id: string
-  company: DocumentReference<DocumentData> | ''
+  company: ICompany['companyId']
   name: string
+  category: string
+  state: 'draft' | 'published' | 'expired'
   description: string
   startDateTime: string
   endDateTime: string
@@ -198,7 +203,9 @@ export interface IEditEventPayload {
   data: Partial<IEvent>
 }
 
-export interface IFirebaseInputField {
-  fieldKey: any
-  value: any
+export interface IFirebaseInputField<FieldKeys, FieldValue> {
+  fieldKey: FieldKeys
+  value: FieldValue
 }
+
+export type handleEventPressType = (eventId: IEvent['id']) => void

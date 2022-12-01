@@ -1,26 +1,34 @@
 import { Button } from 'native-base'
 
-import { createEvent } from '../redux/slices/events'
-import { useAppDispatch } from '../hooks'
+import { FBCreateEvent } from '../../firebase'
 
+import { useAppSelector } from '../hooks'
+
+import { EventList } from '../molecules/EventList'
 import { ViewContainer } from '../atoms/ViewContainer'
 
-import { CompanyStackScreenProps, IEvent } from '../types'
+import { CompanyStackScreenProps, handleEventPressType } from '../types'
 
 export const CompanyDashboardScreen = ({
   navigation,
-}: CompanyStackScreenProps<'Dashboard'>) => {
-  const dispatch = useAppDispatch()
+}: CompanyStackScreenProps<'CompanyDashboard'>) => {
+  const companyId = useAppSelector(({ company }) => company.companyId)
+  const companyEvents = useAppSelector(({ events }) =>
+    events.events.filter(event => event.company === companyId)
+  )
 
   const handleCreateEvent = async () => {
-    const action = await dispatch(createEvent())
-    const payload = action.payload as IEvent
+    const { id } = await FBCreateEvent(companyId)
 
-    navigation.navigate('CreateEvent', { eventId: payload.id })
+    navigation.navigate('EditEvent', { id })
   }
+
+  const handleEventPress: handleEventPressType = id =>
+    navigation.navigate('Event', { id })
 
   return (
     <ViewContainer>
+      <EventList events={companyEvents} onPress={handleEventPress} />
       <Button onPress={handleCreateEvent}>Create an Event</Button>
     </ViewContainer>
   )
