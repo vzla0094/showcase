@@ -6,11 +6,11 @@ import { CompanyDetailsSchema } from './schema'
 import {
   COMPANY_DETAILS,
   CompanyDetailsType,
-  ICompanyDetailsField,
+  IFirebaseInputField,
 } from '../../types'
 
 interface ICompanyDetailsFormProps {
-  onSubmit: (companyDetailsField: ICompanyDetailsField) => void
+  onSubmit: (field: IFirebaseInputField<COMPANY_DETAILS, string>) => void
   initialValues: CompanyDetailsType
 }
 
@@ -33,7 +33,7 @@ export const CompanyDetailsForm = ({
   return (
     <VStack space={2}>
       {companyDetailsData.map(({ key, label }) => (
-        <FirebaseInput
+        <FirebaseInput<COMPANY_DETAILS, string>
           fieldKey={key}
           validationSchema={CompanyDetailsSchema[key]}
           onSubmit={onSubmit}

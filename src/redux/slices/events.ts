@@ -1,7 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IEditEventPayload, IEvent } from '../../types'
-import { FBCreateEvent, FBEditEvent } from '../../../firebase'
-import { RootState } from '../store'
+import { FBEditEvent } from '../../../firebase'
 
 interface IInitialState {
   loading: boolean
@@ -13,6 +12,8 @@ export const emptyEvent: IEvent = {
   id: '',
   company: '',
   name: '',
+  state: 'draft',
+  category: '',
   description: '',
   startDateTime: '',
   endDateTime: '',
@@ -28,35 +29,26 @@ const initialState: IInitialState = {
   events: [],
 }
 
-export const createEvent = createAsyncThunk(
-  'event/createEvent',
-  async (_, { getState }) => {
-    const state = getState() as RootState
-    const { company } = state
-
-    return await FBCreateEvent(company.companyId)
-  }
-)
-
 export const editEvent = createAsyncThunk(
-  'event/editEvent',
+  'events/editEvent',
   async (payload: IEditEventPayload) => await FBEditEvent(payload)
 )
 
 export const eventsSlice = createSlice({
   name: 'events',
   initialState,
-  reducers: {},
+  reducers: {
+    addEvent: (state, action: PayloadAction<IEvent>) => {
+      state.events.push(action.payload)
+    },
+    editEvent: (state, action: PayloadAction<IEvent>) => {
+      state.events.map(event => {
+        if (event.id !== action.payload.id) return event
+        return { ...event, ...action.payload }
+      })
+    },
+  },
   extraReducers: builder => {
-    builder
-      .addCase(createEvent.fulfilled, (state, { payload }) => {
-        state.loading = false
-        state.events = [...state.events, payload]
-      })
-      .addCase(createEvent.pending, state => {
-        state.loading = true
-      })
-
     builder.addCase(editEvent.fulfilled, (state, { payload }) => {
       state.events = state.events.map(event => {
         if (event.id !== payload.id) return event

@@ -3,12 +3,18 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 
 import {
+  FBAddEvent,
   FBCreateCompany,
   FBInitializeCompany,
   FBSetCompany,
 } from '../../../firebase'
 
-import { ICompany, IInitializeCompanyData, IUser } from '../../types'
+import {
+  IAddEventPayload,
+  ICompany,
+  IInitializeCompanyData,
+  IUser,
+} from '../../types'
 
 export const companyInitialState: ICompany = {
   companyId: '',
@@ -78,6 +84,12 @@ export const setCompany = createAsyncThunk(
   }
 )
 
+export const addEvent = createAsyncThunk(
+  'company/addEvent',
+  async ({ companyId, eventId }: IAddEventPayload) =>
+    FBAddEvent(companyId, eventId)
+)
+
 // TODO, add uuid for companyId for the first time
 export const companySlice = createSlice({
   name: 'company',
@@ -96,6 +108,9 @@ export const companySlice = createSlice({
       state.active = payload
     })
     builder.addCase(createCompany.fulfilled, (state, { payload }) => payload)
+    builder.addCase(addEvent.fulfilled, (state, { payload }) => {
+      state.events.push(payload)
+    })
   },
 })
 
