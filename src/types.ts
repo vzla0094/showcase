@@ -39,61 +39,6 @@ export type CompanyStackScreenProps<
   Screen extends keyof CompanyStackParamList
 > = NativeStackScreenProps<CompanyStackParamList, Screen>
 
-// Deals
-export type DealCategoryNames =
-  | 'Food'
-  | 'Activities'
-  | 'Events'
-  | 'Stay'
-  | 'Transportation'
-
-export interface IDealCategory {
-  name: DealCategoryNames
-  deals: Array<IDeal>
-}
-
-export type ToggleButtonOnPress = (buttonValue: DealCategoryNames) => void
-
-export interface IDealProps {
-  title: string
-  description: string
-}
-
-type TimeSlot = [{ start: string; end: string }]
-interface ITimeSlots {
-  sunday: TimeSlot
-  monday: TimeSlot
-  tuesday: TimeSlot
-  wednesday: TimeSlot
-  thursday: TimeSlot
-  friday: TimeSlot
-  saturday: TimeSlot
-}
-
-interface IReview {
-  uuid: string
-  comment: string
-  rating: string
-}
-
-export interface IDeal {
-  category: DealCategoryNames
-  timeSlots?: Partial<ITimeSlots>
-  dealId: string
-  active: boolean
-  validatedUsers: Array<string>
-  title: string
-  description: string
-  imageGallery: Array<string>
-  thumbnail: string
-  coverImage: string
-  startDate: string
-  endDate: string
-  quantityLimit: string
-  reviews: Array<IReview>
-  companyId?: ICompany['companyId']
-}
-
 // Users
 export interface IUser {
   uid: string
@@ -168,6 +113,8 @@ export interface IAddEventPayload {
 }
 
 // Events
+export type ToggleButtonOnPress = (buttonValue: EVENT_CATEGORIES) => void
+
 export enum EVENT_FIELD_NAMES {
   Name = 'name',
   Description = 'description',
@@ -187,7 +134,7 @@ export interface IEvent {
   id: string
   company: ICompany['companyId']
   name: string
-  category: string
+  category: EVENT_CATEGORIES | ''
   state: 'draft' | 'published' | 'expired'
   description: string
   startDateTime: string
@@ -209,3 +156,21 @@ export interface IFirebaseInputField<FieldKeys, FieldValue> {
 }
 
 export type handleEventPressType = (eventId: IEvent['id']) => void
+
+export enum EVENT_CATEGORIES {
+  Food = 'food',
+  Activities = 'activities',
+  Events = 'events',
+  Accommodation = 'accommodation',
+  Transportation = 'transportation',
+}
+
+export interface IEventCategory {
+  name: EVENT_CATEGORIES
+  events: Array<IEvent>
+}
+
+export interface IEventProps {
+  name: string
+  description: string
+}
