@@ -1,16 +1,15 @@
-import { IDealCategory } from '../types'
-import { FC } from 'react'
-import { DealCategory } from '../components/DealCategory'
+import { IEventCategory } from '../types'
+import { EventCategory } from '../components/EventCategory'
 import { ViewContainer } from '../atoms/ViewContainer'
 
 interface IDashboardView {
-  activeDealCategories: Array<IDealCategory>
+  eventCategories: Array<IEventCategory>
 }
 
-export const DiscoveryView: FC<IDashboardView> = ({ activeDealCategories }) => (
-  <ViewContainer scroll>
-    {activeDealCategories.map(dealCategory => (
-      <DealCategory key={dealCategory.name} dealCategory={dealCategory} />
+export const DiscoveryView = ({ eventCategories }: IDashboardView) => (
+  <ViewContainer scroll alignment="stretch">
+    {eventCategories.map((eventCategory, index) => (
+      <EventCategory key={index} eventCategory={eventCategory} />
     ))}
   </ViewContainer>
 )

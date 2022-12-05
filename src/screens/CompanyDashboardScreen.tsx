@@ -14,7 +14,7 @@ export const CompanyDashboardScreen = ({
 }: CompanyStackScreenProps<'CompanyDashboard'>) => {
   const companyId = useAppSelector(({ company }) => company.companyId)
   const companyEvents = useAppSelector(({ events }) =>
-    events.events.filter(event => event.company === companyId)
+    events.allEvents.filter(event => event.company === companyId)
   )
 
   const handleCreateEvent = async () => {

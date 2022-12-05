@@ -2,17 +2,16 @@ import { useEffect, useState } from 'react'
 
 import { initializeApp } from 'firebase/app'
 import {
+  arrayUnion,
   collection,
   doc,
   getDoc,
-  updateDoc,
-  getDocs as FBGetDocs,
   getFirestore,
+  onSnapshot,
   query,
   setDoc,
+  updateDoc,
   where,
-  arrayUnion,
-  onSnapshot,
 } from 'firebase/firestore'
 import {
   createUserWithEmailAndPassword,
@@ -24,21 +23,20 @@ import {
 import { useAppDispatch } from './src/hooks'
 import { actions } from './src/redux/slices'
 import {
-  initializeCompany,
   companyInitialState,
+  initializeCompany,
 } from './src/redux/slices/company'
 import { emptyEvent } from './src/redux/slices/events'
 import { userInitialState } from './src/redux/slices/user'
 
 import {
-  DealCategoryNames,
+  EVENT_CATEGORIES,
   ICompany,
-  IDeal,
+  IEditEventPayload,
+  IEvent,
   IInitializeCompanyData,
   IUser,
   IUserDetailsField,
-  IEditEventPayload,
-  IEvent,
 } from './src/types'
 
 const firebaseConfig = {
@@ -53,57 +51,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
-
-// Deals
-const getDocs = async (query: any) => {
-  try {
-    const docs: Array<unknown> = []
-    const querySnapshot = await FBGetDocs(query)
-    querySnapshot.forEach(doc => {
-      docs.push(doc.data())
-    })
-    return docs
-  } catch (e) {
-    console.error('Error getting documents: ', e)
-  }
-}
-
-export const createDeal = async (dealWithoutId: IDeal) => {
-  try {
-    // Add a new document with a generated id
-    const newDealRef = doc(collection(db, 'deals'))
-
-    // Add the firebase generated id to the deal
-    const dealWithId: IDeal = { ...dealWithoutId, dealId: newDealRef.id }
-
-    // Save deal with ID
-    await setDoc(newDealRef, dealWithId)
-
-    return [dealWithId, null]
-  } catch (e) {
-    console.error('Error setting deal: ', e)
-
-    return [null, e]
-  }
-}
-
-export const getActiveDeals = async (
-  activeDealCategories: Array<DealCategoryNames>
-) => {
-  try {
-    const activeDealsQuery = query(
-      collection(db, 'deals'),
-      where('category', 'in', activeDealCategories)
-    )
-    const data = await getDocs(activeDealsQuery)
-
-    return [data, null]
-  } catch (e) {
-    console.error('Error getting active deals: ', e)
-
-    return [null, e]
-  }
-}
 
 // Authentication
 const auth = getAuth()
@@ -353,6 +300,7 @@ export const FBGetEvent = async (eventId: IEvent['id']): Promise<IEvent> => {
 export const useEvents = () => {
   const dispatch = useAppDispatch()
 
+  // all events observer
   useEffect(() => {
     return onSnapshot(collection(db, 'events'), snapshot => {
       snapshot.docChanges().forEach(change => {
@@ -365,10 +313,47 @@ export const useEvents = () => {
           dispatch(actions.events.editEvent(data))
         }
         if (change.type === 'removed') {
-          console.log('Removed event: ', change.doc.data())
-          // TODO: wire up to event removal CTA if needed
+          const data = change.doc.data() as IEvent
+          dispatch(actions.events.removeEvent(data))
         }
       })
     })
   }, [])
+
+  // categories observers, TODO: see if this can be simplified (DRY)
+  useEventCategory(EVENT_CATEGORIES.Food)
+  useEventCategory(EVENT_CATEGORIES.Activities)
+  useEventCategory(EVENT_CATEGORIES.Events)
+  useEventCategory(EVENT_CATEGORIES.Accommodation)
+  useEventCategory(EVENT_CATEGORIES.Transportation)
+}
+
+const useEventCategory = (category: EVENT_CATEGORIES) => {
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    const q = query(
+      collection(db, 'events'),
+      where('category', '==', category),
+      where('state', '==', 'published')
+    )
+    return () => {
+      onSnapshot(q, snapshot => {
+        snapshot.docChanges().forEach(change => {
+          if (change.type === 'added') {
+            const data = change.doc.data() as IEvent
+            dispatch(actions.events.addEventCategory(data))
+          }
+          if (change.type === 'modified') {
+            const data = change.doc.data() as IEvent
+            dispatch(actions.events.editEventCategory(data))
+          }
+          if (change.type === 'removed') {
+            const data = change.doc.data() as IEvent
+            dispatch(actions.events.removeEventCategory(data))
+          }
+        })
+      })
+    }
+  })
 }

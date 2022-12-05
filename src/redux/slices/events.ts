@@ -1,11 +1,13 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IEditEventPayload, IEvent } from '../../types'
-import { FBEditEvent } from '../../../firebase'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { EVENT_CATEGORIES, IEvent } from '../../types'
 
 interface IInitialState {
   loading: boolean
   error: string
-  events: Array<IEvent>
+  allEvents: Array<IEvent>
+  categories: {
+    [key in EVENT_CATEGORIES]: Array<IEvent>
+  }
 }
 
 export const emptyEvent: IEvent = {
@@ -26,35 +28,52 @@ export const emptyEvent: IEvent = {
 const initialState: IInitialState = {
   error: '',
   loading: false,
-  events: [],
+  allEvents: [],
+  categories: {
+    food: [],
+    activities: [],
+    events: [],
+    accommodation: [],
+    transportation: [],
+  },
 }
-
-export const editEvent = createAsyncThunk(
-  'events/editEvent',
-  async (payload: IEditEventPayload) => await FBEditEvent(payload)
-)
 
 export const eventsSlice = createSlice({
   name: 'events',
   initialState,
   reducers: {
-    addEvent: (state, action: PayloadAction<IEvent>) => {
-      state.events.push(action.payload)
+    addEvent: (state, { payload }: PayloadAction<IEvent>) => {
+      state.allEvents.push(payload)
     },
-    editEvent: (state, action: PayloadAction<IEvent>) => {
-      state.events.map(event => {
-        if (event.id !== action.payload.id) return event
-        return { ...event, ...action.payload }
-      })
+    editEvent: (state, { payload }: PayloadAction<IEvent>) => {
+      state.allEvents = state.allEvents.map(event =>
+        event.id === payload.id ? { ...event, ...payload } : event
+      )
     },
-  },
-  extraReducers: builder => {
-    builder.addCase(editEvent.fulfilled, (state, { payload }) => {
-      state.events = state.events.map(event => {
-        if (event.id !== payload.id) return event
-        return { ...event, ...payload.data }
-      })
-    })
+    removeEvent: (state, { payload }: PayloadAction<IEvent>) => {
+      state.allEvents = state.allEvents.filter(event => event.id !== payload.id)
+    },
+    addEventCategory: (state, { payload }: PayloadAction<IEvent>) => {
+      if (payload.category) {
+        state.categories[payload.category].push(payload)
+      }
+    },
+    editEventCategory: (state, { payload }: PayloadAction<IEvent>) => {
+      if (payload.category) {
+        state.categories[payload.category] = state.categories[
+          payload.category
+        ].map(event =>
+          event.id === payload.id ? { ...event, ...payload } : event
+        )
+      }
+    },
+    removeEventCategory: (state, { payload }: PayloadAction<IEvent>) => {
+      if (payload.category) {
+        state.categories[payload.category] = state.categories[
+          payload.category
+        ].filter(event => event.id !== payload.id)
+      }
+    },
   },
 })
 

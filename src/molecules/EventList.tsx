@@ -10,11 +10,12 @@ export const EventList = ({ events, onPress }: IEventListProps) => (
   <Box>
     <Heading>Events</Heading>
     <VStack>
-      {events.map(({ id, name, description }) => (
+      {events.map(({ id, name, description, category }) => (
         <Box key={id}>
           <Pressable onPress={() => onPress(id)}>
             <Heading size="sm">{name}</Heading>
-            <Text>{description}</Text>
+            {Boolean(description) && <Text>{description}</Text>}
+            <Text>{category}</Text>
           </Pressable>
         </Box>
       ))}

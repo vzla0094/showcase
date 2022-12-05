@@ -1,10 +1,7 @@
-import { Text } from 'native-base'
-
 import { useAppSelector } from '../hooks'
 import { DiscoveryView } from '../views/DiscoveryView'
-import { useGetActiveDealsQuery } from '../redux/services/deals'
 import { LoginBottomNavigation } from '../components/LoginBottomNavigation'
-import { UnAuthStackScreenProps } from '../types'
+import { EVENT_CATEGORIES, UnAuthStackScreenProps } from '../types'
 
 interface IDiscoveryScreenProps {
   navigation: UnAuthStackScreenProps<'Discovery'>['navigation']
@@ -15,16 +12,18 @@ export const DiscoveryScreen = ({
   navigation,
   loginBottom = false,
 }: IDiscoveryScreenProps) => {
-  const activeDealCategoryNames = useAppSelector(
-    state => state.deals.activeDealCategoryNames
-  )
-  const { data, isLoading } = useGetActiveDealsQuery(activeDealCategoryNames)
+  const eventCategories = useAppSelector(({ events }) => {
+    const names = Object.keys(events.categories) as Array<EVENT_CATEGORIES>
 
-  return isLoading || !data ? (
-    <Text>Loading...</Text>
-  ) : (
+    return names.map(name => ({
+      name,
+      events: [...events.categories[name]],
+    }))
+  })
+
+  return (
     <>
-      <DiscoveryView activeDealCategories={data} />
+      <DiscoveryView eventCategories={eventCategories} />
       {loginBottom && <LoginBottomNavigation navigation={navigation} />}
     </>
   )
