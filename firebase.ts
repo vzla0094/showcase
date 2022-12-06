@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react'
 
+import {
+  getCurrentPositionAsync,
+  requestForegroundPermissionsAsync,
+} from 'expo-location'
+import { geohashForLocation } from 'geofire-common'
+
 import { initializeApp } from 'firebase/app'
 import {
   arrayUnion,
@@ -27,16 +33,19 @@ import {
   initializeCompany,
 } from './src/redux/slices/company'
 import { emptyEvent } from './src/redux/slices/events'
-import { userInitialState } from './src/redux/slices/user'
+import { setUserGeoLocation, userInitialState } from './src/redux/slices/user'
 
 import {
   EVENT_CATEGORIES,
   ICompany,
   IEditEventPayload,
   IEvent,
+  IGeolocation,
   IInitializeCompanyData,
+  IUseLocationRequest,
   IUser,
   IUserDetailsField,
+  StatusIUserLocation,
 } from './src/types'
 
 const firebaseConfig = {
@@ -103,6 +112,21 @@ export const setUser = async (user: IUser) => {
   }
 }
 
+export const FBSetUserGeoLocation = async (
+  geolocation: IGeolocation,
+  uid: IUser['uid']
+): Promise<IGeolocation> => {
+  try {
+    await updateDoc(doc(db, 'users', uid), { geolocation })
+
+    return geolocation
+  } catch (e) {
+    console.error('Error setting user data', e)
+
+    return e
+  }
+}
+
 export const FBSetUserDetail = async (
   uid: IUser['uid'],
   userDetailsField: IUserDetailsField
@@ -142,6 +166,9 @@ export const useAuth = () => {
         // user hydration
         const user = await getUser(fbUser.uid)
         dispatch(actions.user.setUser(user))
+
+        // user location
+        dispatch(setUserGeoLocation())
 
         // company hydration
         dispatch(
@@ -357,3 +384,39 @@ const useEventCategory = (category: EVENT_CATEGORIES) => {
     }
   })
 }
+
+// Location
+export const requestPermissionsAsync =
+  async (): Promise<IUseLocationRequest> => {
+    try {
+      const { status } = await requestForegroundPermissionsAsync()
+
+      if (status !== 'granted') {
+        return {
+          status: StatusIUserLocation.denied,
+          description: 'Permission to access location was denied',
+          variant: 'error',
+        }
+      }
+
+      const {
+        coords: { latitude, longitude, accuracy },
+      } = await getCurrentPositionAsync({})
+
+      if (latitude && longitude) {
+        const geoHash = geohashForLocation([latitude, longitude])
+
+        return {
+          status: StatusIUserLocation.allowed,
+          geolocation: { latitude, longitude, accuracy, geoHash },
+        }
+      }
+
+      return {
+        status: StatusIUserLocation.init,
+      }
+    } catch (e) {
+      console.error(`Error: useLocation`, e)
+      throw e
+    }
+  }
