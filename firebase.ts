@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import {
   getCurrentPositionAsync,
@@ -12,12 +12,14 @@ import {
   collection,
   doc,
   getDoc,
+  getDocs,
   getFirestore,
   onSnapshot,
-  query,
   setDoc,
   updateDoc,
   where,
+  query,
+  deleteDoc,
 } from 'firebase/firestore'
 import {
   createUserWithEmailAndPassword,
@@ -32,13 +34,12 @@ import {
   companyInitialState,
   initializeCompany,
 } from './src/redux/slices/company'
-import { emptyEvent } from './src/redux/slices/events'
 import { setUserGeoLocation, userInitialState } from './src/redux/slices/user'
 
 import {
-  EVENT_CATEGORIES,
+  EVENT_CATEGORY_NAMES,
+  categoryNamesArr,
   ICompany,
-  IEditEventPayload,
   IEvent,
   IGeolocation,
   IInitializeCompanyData,
@@ -46,7 +47,10 @@ import {
   IUser,
   IUserDetailsField,
   StatusIUserLocation,
+  categoryPathMap,
+  emptyEvent,
 } from './src/types'
+import { useFocusEffect } from '@react-navigation/native'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAhWL-VE6px-42zW-veEUddTpIstjtxzJM',
@@ -275,10 +279,10 @@ export const FBCreateEvent = async (
 ): Promise<IEvent> => {
   try {
     // Adds a new event document with a generated id
-    const eventRef = await doc(collection(db, 'events'))
+    const eventRef = await doc(collection(db, 'eventsFood'))
     const generatedEventId = eventRef.id
 
-    // Adds initial data shape to the  event document including
+    // Adds initial data shape to the event document including
     // new generated id and company ref
     const data = {
       ...emptyEvent,
@@ -295,26 +299,42 @@ export const FBCreateEvent = async (
   }
 }
 
-export const FBEditEvent = async (
-  editEventPayload: IEditEventPayload
-): Promise<IEditEventPayload> => {
-  const { id, data } = editEventPayload
-  try {
-    const eventRef = doc(db, 'events', id)
+export const useEvents = () =>
+  categoryNamesArr.map(categoryName => useEventCategoryObserver(categoryName))
 
-    await updateDoc(eventRef, data)
+export const useEventCategoryObserver = (
+  categoryName: EVENT_CATEGORY_NAMES
+) => {
+  const [events, setEvents] = useState<Array<IEvent>>([])
 
-    return editEventPayload
-  } catch (e) {
-    console.error('Error creating event: ', e)
+  useFocusEffect(
+    useCallback(() => {
+      const path = categoryPathMap[categoryName]
+      const q = query(collection(db, path), where('state', '==', 'published'))
 
-    return e
-  }
+      const unsubscribe = onSnapshot(q, snapshot => {
+        snapshot.forEach(doc => {
+          const data = doc.data() as IEvent
+          setEvents(prevState => [...prevState, data])
+        })
+      })
+
+      return () => {
+        setEvents([])
+        unsubscribe()
+      }
+    }, [])
+  )
+  return { name: categoryName, events }
 }
 
-export const FBGetEvent = async (eventId: IEvent['id']): Promise<IEvent> => {
+export const FBGetEvent = async (
+  eventId: IEvent['id'],
+  category: IEvent['category']
+): Promise<IEvent> => {
+  const path = categoryPathMap[category]
   try {
-    const eventSnap = await getDoc(doc(db, 'events', eventId))
+    const eventSnap = await getDoc(doc(db, path, eventId))
 
     return eventSnap.data() as IEvent
   } catch (e) {
@@ -324,65 +344,58 @@ export const FBGetEvent = async (eventId: IEvent['id']): Promise<IEvent> => {
   }
 }
 
-export const useEvents = () => {
-  const dispatch = useAppDispatch()
+export const FBGetCompanyEvents = async (
+  companyId: ICompany['companyId']
+): Promise<Array<IEvent>> => {
+  const companyEvents: Array<IEvent> = []
 
-  // all events observer
-  useEffect(() => {
-    return onSnapshot(collection(db, 'events'), snapshot => {
-      snapshot.docChanges().forEach(change => {
-        if (change.type === 'added') {
-          const data = change.doc.data() as IEvent
-          dispatch(actions.events.addEvent(data))
-        }
-        if (change.type === 'modified') {
-          const data = change.doc.data() as IEvent
-          dispatch(actions.events.editEvent(data))
-        }
-        if (change.type === 'removed') {
-          const data = change.doc.data() as IEvent
-          dispatch(actions.events.removeEvent(data))
-        }
+  await Promise.all(
+    categoryNamesArr.map(async categoryName => {
+      const path = categoryPathMap[categoryName]
+
+      const q = query(collection(db, path), where('company', '==', companyId))
+
+      const querySnapshot = await getDocs(q)
+
+      querySnapshot.forEach(doc => {
+        const data = doc.data() as IEvent
+        companyEvents.push(data)
       })
     })
-  }, [])
+  )
 
-  // categories observers, TODO: see if this can be simplified (DRY)
-  useEventCategory(EVENT_CATEGORIES.Food)
-  useEventCategory(EVENT_CATEGORIES.Activities)
-  useEventCategory(EVENT_CATEGORIES.Events)
-  useEventCategory(EVENT_CATEGORIES.Accommodation)
-  useEventCategory(EVENT_CATEGORIES.Transportation)
+  return companyEvents
 }
 
-const useEventCategory = (category: EVENT_CATEGORIES) => {
-  const dispatch = useAppDispatch()
+export const FBSetEventDetails = async (
+  prevEvent: IEvent,
+  newEvent: IEvent
+) => {
+  try {
+    if (prevEvent.category === newEvent.category) {
+      const path = categoryPathMap[newEvent.category]
+      await setDoc(doc(db, path, newEvent.id), newEvent)
 
-  useEffect(() => {
-    const q = query(
-      collection(db, 'events'),
-      where('category', '==', category),
-      where('state', '==', 'published')
-    )
-    return () => {
-      onSnapshot(q, snapshot => {
-        snapshot.docChanges().forEach(change => {
-          if (change.type === 'added') {
-            const data = change.doc.data() as IEvent
-            dispatch(actions.events.addEventCategory(data))
-          }
-          if (change.type === 'modified') {
-            const data = change.doc.data() as IEvent
-            dispatch(actions.events.editEventCategory(data))
-          }
-          if (change.type === 'removed') {
-            const data = change.doc.data() as IEvent
-            dispatch(actions.events.removeEventCategory(data))
-          }
-        })
-      })
+      return newEvent
     }
-  })
+
+    // Logic to change event category
+    const prevPath = categoryPathMap[prevEvent.category]
+    const newPath = categoryPathMap[newEvent.category]
+
+    // remove event from previous event category collection
+    const prevEventRef = doc(db, prevPath, prevEvent.id)
+    await deleteDoc(prevEventRef)
+
+    // add event to new event category collection
+    await setDoc(doc(db, newPath, newEvent.id), newEvent)
+
+    return newEvent
+  } catch (e) {
+    console.error('Error setting event details: ', e)
+
+    return e
+  }
 }
 
 // Location

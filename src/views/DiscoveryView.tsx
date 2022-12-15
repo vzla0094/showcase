@@ -7,7 +7,7 @@ interface IDashboardView {
 }
 
 export const DiscoveryView = ({ eventCategories }: IDashboardView) => (
-  <ViewContainer scroll alignment="stretch">
+  <ViewContainer scroll alignItems="stretch">
     {eventCategories.map((eventCategory, index) => (
       <EventCategory key={index} eventCategory={eventCategory} />
     ))}

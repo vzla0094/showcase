@@ -26,11 +26,11 @@ export const FormikInput = ({
   <FormControl isInvalid={fieldName in errors}>
     {label && <FormControl.Label>{label}</FormControl.Label>}
     <Input
-      onBlur={handleBlur(fieldName)}
-      onChangeText={handleChange(fieldName)}
+      onBlur={handleBlur}
+      onChangeText={handleChange}
       value={value}
       placeholder={placeholder}
     />
-    <FormControl.ErrorMessage>{errors.eventName}</FormControl.ErrorMessage>
+    <FormControl.ErrorMessage>{errors[fieldName]}</FormControl.ErrorMessage>
   </FormControl>
 )

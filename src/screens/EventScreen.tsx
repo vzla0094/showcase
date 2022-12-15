@@ -1,19 +1,42 @@
-import { Heading, Text } from 'native-base'
+import { CompanyStackScreenProps, IEvent } from '../types'
+import { useCallback, useState } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
 
-import { ViewContainer } from '../atoms/ViewContainer'
-import { useEvent } from '../hooks'
+import { FBGetEvent, FBSetEventDetails } from '../../firebase'
 
-import { CompanyStackScreenProps } from '../types'
+import { EventDetailsView } from '../views/EventDetailsView'
+import { EventEditDetailsView } from '../views/EventEditDetailsView'
 
-export const EventScreen = ({ route }: CompanyStackScreenProps<'Event'>) => {
-  const event = useEvent(route.params.id)
+export const EventScreen = ({
+  route,
+  navigation,
+}: CompanyStackScreenProps<'Event'>) => {
+  const { id, category, activeView } = route.params
+  const [event, setEvent] = useState<IEvent>()
 
-  if (!event) return null
+  useFocusEffect(
+    useCallback(() => {
+      const fetchEvent = async () => {
+        const data = await FBGetEvent(id, category)
+        setEvent(data)
+      }
 
-  return (
-    <ViewContainer>
-      <Heading>{event.name}</Heading>
-      <Text>{event.description}</Text>
-    </ViewContainer>
+      fetchEvent()
+    }, [id, category])
+  )
+
+  const handleDetailsSubmit = async (prevEvent: IEvent, newEvent: IEvent) => {
+    const data = await FBSetEventDetails(prevEvent, newEvent)
+    setEvent(data)
+  }
+
+  return activeView === 'EventDetails' ? (
+    <EventDetailsView navigation={navigation} event={event} />
+  ) : (
+    <EventEditDetailsView
+      navigation={navigation}
+      event={event}
+      onSubmit={handleDetailsSubmit}
+    />
   )
 }

@@ -4,7 +4,6 @@ import { FontAwesome } from '@expo/vector-icons'
 
 import { CompanyDashboardScreen } from '../screens/CompanyDashboardScreen'
 import { CompanyDetailsScreen } from '../screens/CompanyDetailsScreen'
-import { EditEventScreen } from '../screens/EditEventScreen'
 import { EventScreen } from '../screens/EventScreen'
 
 import { CompanyStackParamList, CompanyStackScreenProps } from '../types'
@@ -34,11 +33,6 @@ export const CompanyStackNavigator = () => {
         component={CompanyDashboardScreen}
       />
       <Stack.Screen
-        name="EditEvent"
-        options={{ title: 'Edit Event' }}
-        component={EditEventScreen}
-      />
-      <Stack.Screen
         options={({
           navigation,
         }: CompanyStackScreenProps<'CompanyDetails'>) => ({
@@ -57,20 +51,25 @@ export const CompanyStackNavigator = () => {
         component={CompanyDetailsScreen}
       />
       <Stack.Screen
-        options={({ navigation, route }: CompanyStackScreenProps<'Event'>) => ({
+        options={{
           title: 'Event details',
+          headerLeft: () => (
+            <IconButton
+              _icon={{
+                as: FontAwesome,
+                name: 'chevron-left',
+              }}
+            />
+          ),
           headerRight: () => (
             <IconButton
-              onPress={() =>
-                navigation.navigate('EditEvent', { id: route.params.id })
-              }
               _icon={{
                 as: FontAwesome,
                 name: 'gear',
               }}
             />
           ),
-        })}
+        }}
         name="Event"
         component={EventScreen}
       />

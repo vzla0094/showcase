@@ -30,7 +30,7 @@ export const ProfileScreen = ({
   }
 
   return (
-    <ViewContainer alignment="stretch">
+    <ViewContainer alignItems="stretch">
       <UserDetailsForm
         onSubmit={handleUserDetailsSubmit}
         initialValues={userDetails}

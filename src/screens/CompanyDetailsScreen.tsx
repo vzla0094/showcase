@@ -41,7 +41,7 @@ export const CompanyDetailsScreen = () => {
     dispatch(setCompany({ [fieldKey]: value }))
 
   return (
-    <ViewContainer alignment="stretch" scroll>
+    <ViewContainer alignItems="stretch" scroll>
       <CompanyDetailsForm
         onSubmit={handleSubmit}
         initialValues={companyDetails}
