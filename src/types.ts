@@ -115,14 +115,16 @@ export interface IAddEventPayload {
 // Events
 export type ToggleButtonOnPress = (buttonValue: EVENT_CATEGORY_NAMES) => void
 
-export enum EVENT_FIELD_NAMES {
+export enum EVENT_FORM_FIELD_NAMES {
   Name = 'name',
   Description = 'description',
   Address = 'address',
+  Category = 'category',
+  State = 'state',
 }
 
-export type EventValuesType = {
-  [key in EVENT_FIELD_NAMES]: string
+export type EventFormValuesType = {
+  [key in EVENT_FORM_FIELD_NAMES]: string
 }
 
 interface ITicket {

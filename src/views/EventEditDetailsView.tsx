@@ -1,11 +1,11 @@
 import { ViewContainer } from '../atoms/ViewContainer'
-import { Heading, IconButton, Select, VStack } from 'native-base'
+import { Button, Heading, IconButton, Select, VStack } from 'native-base'
 import { Formik, FormikProps, FormikValues } from 'formik'
 import { FormikInput } from '../atoms/FormikInput'
 import {
   CompanyStackScreenProps,
-  EVENT_FIELD_NAMES,
-  EventValuesType,
+  EVENT_FORM_FIELD_NAMES,
+  EventFormValuesType,
   IEvent,
 } from '../types'
 import { useEffect, useRef } from 'react'
@@ -38,53 +38,72 @@ export const EventEditDetailsView = ({
           }}
         />
       ),
-      headerRight: () => null,
+      // useEffect doesn't like returning null here for hiding the button,
+      // adding a display="none" instead fixes the warning
+      headerRight: () => <IconButton display="none" />,
     })
   }, [navigation])
 
   if (!event) return null
 
-  const initialValues: EventValuesType = {
+  const initialValues: EventFormValuesType = {
     name: event.name,
     description: event.description,
     address: event.address,
+    category: event.category,
+    state: event.state,
   }
-
-  const eventFields = [
-    { name: EVENT_FIELD_NAMES.Name, label: 'Event name' },
-    { name: EVENT_FIELD_NAMES.Description, label: 'Description' },
-    { name: EVENT_FIELD_NAMES.Address, label: 'Address' },
-  ]
 
   return (
     <ViewContainer alignItems="stretch">
       <Heading>Edit Event</Heading>
       <Formik
-        initialValues={{ ...initialValues, category: event.category }}
+        initialValues={initialValues}
         onSubmit={values => {
           onSubmit(event, { ...event, ...values })
         }}
         innerRef={formikRef}
       >
-        {({ values, handleChange, handleBlur, errors, setFieldValue }) => {
+        {({
+          values,
+          handleChange,
+          handleSubmit,
+          handleBlur,
+          errors,
+          setFieldValue,
+        }) => {
           return (
             <VStack space={2}>
-              {eventFields.map(({ name, label }) => {
-                return (
-                  <FormikInput
-                    key={name}
-                    value={values[name]}
-                    fieldName={name}
-                    handleBlur={handleBlur(name)}
-                    handleChange={handleChange(name)}
-                    errors={errors}
-                    label={label}
-                  />
-                )
-              })}
+              <FormikInput
+                key={EVENT_FORM_FIELD_NAMES.Name}
+                value={values[EVENT_FORM_FIELD_NAMES.Name]}
+                fieldName={EVENT_FORM_FIELD_NAMES.Name}
+                handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.Name)}
+                handleChange={handleChange(EVENT_FORM_FIELD_NAMES.Name)}
+                errors={errors}
+                label="Event name"
+              />
+              <FormikInput
+                key={EVENT_FORM_FIELD_NAMES.Address}
+                value={values[EVENT_FORM_FIELD_NAMES.Address]}
+                fieldName={EVENT_FORM_FIELD_NAMES.Address}
+                handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.Address)}
+                handleChange={handleChange(EVENT_FORM_FIELD_NAMES.Address)}
+                errors={errors}
+                label="Address"
+              />
+              <FormikInput
+                key={EVENT_FORM_FIELD_NAMES.Description}
+                value={values[EVENT_FORM_FIELD_NAMES.Description]}
+                fieldName={EVENT_FORM_FIELD_NAMES.Description}
+                handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.Description)}
+                handleChange={handleChange(EVENT_FORM_FIELD_NAMES.Description)}
+                errors={errors}
+                label="description"
+              />
               <Select
                 placeholder="Select a category"
-                selectedValue={values.category}
+                selectedValue={values[EVENT_FORM_FIELD_NAMES.Category]}
                 onValueChange={value => setFieldValue('category', value)}
               >
                 <Select.Item label="Food" value="food" />
@@ -93,6 +112,16 @@ export const EventEditDetailsView = ({
                 <Select.Item label="Accommodation" value="accommodation" />
                 <Select.Item label="Transportation" value="transportation" />
               </Select>
+              {event?.state === 'draft' && (
+                <Button
+                  onPress={() => {
+                    setFieldValue('state', 'published')
+                    handleSubmit()
+                  }}
+                >
+                  Publish
+                </Button>
+              )}
             </VStack>
           )
         }}

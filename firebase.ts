@@ -10,16 +10,16 @@ import { initializeApp } from 'firebase/app'
 import {
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
   getFirestore,
   onSnapshot,
+  query,
   setDoc,
   updateDoc,
   where,
-  query,
-  deleteDoc,
 } from 'firebase/firestore'
 import {
   createUserWithEmailAndPassword,
@@ -37,8 +37,10 @@ import {
 import { setUserGeoLocation, userInitialState } from './src/redux/slices/user'
 
 import {
-  EVENT_CATEGORY_NAMES,
   categoryNamesArr,
+  categoryPathMap,
+  emptyEvent,
+  EVENT_CATEGORY_NAMES,
   ICompany,
   IEvent,
   IGeolocation,
@@ -47,8 +49,6 @@ import {
   IUser,
   IUserDetailsField,
   StatusIUserLocation,
-  categoryPathMap,
-  emptyEvent,
 } from './src/types'
 import { useFocusEffect } from '@react-navigation/native'
 
@@ -162,6 +162,7 @@ export const getUser = async (userId: IUser['uid']) => {
 
 export const useAuth = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false)
+  const [loading, setLoading] = useState(true)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -182,14 +183,16 @@ export const useAuth = () => {
         )
 
         setAuthenticated(true)
+        setLoading(false)
       } else {
         dispatch(actions.user.resetUser())
         setAuthenticated(false)
+        setLoading(false)
       }
     })
   }, [])
 
-  return authenticated
+  return { authenticated, loading }
 }
 
 // Company
@@ -313,9 +316,26 @@ export const useEventCategoryObserver = (
       const q = query(collection(db, path), where('state', '==', 'published'))
 
       const unsubscribe = onSnapshot(q, snapshot => {
-        snapshot.forEach(doc => {
-          const data = doc.data() as IEvent
-          setEvents(prevState => [...prevState, data])
+        snapshot.docChanges().forEach(change => {
+          if (change.type === 'added') {
+            const data = change.doc.data() as IEvent
+
+            setEvents(prevState => [...prevState, data])
+          }
+          if (change.type === 'modified') {
+            const data = change.doc.data() as IEvent
+
+            setEvents(prevState =>
+              prevState.map(event => (event.id === data.id ? data : event))
+            )
+          }
+          if (change.type === 'removed') {
+            const data = change.doc.data() as IEvent
+
+            setEvents(prevState =>
+              prevState.filter(event => event.id !== data.id)
+            )
+          }
         })
       })
 
@@ -325,6 +345,7 @@ export const useEventCategoryObserver = (
       }
     }, [])
   )
+
   return { name: categoryName, events }
 }
 
