@@ -19,12 +19,11 @@ export type AuthBottomTabParamList = {
 
 export type CompanyStackParamList = {
   CompanyDashboard: undefined
-  EditEvent: {
-    id: string
-  }
   CompanyDetails: undefined
   Event: {
     id: IEvent['id']
+    category: IEvent['category']
+    activeView: 'EventDetails' | 'EventEditDetails'
   }
 }
 
@@ -114,11 +113,12 @@ export interface IAddEventPayload {
 }
 
 // Events
-export type ToggleButtonOnPress = (buttonValue: EVENT_CATEGORIES) => void
+export type ToggleButtonOnPress = (buttonValue: EVENT_CATEGORY_NAMES) => void
 
 export enum EVENT_FIELD_NAMES {
   Name = 'name',
   Description = 'description',
+  Address = 'address',
 }
 
 export type EventValuesType = {
@@ -135,7 +135,8 @@ export interface IEvent {
   id: string
   company: ICompany['companyId']
   name: string
-  category: EVENT_CATEGORIES | ''
+  category: EVENT_CATEGORY_NAMES
+  address: string
   state: 'draft' | 'published' | 'expired'
   description: string
   startDateTime: string
@@ -146,34 +147,40 @@ export interface IEvent {
   timeSlots: []
 }
 
-export interface IEditEventPayload {
-  id: IEvent['id']
-  data: Partial<IEvent>
-}
-
 export interface IFirebaseInputField<FieldKeys, FieldValue> {
   fieldKey: FieldKeys
   value: FieldValue
 }
 
-export type handleEventPressType = (eventId: IEvent['id']) => void
+export type handleEventPressType = (values: {
+  id: IEvent['id']
+  category: IEvent['category']
+}) => void
 
-export enum EVENT_CATEGORIES {
+export enum EVENT_CATEGORY_NAMES {
   Food = 'food',
   Activities = 'activities',
-  Events = 'events',
+  Venues = 'venues',
   Accommodation = 'accommodation',
   Transportation = 'transportation',
 }
 
 export interface IEventCategory {
-  name: EVENT_CATEGORIES
+  name: EVENT_CATEGORY_NAMES
   events: Array<IEvent>
 }
 
 export interface IEventProps {
   name: string
   description: string
+}
+
+export enum EVENT_PATHS {
+  Food = 'eventsFood',
+  Activities = 'eventsActivities',
+  Venues = 'eventsVenues',
+  Accommodation = 'eventsAccommodation',
+  Transportation = 'eventsTransportation',
 }
 
 // Location
@@ -213,3 +220,34 @@ export type IUseLocationRequest =
   | ILocationSuccess
   | ILocationError
   | IUserLocationDefault
+
+export const categoryNamesArr = [
+  EVENT_CATEGORY_NAMES.Food,
+  EVENT_CATEGORY_NAMES.Activities,
+  EVENT_CATEGORY_NAMES.Venues,
+  EVENT_CATEGORY_NAMES.Accommodation,
+  EVENT_CATEGORY_NAMES.Transportation,
+]
+export const categoryPathMap = {
+  food: EVENT_PATHS.Food,
+  activities: EVENT_PATHS.Activities,
+  venues: EVENT_PATHS.Venues,
+  accommodation: EVENT_PATHS.Accommodation,
+  transportation: EVENT_PATHS.Transportation,
+}
+
+export const emptyEvent: IEvent = {
+  id: '',
+  company: '',
+  name: '',
+  state: 'draft',
+  category: EVENT_CATEGORY_NAMES.Food,
+  address: '',
+  description: '',
+  startDateTime: '',
+  endDateTime: '',
+  ticketCount: 0,
+  ticketLimit: 0,
+  tickets: [],
+  timeSlots: [],
+}

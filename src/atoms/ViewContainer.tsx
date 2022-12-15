@@ -4,14 +4,14 @@ import { Center, Container, ScrollView, IContainerProps } from 'native-base'
 interface IViewContainerProps {
   children: ReactNode
   justifyContent?: IContainerProps['justifyContent']
-  alignment?: 'start' | 'center' | 'stretch'
+  alignItems?: 'start' | 'center' | 'stretch'
   scroll?: boolean
 }
 
 export const ViewContainer = ({
   children,
   justifyContent = 'auto',
-  alignment = 'center',
+  alignItems = 'center',
   scroll = false,
 }: IViewContainerProps) => {
   const ContainedChildren = (
@@ -21,7 +21,7 @@ export const ViewContainer = ({
         flex={1}
         w={'100%'}
         justifyContent={justifyContent}
-        alignItems={alignment}
+        alignItems={alignItems}
       >
         {children}
       </Container>

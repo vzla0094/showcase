@@ -1,7 +1,7 @@
-import { useAppSelector } from '../hooks'
 import { DiscoveryView } from '../views/DiscoveryView'
 import { LoginBottomNavigation } from '../components/LoginBottomNavigation'
-import { EVENT_CATEGORIES, UnAuthStackScreenProps } from '../types'
+import { UnAuthStackScreenProps } from '../types'
+import { useEvents } from '../../firebase'
 
 interface IDiscoveryScreenProps {
   navigation: UnAuthStackScreenProps<'Discovery'>['navigation']
@@ -12,14 +12,7 @@ export const DiscoveryScreen = ({
   navigation,
   loginBottom = false,
 }: IDiscoveryScreenProps) => {
-  const eventCategories = useAppSelector(({ events }) => {
-    const names = Object.keys(events.categories) as Array<EVENT_CATEGORIES>
-
-    return names.map(name => ({
-      name,
-      events: [...events.categories[name]],
-    }))
-  })
+  const eventCategories = useEvents()
 
   return (
     <>

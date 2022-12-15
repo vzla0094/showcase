@@ -12,7 +12,7 @@ export const EventList = ({ events, onPress }: IEventListProps) => (
     <VStack>
       {events.map(({ id, name, description, category }) => (
         <Box key={id}>
-          <Pressable onPress={() => onPress(id)}>
+          <Pressable onPress={() => onPress({ id, category })}>
             <Heading size="sm">{name}</Heading>
             {Boolean(description) && <Text>{description}</Text>}
             <Text>{category}</Text>
