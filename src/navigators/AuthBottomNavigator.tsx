@@ -9,7 +9,7 @@ import { ProfileScreen } from '../screens/ProfileScreen'
 
 import { useAppSelector } from '../hooks'
 
-import { AuthBottomTabParamList } from '../types'
+import { AuthBottomTabParamList, AuthBottomTabScreenProps } from '../types'
 
 const Tab = createBottomTabNavigator<AuthBottomTabParamList>()
 
@@ -54,6 +54,12 @@ export const AuthBottomNavigator = () => {
           }}
           name="Company"
           component={CompanyStackNavigator}
+          listeners={({ navigation }: AuthBottomTabScreenProps<'Company'>) => ({
+            tabPress: e => {
+              e.preventDefault()
+              navigation.navigate('Company', { screen: 'CompanyDashboard' })
+            },
+          })}
         />
       )}
     </Tab.Navigator>
