@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { Button } from 'native-base'
 
-import { FBCreateEvent, FBGetCompanyEvents } from '../../firebase'
+import { FBCreateEvent, FBGetCompanyEvents } from '../firebase'
 
 import { useAppSelector } from '../hooks'
 

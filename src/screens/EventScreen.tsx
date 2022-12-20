@@ -1,11 +1,12 @@
-import { CompanyStackScreenProps, IEvent } from '../types'
 import { useCallback, useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 
-import { FBGetEvent, FBSetEventDetails } from '../../firebase'
+import { FBGetEvent, FBSetEventDetails } from '../firebase'
 
 import { EventDetailsView } from '../views/EventDetailsView'
 import { EventEditDetailsView } from '../views/EventEditDetailsView'
+
+import { CompanyStackScreenProps, IEvent } from '../types'
 
 export const EventScreen = ({
   route,

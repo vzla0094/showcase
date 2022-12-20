@@ -1,15 +1,17 @@
-import { ViewContainer } from '../atoms/ViewContainer'
+import { useEffect, useRef } from 'react'
+import { FontAwesome } from '@expo/vector-icons'
 import { Button, Heading, IconButton, Select, VStack } from 'native-base'
 import { Formik, FormikProps, FormikValues } from 'formik'
+
+import { ViewContainer } from '../atoms/ViewContainer'
 import { FormikInput } from '../atoms/FormikInput'
+
 import {
   CompanyStackScreenProps,
   EVENT_FORM_FIELD_NAMES,
   EventFormValuesType,
   IEvent,
 } from '../types'
-import { useEffect, useRef } from 'react'
-import { FontAwesome } from '@expo/vector-icons'
 
 interface IEventEditDetailsViewProps {
   event?: IEvent

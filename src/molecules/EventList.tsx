@@ -1,4 +1,5 @@
 import { Box, Heading, Pressable, Text, VStack } from 'native-base'
+
 import { handleEventPressType, IEvent } from '../types'
 
 interface IEventListProps {

@@ -1,8 +1,9 @@
-import { CompanyStackScreenProps, IEvent } from '../types'
 import { ViewContainer } from '../atoms/ViewContainer'
 import { Heading, IconButton, Text } from 'native-base'
 import { useEffect } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
+
+import { CompanyStackScreenProps, IEvent } from '../types'
 
 interface IEventDetailsProps {
   event?: IEvent

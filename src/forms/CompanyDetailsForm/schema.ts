@@ -1,4 +1,5 @@
 import * as yup from 'yup'
+
 import { COMPANY_DETAILS } from '../../types'
 
 type CompanyDetailsSchemaType = {
