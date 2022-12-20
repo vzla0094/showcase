@@ -1,11 +1,13 @@
 import { DiscoveryView } from '../views/DiscoveryView'
 import { LoginBottomNavigation } from '../components/LoginBottomNavigation'
+
+import { useEvents } from '../firebase'
+
 import { UnAuthStackScreenProps } from '../types'
-import { useEvents } from '../../firebase'
 
 interface IDiscoveryScreenProps {
   navigation: UnAuthStackScreenProps<'Discovery'>['navigation']
-  loginBottom: boolean
+  loginBottom?: boolean
 }
 
 export const DiscoveryScreen = ({

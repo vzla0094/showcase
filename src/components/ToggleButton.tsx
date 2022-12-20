@@ -1,5 +1,6 @@
 import { Button } from 'native-base'
 import { FC } from 'react'
+
 import { ToggleButtonOnPress, EVENT_CATEGORY_NAMES } from '../types'
 
 interface IToggleButton {

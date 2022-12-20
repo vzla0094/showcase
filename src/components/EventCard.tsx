@@ -1,4 +1,5 @@
 import { Box, Heading, Text } from 'native-base'
+
 import { IEventProps } from '../types'
 
 export const EventCard = ({ name, description }: IEventProps) => (

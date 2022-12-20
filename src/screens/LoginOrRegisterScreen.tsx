@@ -1,10 +1,12 @@
 import { useValidations } from '../helpers/useValidations'
 import { useState } from 'react'
-import { IAuth } from '../types'
+
 import { useToast } from '../helpers/useToast'
 import { LoginOrRegisterView } from '../views/LoginOrRegisterView'
 import { login, register } from '../redux/slices/user'
 import { useAppDispatch } from '../hooks'
+
+import { IAuth } from '../types'
 
 export const LoginOrRegisterScreen = () => {
   const [loginOrRegister, setLoginOrRegister] = useState<'login' | 'register'>(

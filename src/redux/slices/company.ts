@@ -7,7 +7,7 @@ import {
   FBCreateCompany,
   FBInitializeCompany,
   FBSetCompany,
-} from '../../../firebase'
+} from '../../firebase'
 
 import {
   IAddEventPayload,

@@ -1,18 +1,21 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+import {
+  requestPermissionsAsync,
+  FBLogin,
+  FBRegister,
+  FBSetUserDetail,
+  FBSetUserGeoLocation,
+} from '../../firebase'
+
+import { RootState } from '../store'
+
 import {
   IAuth,
   IUser,
   IUserDetailsField,
   StatusIUserLocation,
 } from '../../types'
-import {
-  FBLogin,
-  FBRegister,
-  FBSetUserGeoLocation,
-  FBSetUserDetail,
-  requestPermissionsAsync,
-} from '../../../firebase'
-import { RootState } from '../store'
 
 export const userInitialState: IUser = {
   uid: '',

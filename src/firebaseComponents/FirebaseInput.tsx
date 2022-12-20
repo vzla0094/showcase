@@ -2,6 +2,7 @@ import { FormEvent } from 'react'
 import { Formik } from 'formik'
 import { FormControl, IFormControlProps, Input } from 'native-base'
 import * as yup from 'yup'
+
 import { IFirebaseInputField } from '../types'
 
 interface IFirebaseInputProps<FieldKey, FieldValue> extends IFormControlProps {
@@ -48,7 +49,6 @@ export const FirebaseInput = <FieldKey, FieldValue extends string>({
             onBlur={(e: unknown) =>
               handleSubmit(e as FormEvent<HTMLFormElement>)
             }
-            max
           />
           <FormControl.ErrorMessage>{errors.value}</FormControl.ErrorMessage>
         </FormControl>

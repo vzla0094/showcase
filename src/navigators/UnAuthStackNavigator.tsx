@@ -1,7 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { UnAuthStackParamList } from '../types'
+
 import { DiscoveryScreen } from '../screens/DiscoveryScreen'
 import { LoginOrRegisterScreen } from '../screens/LoginOrRegisterScreen'
+
+import { UnAuthStackParamList } from '../types'
 
 const Stack = createNativeStackNavigator<UnAuthStackParamList>()
 

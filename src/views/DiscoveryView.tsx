@@ -1,6 +1,7 @@
-import { IEventCategory } from '../types'
 import { EventCategory } from '../components/EventCategory'
 import { ViewContainer } from '../atoms/ViewContainer'
+
+import { IEventCategory } from '../types'
 
 interface IDashboardView {
   eventCategories: Array<IEventCategory>

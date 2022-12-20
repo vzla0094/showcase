@@ -1,6 +1,8 @@
 import { Heading, FlatList, Box } from 'native-base'
-import { IEventCategory } from '../types'
+
 import { EventCard } from './EventCard'
+
+import { IEventCategory } from '../types'
 
 interface IEventCategoryProps {
   eventCategory: IEventCategory
