@@ -1,17 +1,14 @@
 import { useCallback, useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 
-import { FBGetEvent, FBSetEventDetails } from '../firebase'
+import { FBDeleteEvent, FBGetEvent, FBSetEventDetails } from '../firebase'
 
 import { EventDetailsView } from '../views/EventDetailsView'
 import { EventEditDetailsView } from '../views/EventEditDetailsView'
 
 import { CompanyStackScreenProps, IEvent } from '../types'
 
-export const EventScreen = ({
-  route,
-  navigation,
-}: CompanyStackScreenProps<'Event'>) => {
+export const EventScreen = ({ route }: CompanyStackScreenProps<'Event'>) => {
   const { id, category, activeView } = route.params
   const [event, setEvent] = useState<IEvent>()
 
@@ -31,13 +28,17 @@ export const EventScreen = ({
     setEvent(data)
   }
 
+  const handleDelete = async (event: IEvent) => {
+    await FBDeleteEvent(event)
+  }
+
   return activeView === 'EventDetails' ? (
-    <EventDetailsView navigation={navigation} event={event} />
+    <EventDetailsView event={event} />
   ) : (
     <EventEditDetailsView
-      navigation={navigation}
       event={event}
       onSubmit={handleDetailsSubmit}
+      onDelete={handleDelete}
     />
   )
 }

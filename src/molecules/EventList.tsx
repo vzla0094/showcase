@@ -10,13 +10,14 @@ interface IEventListProps {
 export const EventList = ({ events, onPress }: IEventListProps) => (
   <Box>
     <Heading>Events</Heading>
-    <VStack>
-      {events.map(({ id, name, description, category }) => (
-        <Box key={id}>
+    <VStack space="sm">
+      {events.map(({ id, name, description, category, state }) => (
+        <Box key={id} borderWidth={1}>
           <Pressable onPress={() => onPress({ id, category })}>
-            <Heading size="sm">{name}</Heading>
-            {Boolean(description) && <Text>{description}</Text>}
-            <Text>{category}</Text>
+            <Heading size="sm">Name: {name}</Heading>
+            {Boolean(description) && <Text>Description: {description}</Text>}
+            <Text>Category: {category}</Text>
+            <Text>State: {state}</Text>
           </Pressable>
         </Box>
       ))}

@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
 import { Button, Heading, IconButton, Select, VStack } from 'native-base'
 import { Formik, FormikProps, FormikValues } from 'formik'
+import { useNavigation } from '@react-navigation/native'
 
 import { ViewContainer } from '../atoms/ViewContainer'
 import { FormikInput } from '../atoms/FormikInput'
@@ -16,14 +17,16 @@ import {
 interface IEventEditDetailsViewProps {
   event?: IEvent
   onSubmit: (prevEvent: IEvent, newEvent: IEvent) => void
-  navigation: CompanyStackScreenProps<'Event'>['navigation']
+  onDelete: (event: IEvent) => void
 }
 
 export const EventEditDetailsView = ({
   event,
   onSubmit,
-  navigation,
+  onDelete,
 }: IEventEditDetailsViewProps) => {
+  const navigation =
+    useNavigation<CompanyStackScreenProps<'Event'>['navigation']>()
   const formikRef = useRef<FormikProps<FormikValues>>(null)
 
   useEffect(() => {
@@ -122,6 +125,34 @@ export const EventEditDetailsView = ({
                   }}
                 >
                   Publish
+                </Button>
+              )}
+              <Button
+                onPress={() => {
+                  handleSubmit()
+                  navigation.setParams({ activeView: 'EventDetails' })
+                }}
+              >
+                Save and go back
+              </Button>
+              {event.state !== 'published' && (
+                <Button
+                  onPress={() => {
+                    onDelete(event)
+                    navigation.goBack()
+                  }}
+                >
+                  Delete event
+                </Button>
+              )}
+              {event.state === 'published' && (
+                <Button
+                  onPress={() => {
+                    setFieldValue('state', 'expired')
+                    handleSubmit()
+                  }}
+                >
+                  Disable event
                 </Button>
               )}
             </VStack>

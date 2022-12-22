@@ -47,8 +47,10 @@ export const FBCreateEvent = async (
     return e
   }
 }
+
 export const useEvents = () =>
   categoryNamesArr.map(categoryName => useEventCategoryObserver(categoryName))
+
 export const useEventCategoryObserver = (
   categoryName: EVENT_CATEGORY_NAMES
 ) => {
@@ -92,6 +94,7 @@ export const useEventCategoryObserver = (
 
   return { name: categoryName, events }
 }
+
 export const FBGetEvent = async (
   eventId: IEvent['id'],
   category: IEvent['category']
@@ -107,6 +110,7 @@ export const FBGetEvent = async (
     return e
   }
 }
+
 export const FBGetCompanyEvents = async (
   companyId: ICompany['companyId']
 ): Promise<Array<IEvent>> => {
@@ -129,6 +133,7 @@ export const FBGetCompanyEvents = async (
 
   return companyEvents
 }
+
 export const FBSetEventDetails = async (
   prevEvent: IEvent,
   newEvent: IEvent
@@ -155,6 +160,19 @@ export const FBSetEventDetails = async (
     return newEvent
   } catch (e) {
     console.error('Error setting event details: ', e)
+
+    return e
+  }
+}
+
+export const FBDeleteEvent = async (event: IEvent) => {
+  const path = categoryPathMap[event.category]
+  try {
+    const eventRef = doc(db, path, event.id)
+
+    await deleteDoc(eventRef)
+  } catch (e) {
+    console.error('Error deleting event: ', e)
 
     return e
   }
