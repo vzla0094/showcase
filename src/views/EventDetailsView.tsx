@@ -2,15 +2,18 @@ import { ViewContainer } from '../atoms/ViewContainer'
 import { Heading, IconButton, Text } from 'native-base'
 import { useEffect } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
 
 import { CompanyStackScreenProps, IEvent } from '../types'
 
 interface IEventDetailsProps {
   event?: IEvent
-  navigation: CompanyStackScreenProps<'Event'>['navigation']
 }
 
-export const EventDetailsView = ({ event, navigation }: IEventDetailsProps) => {
+export const EventDetailsView = ({ event }: IEventDetailsProps) => {
+  const navigation =
+    useNavigation<CompanyStackScreenProps<'Event'>['navigation']>()
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
