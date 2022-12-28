@@ -1,28 +1,24 @@
 import { Heading, FlatList, Box } from 'native-base'
 
-import { EventCard } from './EventCard'
-
 import { IEventCategory } from '../types'
+import { GenericCard } from '../molecules/GenericCard'
 
-interface IEventCategoryProps {
-  eventCategory: IEventCategory
-}
+export const EventCategory = ({ events, name, showMore }: IEventCategory) => {
+  if (!events.length) return null
 
-export const EventCategory = ({ eventCategory }: IEventCategoryProps) => {
-  if (!eventCategory.events.length) return null
+  const flatListData = [
+    ...events.slice(0, 3),
+    { showMore, eventCategoryName: name },
+  ]
 
   return (
     <Box mb={5}>
-      <Heading>{eventCategory.name}</Heading>
+      <Heading>{name}</Heading>
       <FlatList
         flexGrow={0}
         horizontal
-        data={eventCategory.events}
-        renderItem={({ item }) => (
-          <Box mr={3}>
-            <EventCard name={item.name} description={item.description} />
-          </Box>
-        )}
+        data={flatListData}
+        renderItem={({ item }) => <GenericCard {...item} />}
       />
     </Box>
   )

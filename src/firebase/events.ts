@@ -10,6 +10,7 @@ import {
   query,
   setDoc,
   where,
+  limit,
 } from 'firebase/firestore'
 
 import { db } from './config'
@@ -21,6 +22,7 @@ import {
   EVENT_CATEGORY_NAMES,
   ICompany,
   IEvent,
+  IEventCategory,
 } from '../types'
 
 export const FBCreateEvent = async (
@@ -48,18 +50,33 @@ export const FBCreateEvent = async (
   }
 }
 
-export const useEvents = () =>
-  categoryNamesArr.map(categoryName => useEventCategoryObserver(categoryName))
+export const useEvents = () => {
+  const eventsLimit = 3
+  return categoryNamesArr.map(categoryName =>
+    useEventCategoryObserver(categoryName, eventsLimit)
+  )
+}
 
 export const useEventCategoryObserver = (
-  categoryName: EVENT_CATEGORY_NAMES
-) => {
+  categoryName: EVENT_CATEGORY_NAMES,
+  eventsLimit?: number
+): IEventCategory => {
   const [events, setEvents] = useState<Array<IEvent>>([])
 
   useFocusEffect(
     useCallback(() => {
       const path = categoryPathMap[categoryName]
-      const q = query(collection(db, path), where('state', '==', 'published'))
+      let q
+
+      if (eventsLimit) {
+        q = query(
+          collection(db, path),
+          where('state', '==', 'published'),
+          limit(eventsLimit)
+        )
+      } else {
+        q = query(collection(db, path), where('state', '==', 'published'))
+      }
 
       const unsubscribe = onSnapshot(q, snapshot => {
         snapshot.docChanges().forEach(change => {
@@ -92,7 +109,7 @@ export const useEventCategoryObserver = (
     }, [])
   )
 
-  return { name: categoryName, events }
+  return { name: categoryName, events, showMore: events.length === 3 }
 }
 
 export const FBGetEvent = async (
