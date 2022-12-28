@@ -41,7 +41,7 @@ export const CompanyDashboardScreen = ({
     navigation.navigate('Event', { id, category, activeView: 'EventDetails' })
 
   return (
-    <ViewContainer>
+    <ViewContainer scroll>
       <EventList events={companyEvents} onPress={handleEventPress} />
       <Button onPress={handleCreateEvent}>Create an Event</Button>
     </ViewContainer>

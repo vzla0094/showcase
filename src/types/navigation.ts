@@ -8,12 +8,19 @@ export type UnAuthStackParamList = {
   Discovery: undefined
   LoginOrRegister: undefined
 }
+
 export type AuthBottomTabParamList = {
-  Discovery: undefined
+  DiscoveryStack: NavigatorScreenParams<DiscoveryStackParamList>
   Search: undefined
   Profile: undefined
-  Company: NavigatorScreenParams<CompanyStackParamList>
+  CompanyStack: NavigatorScreenParams<CompanyStackParamList>
 }
+
+export type DiscoveryStackParamList = {
+  Discovery: undefined
+  EventCategory: { eventCategoryName: IEvent['category'] }
+}
+
 export type CompanyStackParamList = {
   CompanyDashboard: undefined
   CompanyDetails: undefined
@@ -23,11 +30,18 @@ export type CompanyStackParamList = {
     activeView: 'EventDetails' | 'EventEditDetails'
   }
 }
+
 export type UnAuthStackScreenProps<Screen extends keyof UnAuthStackParamList> =
   NativeStackScreenProps<UnAuthStackParamList, Screen>
+
 export type AuthBottomTabScreenProps<
   Screen extends keyof AuthBottomTabParamList
 > = BottomTabScreenProps<AuthBottomTabParamList, Screen>
+
+export type DiscoveryStackScreenProps<
+  Screen extends keyof DiscoveryStackParamList
+> = NativeStackScreenProps<DiscoveryStackParamList, Screen>
+
 export type CompanyStackScreenProps<
   Screen extends keyof CompanyStackParamList
 > = NativeStackScreenProps<CompanyStackParamList, Screen>

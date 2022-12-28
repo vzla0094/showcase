@@ -57,11 +57,7 @@ export enum EVENT_CATEGORY_NAMES {
 export interface IEventCategory {
   name: EVENT_CATEGORY_NAMES
   events: Array<IEvent>
-}
-
-export interface IEventProps {
-  name: string
-  description: string
+  showMore: boolean
 }
 
 export enum EVENT_PATHS {

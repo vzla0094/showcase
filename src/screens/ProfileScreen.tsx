@@ -24,7 +24,7 @@ export const ProfileScreen = ({
 
   const handleAddCompany = async () => {
     await dispatch(createCompany(uid))
-    navigation.navigate('Company', {
+    navigation.navigate('CompanyStack', {
       screen: 'CompanyDetails',
     })
   }
