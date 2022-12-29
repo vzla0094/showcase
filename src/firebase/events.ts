@@ -18,7 +18,6 @@ import { db } from './config'
 import {
   categoryNamesArr,
   categoryPathMap,
-  emptyEvent,
   EVENT_CATEGORY_NAMES,
   ICompany,
   IEvent,
@@ -26,17 +25,19 @@ import {
 } from '../types'
 
 export const FBCreateEvent = async (
-  companyId: ICompany['companyId']
+  companyId: ICompany['companyId'],
+  newEvent: IEvent
 ): Promise<IEvent> => {
   try {
     // Adds a new event document with a generated id
-    const eventRef = await doc(collection(db, 'eventsFood'))
+    const path = categoryPathMap[newEvent.category]
+    const eventRef = await doc(collection(db, path))
     const generatedEventId = eventRef.id
 
     // Adds initial data shape to the event document including
     // new generated id and company ref
     const data = {
-      ...emptyEvent,
+      ...newEvent,
       id: generatedEventId,
       company: companyId,
     }
@@ -151,10 +152,7 @@ export const FBGetCompanyEvents = async (
   return companyEvents
 }
 
-export const FBSetEventDetails = async (
-  prevEvent: IEvent,
-  newEvent: IEvent
-) => {
+export const FBEditEvent = async (prevEvent: IEvent, newEvent: IEvent) => {
   try {
     if (prevEvent.category === newEvent.category) {
       const path = categoryPathMap[newEvent.category]

@@ -25,8 +25,8 @@ export type CompanyStackParamList = {
   CompanyDashboard: undefined
   CompanyDetails: undefined
   Event: {
-    id: IEvent['id']
-    category: IEvent['category']
+    id?: IEvent['id']
+    category?: IEvent['category']
     activeView: 'EventDetails' | 'EventEditDetails'
   }
 }
