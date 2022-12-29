@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { Button } from 'native-base'
 
-import { FBCreateEvent, FBGetCompanyEvents } from '../firebase'
+import { FBGetCompanyEvents } from '../firebase'
 
 import { useAppSelector } from '../hooks'
 
@@ -27,23 +27,21 @@ export const CompanyDashboardScreen = ({
     fetchCompanyEvents()
   })
 
-  const handleCreateEvent = async () => {
-    const { id, category } = await FBCreateEvent(companyId)
-
-    navigation.navigate('Event', {
-      id,
-      category,
-      activeView: 'EventEditDetails',
-    })
-  }
-
   const handleEventPress: handleEventPressType = ({ id, category }) =>
     navigation.navigate('Event', { id, category, activeView: 'EventDetails' })
 
   return (
-    <ViewContainer scroll>
+    <ViewContainer scroll alignItems="stretch">
       <EventList events={companyEvents} onPress={handleEventPress} />
-      <Button onPress={handleCreateEvent}>Create an Event</Button>
+      <Button
+        onPress={() => {
+          navigation.navigate('Event', {
+            activeView: 'EventEditDetails',
+          })
+        }}
+      >
+        Create an Event
+      </Button>
     </ViewContainer>
   )
 }

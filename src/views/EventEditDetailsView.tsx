@@ -1,6 +1,13 @@
 import { useEffect, useRef } from 'react'
-import { FontAwesome } from '@expo/vector-icons'
-import { Button, Heading, IconButton, Select, VStack } from 'native-base'
+import {
+  Button,
+  IconButton,
+  Select,
+  VStack,
+  Switch,
+  HStack,
+  Text,
+} from 'native-base'
 import { Formik, FormikProps, FormikValues } from 'formik'
 import { useNavigation } from '@react-navigation/native'
 
@@ -9,47 +16,42 @@ import { FormikInput } from '../atoms/FormikInput'
 
 import {
   CompanyStackScreenProps,
+  emptyEvent,
   EVENT_FORM_FIELD_NAMES,
   EventFormValuesType,
   IEvent,
 } from '../types'
 
+export interface IOnSubmitPayload {
+  prevEvent?: IEvent
+  event: IEvent
+}
+
 interface IEventEditDetailsViewProps {
   event?: IEvent
-  onSubmit: (prevEvent: IEvent, newEvent: IEvent) => void
+  onSubmit: (payload: IOnSubmitPayload) => void
   onDelete: (event: IEvent) => void
 }
 
 export const EventEditDetailsView = ({
-  event,
+  event = emptyEvent,
   onSubmit,
   onDelete,
 }: IEventEditDetailsViewProps) => {
   const navigation =
     useNavigation<CompanyStackScreenProps<'Event'>['navigation']>()
   const formikRef = useRef<FormikProps<FormikValues>>(null)
+  const eventExists = Boolean(event?.id)
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => (
-        <IconButton
-          onPress={() => {
-            if (formikRef.current) formikRef.current.handleSubmit()
-            navigation.setParams({ activeView: 'EventDetails' })
-          }}
-          _icon={{
-            as: FontAwesome,
-            name: 'chevron-left',
-          }}
-        />
-      ),
       // useEffect doesn't like returning null here for hiding the button,
       // adding a display="none" instead fixes the warning
+      headerLeft: () => <IconButton display="none" />,
       headerRight: () => <IconButton display="none" />,
+      title: eventExists ? 'Edit event' : 'Create event',
     })
   }, [navigation])
-
-  if (!event) return null
 
   const initialValues: EventFormValuesType = {
     name: event.name,
@@ -61,11 +63,20 @@ export const EventEditDetailsView = ({
 
   return (
     <ViewContainer alignItems="stretch">
-      <Heading>Edit Event</Heading>
       <Formik
         initialValues={initialValues}
         onSubmit={values => {
-          onSubmit(event, { ...event, ...values })
+          let payload: IOnSubmitPayload = { event }
+
+          if (eventExists) {
+            payload = { prevEvent: event, event: { ...event, ...values } }
+          }
+
+          if (!eventExists) {
+            payload = { event: { ...event, ...values } }
+          }
+
+          onSubmit(payload)
         }}
         innerRef={formikRef}
       >
@@ -78,7 +89,7 @@ export const EventEditDetailsView = ({
           setFieldValue,
         }) => {
           return (
-            <VStack space={2}>
+            <VStack space={4}>
               <FormikInput
                 key={EVENT_FORM_FIELD_NAMES.Name}
                 value={values[EVENT_FORM_FIELD_NAMES.Name]}
@@ -88,6 +99,7 @@ export const EventEditDetailsView = ({
                 errors={errors}
                 label="Event name"
               />
+
               <FormikInput
                 key={EVENT_FORM_FIELD_NAMES.Address}
                 value={values[EVENT_FORM_FIELD_NAMES.Address]}
@@ -97,6 +109,7 @@ export const EventEditDetailsView = ({
                 errors={errors}
                 label="Address"
               />
+
               <FormikInput
                 key={EVENT_FORM_FIELD_NAMES.Description}
                 value={values[EVENT_FORM_FIELD_NAMES.Description]}
@@ -106,6 +119,7 @@ export const EventEditDetailsView = ({
                 errors={errors}
                 label="description"
               />
+
               <Select
                 placeholder="Select a category"
                 selectedValue={values[EVENT_FORM_FIELD_NAMES.Category]}
@@ -117,25 +131,36 @@ export const EventEditDetailsView = ({
                 <Select.Item label="Accommodation" value="accommodation" />
                 <Select.Item label="Transportation" value="transportation" />
               </Select>
-              {event?.state === 'draft' && (
-                <Button
-                  onPress={() => {
-                    setFieldValue('state', 'published')
-                    handleSubmit()
+
+              <HStack alignItems="center" space={4}>
+                <Text>Draft</Text>
+                <Switch
+                  value={values[EVENT_FORM_FIELD_NAMES.State] === 'published'}
+                  onToggle={value => {
+                    setFieldValue('state', value ? 'published' : 'draft')
                   }}
-                >
-                  Publish
-                </Button>
-              )}
+                  size="lg"
+                />
+                <Text>Publish</Text>
+              </HStack>
+
               <Button
                 onPress={() => {
                   handleSubmit()
-                  navigation.setParams({ activeView: 'EventDetails' })
                 }}
               >
                 Save and go back
               </Button>
-              {event.state !== 'published' && (
+
+              <Button
+                onPress={() => {
+                  navigation.goBack()
+                }}
+              >
+                Cancel
+              </Button>
+
+              {event.state !== 'published' && eventExists && (
                 <Button
                   onPress={() => {
                     onDelete(event)
@@ -143,16 +168,6 @@ export const EventEditDetailsView = ({
                   }}
                 >
                   Delete event
-                </Button>
-              )}
-              {event.state === 'published' && (
-                <Button
-                  onPress={() => {
-                    setFieldValue('state', 'expired')
-                    handleSubmit()
-                  }}
-                >
-                  Disable event
                 </Button>
               )}
             </VStack>
