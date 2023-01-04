@@ -6,34 +6,21 @@ import {
   FBRegister,
   FBSetUserDetail,
   FBSetUserGeoLocation,
+  FBSetSearchFilterSettings,
 } from '../../firebase'
 
 import { RootState } from '../store'
 
 import {
+  emptyUser,
   IAuth,
   IUser,
   IUserDetailsField,
+  SearchFilterSettingsField,
   StatusIUserLocation,
 } from '../../types'
 
-export const userInitialState: IUser = {
-  uid: '',
-  details: {
-    username: '',
-    birthDay: '',
-    birthMonth: '',
-    birthYear: '',
-    phoneNumber: '',
-  },
-  geolocation: {
-    geoHash: '',
-    accuracy: 0,
-    latitude: 0,
-    longitude: 0,
-  },
-  company: '',
-}
+export const userInitialState = emptyUser
 
 export const login = createAsyncThunk(
   'user/login',
@@ -50,6 +37,14 @@ export const setUserDetail = createAsyncThunk(
   async (userField: IUserDetailsField, thunkAPI) => {
     const { user } = thunkAPI.getState() as RootState
     return await FBSetUserDetail(user.uid, userField)
+  }
+)
+
+export const setSearchFilterSetting = createAsyncThunk(
+  'user/setSearchFilterSetting',
+  async (searchFilterSettingField: SearchFilterSettingsField, thunkAPI) => {
+    const { user } = thunkAPI.getState() as RootState
+    return await FBSetSearchFilterSettings(user.uid, searchFilterSettingField)
   }
 )
 
@@ -88,6 +83,12 @@ export const userSlice = createSlice({
     builder.addCase(register.fulfilled, (state, { payload }) => payload)
     builder.addCase(setUserDetail.fulfilled, (state, { payload }) => {
       state.details = { ...state.details, [payload.fieldKey]: payload.value }
+    })
+    builder.addCase(setSearchFilterSetting.fulfilled, (state, { payload }) => {
+      state.searchFilterSettings = {
+        ...state.searchFilterSettings,
+        [payload.fieldKey]: payload.value,
+      }
     })
     builder.addCase(setUserGeoLocation.fulfilled, (state, { payload }) => {
       state.geolocation = payload

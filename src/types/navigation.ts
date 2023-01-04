@@ -4,14 +4,15 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 
 import { IEvent } from './events'
 
-export type UnAuthStackParamList = {
-  Discovery: undefined
+export type UnAuthBottomTabParamList = {
+  DiscoveryStack: NavigatorScreenParams<DiscoveryStackParamList>
   LoginOrRegister: undefined
 }
 
 export type AuthBottomTabParamList = {
   DiscoveryStack: NavigatorScreenParams<DiscoveryStackParamList>
   Search: undefined
+  Filter: undefined
   Profile: undefined
   CompanyStack: NavigatorScreenParams<CompanyStackParamList>
 }
@@ -19,6 +20,7 @@ export type AuthBottomTabParamList = {
 export type DiscoveryStackParamList = {
   Discovery: undefined
   EventCategory: { eventCategoryName: IEvent['category'] }
+  Highlights: undefined
 }
 
 export type CompanyStackParamList = {
@@ -31,8 +33,9 @@ export type CompanyStackParamList = {
   }
 }
 
-export type UnAuthStackScreenProps<Screen extends keyof UnAuthStackParamList> =
-  NativeStackScreenProps<UnAuthStackParamList, Screen>
+export type UnAuthBottomTabScreenProps<
+  Screen extends keyof UnAuthBottomTabParamList
+> = BottomTabScreenProps<UnAuthBottomTabParamList, Screen>
 
 export type AuthBottomTabScreenProps<
   Screen extends keyof AuthBottomTabParamList
