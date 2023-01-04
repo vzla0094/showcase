@@ -2,7 +2,12 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 
 import { db } from './config'
 
-import { IGeolocation, IUser, IUserDetailsField } from '../types'
+import {
+  IGeolocation,
+  IUser,
+  IUserDetailsField,
+  SearchFilterSettingsField,
+} from '../types'
 
 export const setUser = async (user: IUser) => {
   try {
@@ -44,6 +49,24 @@ export const FBSetUserDetail = async (
     return userDetailsField
   } catch (e) {
     console.error('Error setting user details: ', e)
+
+    return e
+  }
+}
+
+export const FBSetSearchFilterSettings = async (
+  uid: IUser['uid'],
+  searchFilterSettingsField: SearchFilterSettingsField
+): Promise<SearchFilterSettingsField> => {
+  const { fieldKey, value } = searchFilterSettingsField
+  try {
+    await updateDoc(doc(db, 'users', uid), {
+      [`searchFilterSettings.${fieldKey}`]: value,
+    })
+
+    return searchFilterSettingsField
+  } catch (e) {
+    console.error('Error setting search filter setting: ', e)
 
     return e
   }

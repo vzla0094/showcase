@@ -1,10 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { FontAwesome } from '@expo/vector-icons'
+import { IconButton } from 'native-base'
 
 import { CompanyStackNavigator } from './CompanyNavigator'
 import { DiscoveryStackNavigator } from './DiscoveryStackNavigator'
 
 import { SearchScreen } from '../screens/SearchScreen'
+import { SearchFilterScreen } from '../screens/SearchFilterScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
 
 import { useAppSelector } from '../hooks'
@@ -29,11 +31,21 @@ export const AuthBottomNavigator = () => {
         component={DiscoveryStackNavigator}
       />
       <Tab.Screen
-        options={{
+        options={({ navigation }: AuthBottomTabScreenProps<'Search'>) => ({
+          headerShown: true,
+          headerRight: () => (
+            <IconButton
+              onPress={() => navigation.navigate('Filter')}
+              _icon={{
+                as: FontAwesome,
+                name: 'sliders',
+              }}
+            />
+          ),
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="search" color={color} size={size} />
           ),
-        }}
+        })}
         name="Search"
         component={SearchScreen}
       />
@@ -68,6 +80,23 @@ export const AuthBottomNavigator = () => {
           })}
         />
       )}
+      <Tab.Screen
+        options={({ navigation }: AuthBottomTabScreenProps<'Filter'>) => ({
+          tabBarButton: () => null,
+          headerShown: true,
+          headerLeft: () => (
+            <IconButton
+              onPress={() => navigation.navigate('Search')}
+              _icon={{
+                as: FontAwesome,
+                name: 'chevron-left',
+              }}
+            />
+          ),
+        })}
+        name="Filter"
+        component={SearchFilterScreen}
+      />
     </Tab.Navigator>
   )
 }
