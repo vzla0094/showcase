@@ -1,20 +1,36 @@
-import { ViewContainer } from '../atoms/ViewContainer'
-import { Heading, IconButton, Text } from 'native-base'
 import { useEffect } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { IconButton, Link, Text } from 'native-base'
+
+import { ViewContainer } from '../atoms/ViewContainer'
 
 import { CompanyStackScreenProps, IEvent } from '../types'
 
 interface IEventDetailsProps {
-  event?: IEvent
+  event: IEvent
+  companyNavigation?: boolean
 }
 
-export const EventDetailsView = ({ event }: IEventDetailsProps) => {
+export const EventDetailsView = ({
+  event,
+  companyNavigation,
+}: IEventDetailsProps) => {
   const navigation =
     useNavigation<CompanyStackScreenProps<'Event'>['navigation']>()
+  const {
+    name,
+    category,
+    address,
+    description,
+    startDateTime,
+    endDateTime,
+    ticketCount,
+    ticketLimit,
+  } = event
 
   useEffect(() => {
+    if (!companyNavigation) return
     navigation.setOptions({
       headerLeft: () => (
         <IconButton
@@ -38,16 +54,20 @@ export const EventDetailsView = ({ event }: IEventDetailsProps) => {
           }}
         />
       ),
+      title: name,
     })
-  }, [navigation])
-
-  if (!event) return null
+  }, [navigation, event, companyNavigation])
 
   return (
     <ViewContainer alignItems="stretch">
-      <Heading>{event.name}</Heading>
-      <Text>{event.description}</Text>
-      <Text>{event.category}</Text>
+      <Text>Category: {category}</Text>
+      <Text>
+        Address: See map <Link>here</Link>
+      </Text>
+      <Text>Description: {description}</Text>
+      <Text>Start date: {startDateTime}</Text>
+      <Text>End date: {endDateTime}</Text>
+      <Text>Available tickets: {ticketLimit - ticketCount}</Text>
     </ViewContainer>
   )
 }

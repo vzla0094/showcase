@@ -18,6 +18,7 @@ import { db } from './config'
 import {
   categoryNamesArr,
   categoryPathMap,
+  emptyEvent,
   EVENT_CATEGORY_NAMES,
   ICompany,
   IEvent,
@@ -113,20 +114,38 @@ export const useEventCategoryObserver = (
   return { name: categoryName, events, showMore: events.length === 3 }
 }
 
-export const FBGetEvent = async (
-  eventId: IEvent['id'],
-  category: IEvent['category']
-): Promise<IEvent> => {
-  const path = categoryPathMap[category]
-  try {
-    const eventSnap = await getDoc(doc(db, path, eventId))
+export const useEvent = (
+  eventId?: IEvent['id'],
+  category?: IEvent['category']
+) => {
+  const [event, setEvent] = useState<IEvent>(emptyEvent)
 
-    return eventSnap.data() as IEvent
-  } catch (e) {
-    console.error('Error getting event: ', e)
+  useFocusEffect(
+    useCallback(() => {
+      // only fetches if event is already created
+      // otherwise it uses the initialized emptyEvent
+      if (!eventId || !category) return
 
-    return e
-  }
+      const fetchEvent = async () => {
+        const path = categoryPathMap[category]
+        try {
+          const eventSnap = await getDoc(doc(db, path, eventId))
+
+          setEvent(eventSnap.data() as IEvent)
+        } catch (e) {
+          console.error('Error getting event: ', e)
+        }
+      }
+
+      fetchEvent()
+
+      return () => {
+        setEvent(emptyEvent)
+      }
+    }, [eventId, category])
+  )
+
+  return event
 }
 
 export const FBGetCompanyEvents = async (
