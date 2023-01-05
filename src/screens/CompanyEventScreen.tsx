@@ -1,11 +1,8 @@
-import { useCallback, useState } from 'react'
-import { useFocusEffect } from '@react-navigation/native'
-
 import {
   FBDeleteEvent,
-  FBGetEvent,
   FBEditEvent,
   FBCreateEvent,
+  useEvent,
 } from '../firebase'
 
 import { EventDetailsView } from '../views/EventDetailsView'
@@ -14,35 +11,16 @@ import {
   IOnSubmitPayload,
 } from '../views/EventEditDetailsView'
 
-import { CompanyStackScreenProps, emptyEvent, IEvent } from '../types'
+import { CompanyStackScreenProps, IEvent } from '../types'
 import { useAppSelector } from '../hooks'
 
-export const EventScreen = ({
+export const CompanyEventScreen = ({
   route,
   navigation,
 }: CompanyStackScreenProps<'Event'>) => {
   const companyId = useAppSelector(({ company }) => company.companyId)
   const { id, category, activeView } = route.params
-  const [event, setEvent] = useState<IEvent>(emptyEvent)
-
-  useFocusEffect(
-    useCallback(() => {
-      // only fetches if event is already created
-      // otherwise it uses the initialized emptyEvent
-      if (!id || !category) return
-
-      const fetchEvent = async () => {
-        const data = await FBGetEvent(id, category)
-        setEvent(data)
-      }
-
-      fetchEvent()
-
-      return () => {
-        setEvent(emptyEvent)
-      }
-    }, [id, category])
-  )
+  const event = useEvent(id, category)
 
   const handleSubmit = async (payload: IOnSubmitPayload) => {
     const { prevEvent, event } = payload
@@ -57,7 +35,7 @@ export const EventScreen = ({
   }
 
   return activeView === 'EventDetails' ? (
-    <EventDetailsView event={event} />
+    <EventDetailsView event={event} companyNavigation />
   ) : (
     <EventEditDetailsView
       event={event}

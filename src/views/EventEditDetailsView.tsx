@@ -51,7 +51,7 @@ export const EventEditDetailsView = ({
       headerRight: () => <IconButton display="none" />,
       title: eventExists ? 'Edit event' : 'Create event',
     })
-  }, [navigation])
+  }, [navigation, eventExists])
 
   const initialValues: EventFormValuesType = {
     name: event.name,

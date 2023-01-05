@@ -21,6 +21,10 @@ export type DiscoveryStackParamList = {
   Discovery: undefined
   EventCategory: { eventCategoryName: IEvent['category'] }
   Highlights: undefined
+  Event: {
+    id: IEvent['id']
+    category: IEvent['category']
+  }
 }
 
 export type CompanyStackParamList = {

@@ -4,7 +4,7 @@ import { FontAwesome } from '@expo/vector-icons'
 
 import { CompanyDashboardScreen } from '../screens/CompanyDashboardScreen'
 import { CompanyDetailsScreen } from '../screens/CompanyDetailsScreen'
-import { EventScreen } from '../screens/EventScreen'
+import { CompanyEventScreen } from '../screens/CompanyEventScreen'
 
 import { CompanyStackParamList, CompanyStackScreenProps } from '../types'
 
@@ -52,7 +52,7 @@ export const CompanyStackNavigator = () => {
       />
       <Stack.Screen
         options={{
-          title: 'Event details',
+          title: '',
           headerLeft: () => (
             <IconButton
               _icon={{
@@ -71,7 +71,7 @@ export const CompanyStackNavigator = () => {
           ),
         }}
         name="Event"
-        component={EventScreen}
+        component={CompanyEventScreen}
       />
     </Stack.Navigator>
   )

@@ -4,9 +4,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import { DiscoveryScreen } from '../screens/DiscoveryScreen'
 import { EventCategoryScreen } from '../screens/EventCategoryScreen'
+import { HighlightsScreen } from '../screens/HighlightsScreen'
+import { UserEventScreen } from '../screens/UserEventScreen'
 
 import { DiscoveryStackParamList, DiscoveryStackScreenProps } from '../types'
-import { HighlightsScreen } from '../screens/HighlightsScreen'
 
 const Stack = createNativeStackNavigator<DiscoveryStackParamList>()
 
@@ -36,6 +37,11 @@ export const DiscoveryStackNavigator = () => (
       options={{ title: 'Highlights' }}
       name="Highlights"
       component={HighlightsScreen}
+    />
+    <Stack.Screen
+      options={{ title: '' }}
+      name="Event"
+      component={UserEventScreen}
     />
   </Stack.Navigator>
 )
