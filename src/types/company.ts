@@ -2,12 +2,18 @@ import { IUser } from './user'
 
 import { IEvent } from './events'
 
-export interface ICompany {
+export interface ICompany extends IAddress {
   companyId: string
   name: string
   members?: Array<IUser['uid']>
   events: Array<IEvent['id']>
   active: boolean
+  telephoneNumber: string
+  cellphoneNumber: string
+  email: string
+}
+
+export interface IAddress {
   streetAddress: string
   city: string
   stateProvince: string
@@ -15,9 +21,6 @@ export interface ICompany {
   zipCode: string
   latitude?: string
   longitude?: string
-  telephoneNumber: string
-  cellphoneNumber: string
-  email: string
 }
 
 export enum COMPANY_DETAILS {
