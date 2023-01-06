@@ -56,13 +56,17 @@ export const EventEditDetailsView = ({
   const initialValues: EventFormValuesType = {
     name: event.name,
     description: event.description,
-    address: event.address,
     category: event.category,
     state: event.state,
+    streetAddress: event.streetAddress,
+    city: event.city,
+    stateProvince: event.stateProvince,
+    country: event.country,
+    zipCode: event.zipCode,
   }
 
   return (
-    <ViewContainer alignItems="stretch">
+    <ViewContainer alignItems="stretch" scroll>
       <Formik
         initialValues={initialValues}
         onSubmit={values => {
@@ -101,16 +105,6 @@ export const EventEditDetailsView = ({
               />
 
               <FormikInput
-                key={EVENT_FORM_FIELD_NAMES.Address}
-                value={values[EVENT_FORM_FIELD_NAMES.Address]}
-                fieldName={EVENT_FORM_FIELD_NAMES.Address}
-                handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.Address)}
-                handleChange={handleChange(EVENT_FORM_FIELD_NAMES.Address)}
-                errors={errors}
-                label="Address"
-              />
-
-              <FormikInput
                 key={EVENT_FORM_FIELD_NAMES.Description}
                 value={values[EVENT_FORM_FIELD_NAMES.Description]}
                 fieldName={EVENT_FORM_FIELD_NAMES.Description}
@@ -131,6 +125,60 @@ export const EventEditDetailsView = ({
                 <Select.Item label="Accommodation" value="accommodation" />
                 <Select.Item label="Transportation" value="transportation" />
               </Select>
+
+              <FormikInput
+                key={EVENT_FORM_FIELD_NAMES.StreetAddress}
+                value={values[EVENT_FORM_FIELD_NAMES.StreetAddress]}
+                fieldName={EVENT_FORM_FIELD_NAMES.StreetAddress}
+                handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.StreetAddress)}
+                handleChange={handleChange(
+                  EVENT_FORM_FIELD_NAMES.StreetAddress
+                )}
+                errors={errors}
+                label="Street Address"
+              />
+
+              <FormikInput
+                key={EVENT_FORM_FIELD_NAMES.City}
+                value={values[EVENT_FORM_FIELD_NAMES.City]}
+                fieldName={EVENT_FORM_FIELD_NAMES.City}
+                handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.City)}
+                handleChange={handleChange(EVENT_FORM_FIELD_NAMES.City)}
+                errors={errors}
+                label="City"
+              />
+
+              <FormikInput
+                key={EVENT_FORM_FIELD_NAMES.StateProvince}
+                value={values[EVENT_FORM_FIELD_NAMES.StateProvince]}
+                fieldName={EVENT_FORM_FIELD_NAMES.StateProvince}
+                handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.StateProvince)}
+                handleChange={handleChange(
+                  EVENT_FORM_FIELD_NAMES.StateProvince
+                )}
+                errors={errors}
+                label="State / Province"
+              />
+
+              <FormikInput
+                key={EVENT_FORM_FIELD_NAMES.Country}
+                value={values[EVENT_FORM_FIELD_NAMES.Country]}
+                fieldName={EVENT_FORM_FIELD_NAMES.Country}
+                handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.Country)}
+                handleChange={handleChange(EVENT_FORM_FIELD_NAMES.Country)}
+                errors={errors}
+                label="Country"
+              />
+
+              <FormikInput
+                key={EVENT_FORM_FIELD_NAMES.ZipCode}
+                value={values[EVENT_FORM_FIELD_NAMES.ZipCode]}
+                fieldName={EVENT_FORM_FIELD_NAMES.ZipCode}
+                handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.ZipCode)}
+                handleChange={handleChange(EVENT_FORM_FIELD_NAMES.ZipCode)}
+                errors={errors}
+                label="Zip Code"
+              />
 
               <HStack alignItems="center" space={4}>
                 <Text>Draft</Text>

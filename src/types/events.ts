@@ -1,13 +1,17 @@
-import { ICompany } from './company'
+import { IAddress, ICompany } from './company'
 
 export type ToggleButtonOnPress = (buttonValue: EVENT_CATEGORY_NAMES) => void
 
 export enum EVENT_FORM_FIELD_NAMES {
   Name = 'name',
   Description = 'description',
-  Address = 'address',
   Category = 'category',
   State = 'state',
+  StreetAddress = 'streetAddress',
+  City = 'city',
+  StateProvince = 'stateProvince',
+  Country = 'country',
+  ZipCode = 'zipCode',
 }
 
 export type EventFormValuesType = {
@@ -20,12 +24,11 @@ interface ITicket {
   id: string
 }
 
-export interface IEvent {
+export interface IEvent extends IAddress {
   id: string
   company: ICompany['companyId']
   name: string
   category: EVENT_CATEGORY_NAMES
-  address: string
   state: 'draft' | 'published' | 'expired'
   description: string
   startDateTime: string
@@ -88,7 +91,6 @@ export const emptyEvent: IEvent = {
   name: '',
   state: 'draft',
   category: EVENT_CATEGORY_NAMES.Food,
-  address: '',
   description: '',
   startDateTime: '',
   endDateTime: '',
@@ -96,4 +98,11 @@ export const emptyEvent: IEvent = {
   ticketLimit: 0,
   tickets: [],
   timeSlots: [],
+  streetAddress: '',
+  city: '',
+  stateProvince: '',
+  country: '',
+  zipCode: '',
+  latitude: '',
+  longitude: '',
 }
