@@ -1,6 +1,6 @@
 import { IUser } from './user'
-
 import { IEvent } from './events'
+import { IAddress } from './location'
 
 export interface ICompany extends IAddress {
   companyId: string
@@ -11,16 +11,6 @@ export interface ICompany extends IAddress {
   telephoneNumber: string
   cellphoneNumber: string
   email: string
-}
-
-export interface IAddress {
-  streetAddress: string
-  city: string
-  stateProvince: string
-  country: string
-  zipCode: string
-  latitude?: string
-  longitude?: string
 }
 
 export enum COMPANY_DETAILS {

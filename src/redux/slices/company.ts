@@ -27,8 +27,6 @@ export const companyInitialState: ICompany = {
   stateProvince: '',
   country: '',
   zipCode: '',
-  latitude: '',
-  longitude: '',
   telephoneNumber: '',
   cellphoneNumber: '',
   email: '',

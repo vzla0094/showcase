@@ -3,6 +3,8 @@ import {
   FBEditEvent,
   FBCreateEvent,
   useEvent,
+  getAddressQuery,
+  getEventGeoLocation,
 } from '../firebase'
 
 import { EventDetailsView } from '../views/EventDetailsView'
@@ -24,8 +26,14 @@ export const CompanyEventScreen = ({
 
   const handleSubmit = async (payload: IOnSubmitPayload) => {
     const { prevEvent, event } = payload
-    if (prevEvent) await FBEditEvent(prevEvent, event)
-    if (!prevEvent) await FBCreateEvent(companyId, event)
+
+    const eventAddressQuery = getAddressQuery(event)
+    const eventGeoLocation = await getEventGeoLocation(eventAddressQuery)
+
+    const eventWithGeoLocation = { ...event, ...eventGeoLocation }
+
+    if (prevEvent) await FBEditEvent(prevEvent, eventWithGeoLocation)
+    if (!prevEvent) await FBCreateEvent(companyId, eventWithGeoLocation)
 
     navigation.goBack()
   }

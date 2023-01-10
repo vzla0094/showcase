@@ -7,6 +7,7 @@ import { WebView } from 'react-native-webview'
 import { ViewContainer } from '../atoms/ViewContainer'
 
 import { CompanyStackScreenProps, IEvent } from '../types'
+import { getAddressQuery } from '../firebase'
 
 interface IEventDetailsProps {
   event: IEvent
@@ -27,11 +28,6 @@ export const EventDetailsView = ({
     endDateTime,
     ticketCount,
     ticketLimit,
-    streetAddress,
-    city,
-    stateProvince,
-    country,
-    zipCode,
   } = event
 
   useEffect(() => {
@@ -63,9 +59,7 @@ export const EventDetailsView = ({
     })
   }, [navigation, event, companyNavigation])
 
-  const mapQuery = `${streetAddress
-    .split(' ')
-    .join('+')},+${city},+${stateProvince},+${country},+${zipCode}`
+  const addressQuery = getAddressQuery(event)
 
   return (
     <ViewContainer alignItems="stretch">
@@ -85,7 +79,7 @@ export const EventDetailsView = ({
               allowfullscreen
               referrerpolicy="no-referrer-when-downgrade"
               src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAhWL-VE6px-42zW-veEUddTpIstjtxzJM
-                &q=${mapQuery}">
+                &q=${addressQuery}">
             </iframe>
           `,
         }}
