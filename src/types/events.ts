@@ -1,4 +1,5 @@
-import { IAddress, ICompany } from './company'
+import { ICompany } from './company'
+import { emptyGeoLocation, IAddress, IGeolocation } from './location'
 
 export type ToggleButtonOnPress = (buttonValue: EVENT_CATEGORY_NAMES) => void
 
@@ -24,7 +25,7 @@ interface ITicket {
   id: string
 }
 
-export interface IEvent extends IAddress {
+export interface IEvent extends IAddress, IGeolocation {
   id: string
   company: ICompany['companyId']
   name: string
@@ -103,6 +104,5 @@ export const emptyEvent: IEvent = {
   stateProvince: '',
   country: '',
   zipCode: '',
-  latitude: '',
-  longitude: '',
+  ...emptyGeoLocation,
 }

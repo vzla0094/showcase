@@ -1,6 +1,6 @@
 import { DocumentData, DocumentReference } from 'firebase/firestore'
 
-import { IGeolocation } from './location'
+import { emptyGeoLocation, IGeolocation } from './location'
 import { EVENT_CATEGORY_NAMES } from './events'
 
 export interface IUser {
@@ -20,12 +20,7 @@ export const emptyUser: IUser = {
     birthYear: '',
     phoneNumber: '',
   },
-  geolocation: {
-    geoHash: '',
-    accuracy: 0,
-    latitude: 0,
-    longitude: 0,
-  },
+  geolocation: emptyGeoLocation,
   company: '',
   searchFilterSettings: {
     activities: false,
@@ -33,7 +28,7 @@ export const emptyUser: IUser = {
     transportation: false,
     food: false,
     venues: false,
-    radiusDistance: '',
+    radiusDistance: 0,
   },
 }
 
@@ -62,15 +57,10 @@ export interface IAuth {
 type SearchFilterSettings = {
   [key in EVENT_CATEGORY_NAMES]: boolean
 } & {
-  radiusDistance: string
+  radiusDistance: number
 }
 
 export type SearchFilterSettingsField = {
   fieldKey: keyof SearchFilterSettings
-  value: string | boolean
-}
-
-export interface IFirebaseSettingsSwitchField<FieldKeys> {
-  fieldKey: FieldKeys
-  value: boolean
+  value: number | boolean
 }

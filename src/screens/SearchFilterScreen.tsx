@@ -1,11 +1,13 @@
 import { Heading, VStack } from 'native-base'
 
 import { ViewContainer } from '../atoms/ViewContainer'
-import { FirebaseSettingsSwitch } from '../firebaseComponents/FirebaseSettingsSwitch'
+import { InputSlider } from '../molecules/InputSlider'
+import { InputSwitch } from '../molecules/InputSwitch'
 
-import { categoryNamesArr, SearchFilterSettingsField } from '../types'
 import { setSearchFilterSetting } from '../redux/slices/user'
 import { useAppDispatch, useAppSelector } from '../hooks'
+
+import { categoryNamesArr, SearchFilterSettingsField } from '../types'
 
 export const SearchFilterScreen = () => {
   const dispatch = useAppDispatch()
@@ -25,14 +27,21 @@ export const SearchFilterScreen = () => {
       <VStack space={4}>
         <Heading>Select event categories</Heading>
         {categoryNamesArr.map((categoryName, index) => (
-          <FirebaseSettingsSwitch<typeof categoryName>
+          <InputSwitch
             key={index}
-            fieldKey={categoryName}
             label={categoryName}
             value={searchFilterSettings[categoryName]}
-            onSubmit={handleSubmit}
+            onToggle={value => handleSubmit({ fieldKey: categoryName, value })}
           />
         ))}
+
+        <InputSlider
+          onValuesChangeFinish={values =>
+            handleSubmit({ fieldKey: 'radiusDistance', value: values[0] })
+          }
+          value={searchFilterSettings.radiusDistance}
+          label="Distance in miles"
+        />
       </VStack>
     </ViewContainer>
   )

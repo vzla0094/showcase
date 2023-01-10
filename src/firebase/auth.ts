@@ -60,7 +60,7 @@ export const useAuth = () => {
         dispatch(actions.user.setUser(user))
 
         // user location
-        dispatch(setUserGeoLocation())
+        await dispatch(setUserGeoLocation())
 
         // company hydration
         dispatch(

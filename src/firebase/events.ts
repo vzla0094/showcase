@@ -14,6 +14,8 @@ import {
 } from 'firebase/firestore'
 
 import { db } from './config'
+import { isEventWithinRange } from './location'
+import { useAppSelector } from '../hooks'
 
 import {
   categoryNamesArr,
@@ -29,9 +31,10 @@ export const FBCreateEvent = async (
   companyId: ICompany['companyId'],
   newEvent: IEvent
 ): Promise<IEvent> => {
+  const path = categoryPathMap[newEvent.category]
+
   try {
     // Adds a new event document with a generated id
-    const path = categoryPathMap[newEvent.category]
     const eventRef = await doc(collection(db, path))
     const generatedEventId = eventRef.id
 
@@ -64,6 +67,7 @@ export const useEventCategoryObserver = (
   eventsLimit?: number
 ): IEventCategory => {
   const [events, setEvents] = useState<Array<IEvent>>([])
+  const user = useAppSelector(({ user }) => user)
 
   useFocusEffect(
     useCallback(() => {
@@ -82,24 +86,33 @@ export const useEventCategoryObserver = (
 
       const unsubscribe = onSnapshot(q, snapshot => {
         snapshot.docChanges().forEach(change => {
-          if (change.type === 'added') {
-            const data = change.doc.data() as IEvent
+          // filter out event if it's not within range
+          const data = change.doc.data() as IEvent
+          const isWithinRange = isEventWithinRange({
+            userLatitude: user.geolocation.latitude,
+            userLongitude: user.geolocation.longitude,
+            eventsRange: user.searchFilterSettings.radiusDistance,
+            eventLatitude: data.latitude,
+            eventLongitude: data.longitude,
+          })
+          if (!isWithinRange) return
 
-            setEvents(prevState => [...prevState, data])
-          }
-          if (change.type === 'modified') {
-            const data = change.doc.data() as IEvent
-
-            setEvents(prevState =>
-              prevState.map(event => (event.id === data.id ? data : event))
-            )
-          }
-          if (change.type === 'removed') {
-            const data = change.doc.data() as IEvent
-
-            setEvents(prevState =>
-              prevState.filter(event => event.id !== data.id)
-            )
+          switch (change.type) {
+            case 'added': {
+              setEvents(prevState => [...prevState, data])
+              break
+            }
+            case 'modified': {
+              setEvents(prevState =>
+                prevState.map(event => (event.id === data.id ? data : event))
+              )
+              break
+            }
+            case 'removed': {
+              setEvents(prevState =>
+                prevState.filter(event => event.id !== data.id)
+              )
+            }
           }
         })
       })
@@ -108,7 +121,7 @@ export const useEventCategoryObserver = (
         setEvents([])
         unsubscribe()
       }
-    }, [])
+    }, [user])
   )
 
   return { name: categoryName, events, showMore: events.length === 3 }
