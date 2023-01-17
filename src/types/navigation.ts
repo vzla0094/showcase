@@ -35,6 +35,8 @@ export type CompanyStackParamList = {
     category?: IEvent['category']
     activeView: 'EventDetails' | 'EventEditDetails'
   }
+  CompanyTickets: undefined
+  TicketTypes: undefined
 }
 
 export type UnAuthBottomTabScreenProps<

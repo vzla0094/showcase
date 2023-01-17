@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { EventDetailsView } from '../views/EventDetailsView'
+import { UserEventDetailsView } from '../views/UserEventDetailsView'
 
 import { useEvent } from '../firebase'
 
@@ -17,5 +17,5 @@ export const UserEventScreen = ({
     navigation.setOptions({ title: event.name })
   }, [navigation, event])
 
-  return <EventDetailsView event={event} />
+  return <UserEventDetailsView event={event} />
 }

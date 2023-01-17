@@ -2,27 +2,28 @@ import {
   FBDeleteEvent,
   FBEditEvent,
   FBCreateEvent,
-  useEvent,
   getAddressQuery,
   getEventGeoLocation,
 } from '../firebase'
 
-import { EventDetailsView } from '../views/EventDetailsView'
+import { CompanyEventDetailsView } from '../views/CompanyEventDetailsView'
 import {
   EventEditDetailsView,
   IOnSubmitPayload,
 } from '../views/EventEditDetailsView'
 
-import { CompanyStackScreenProps, IEvent } from '../types'
 import { useAppSelector } from '../hooks'
+import { CompanyStackScreenProps, IEvent } from '../types'
 
 export const CompanyEventScreen = ({
   route,
   navigation,
 }: CompanyStackScreenProps<'Event'>) => {
-  const companyId = useAppSelector(({ company }) => company.companyId)
-  const { id, category, activeView } = route.params
-  const event = useEvent(id, category)
+  const { companyId, event } = useAppSelector(({ company, user }) => ({
+    companyId: company.companyId,
+    event: user.activeEvent,
+  }))
+  const { activeView } = route.params
 
   const handleSubmit = async (payload: IOnSubmitPayload) => {
     const { prevEvent, event } = payload
@@ -43,7 +44,7 @@ export const CompanyEventScreen = ({
   }
 
   return activeView === 'EventDetails' ? (
-    <EventDetailsView event={event} companyNavigation />
+    <CompanyEventDetailsView event={event} />
   ) : (
     <EventEditDetailsView
       event={event}

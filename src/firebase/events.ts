@@ -127,6 +127,22 @@ export const useEventCategoryObserver = (
   return { name: categoryName, events, showMore: events.length === 3 }
 }
 
+export const FBGetEvent = async (
+  eventId: IEvent['id'],
+  category: IEvent['category']
+): Promise<IEvent> => {
+  const path = categoryPathMap[category]
+  try {
+    const eventSnap = await getDoc(doc(db, path, eventId))
+
+    return eventSnap.data() as IEvent
+  } catch (e) {
+    console.error('Error getting event: ', e)
+
+    return e
+  }
+}
+
 export const useEvent = (
   eventId?: IEvent['id'],
   category?: IEvent['category']
@@ -140,14 +156,8 @@ export const useEvent = (
       if (!eventId || !category) return
 
       const fetchEvent = async () => {
-        const path = categoryPathMap[category]
-        try {
-          const eventSnap = await getDoc(doc(db, path, eventId))
-
-          setEvent(eventSnap.data() as IEvent)
-        } catch (e) {
-          console.error('Error getting event: ', e)
-        }
+        const data = await FBGetEvent(eventId, category)
+        setEvent(data)
       }
 
       fetchEvent()

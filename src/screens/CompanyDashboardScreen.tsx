@@ -4,17 +4,20 @@ import { Button } from 'native-base'
 
 import { FBGetCompanyEvents } from '../firebase'
 
-import { useAppSelector } from '../hooks'
+import { useAppDispatch, useAppSelector } from '../hooks'
+import { setActiveEvent } from '../redux/slices/user'
 
 import { EventList } from '../molecules/EventList'
 import { ViewContainer } from '../atoms/ViewContainer'
 
 import { CompanyStackScreenProps, handleEventPressType, IEvent } from '../types'
+import { actions } from '../redux/slices'
 
 export const CompanyDashboardScreen = ({
   navigation,
 }: CompanyStackScreenProps<'CompanyDashboard'>) => {
   const companyId = useAppSelector(({ company }) => company.companyId)
+  const dispatch = useAppDispatch()
 
   const [companyEvents, setCompanyEvents] = useState<Array<IEvent>>([])
 
@@ -27,21 +30,23 @@ export const CompanyDashboardScreen = ({
     fetchCompanyEvents()
   })
 
-  const handleEventPress: handleEventPressType = ({ id, category }) =>
+  const handleEventPress: handleEventPressType = async ({ id, category }) => {
+    await dispatch(setActiveEvent({ eventId: id, eventCategory: category }))
+
     navigation.navigate('Event', { id, category, activeView: 'EventDetails' })
+  }
+
+  const handleCreateEventPress = async () => {
+    await dispatch(actions.user.resetActiveEvent())
+    navigation.navigate('Event', {
+      activeView: 'EventEditDetails',
+    })
+  }
 
   return (
     <ViewContainer scroll alignItems="stretch">
       <EventList events={companyEvents} onPress={handleEventPress} />
-      <Button
-        onPress={() => {
-          navigation.navigate('Event', {
-            activeView: 'EventEditDetails',
-          })
-        }}
-      >
-        Create an Event
-      </Button>
+      <Button onPress={handleCreateEventPress}>Create an Event</Button>
     </ViewContainer>
   )
 }

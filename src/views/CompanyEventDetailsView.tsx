@@ -1,23 +1,22 @@
 import { useEffect } from 'react'
 import { FontAwesome } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { IconButton, Text } from 'native-base'
+import { Button, IconButton, Text, VStack } from 'native-base'
 import { WebView } from 'react-native-webview'
 
 import { ViewContainer } from '../atoms/ViewContainer'
 
 import { CompanyStackScreenProps, IEvent } from '../types'
 import { getAddressQuery } from '../firebase'
+import { EventTicketsButton } from '../molecules/EventTicketsButton'
 
-interface IEventDetailsProps {
+interface ICompanyEventDetailsProps {
   event: IEvent
-  companyNavigation?: boolean
 }
 
-export const EventDetailsView = ({
+export const CompanyEventDetailsView = ({
   event,
-  companyNavigation,
-}: IEventDetailsProps) => {
+}: ICompanyEventDetailsProps) => {
   const navigation =
     useNavigation<CompanyStackScreenProps<'Event'>['navigation']>()
   const {
@@ -31,7 +30,6 @@ export const EventDetailsView = ({
   } = event
 
   useEffect(() => {
-    if (!companyNavigation) return
     navigation.setOptions({
       headerLeft: () => (
         <IconButton
@@ -57,20 +55,28 @@ export const EventDetailsView = ({
       ),
       title: name,
     })
-  }, [navigation, event, companyNavigation])
+  }, [navigation, event])
 
   const addressQuery = getAddressQuery(event)
 
   return (
     <ViewContainer alignItems="stretch">
-      <Text>Category: {category}</Text>
-      <Text>Description: {description}</Text>
-      <Text>Start date: {startDateTime}</Text>
-      <Text>End date: {endDateTime}</Text>
-      <Text>Available tickets: {ticketLimit - ticketCount}</Text>
-      <WebView
-        source={{
-          html: `
+      <VStack space={2} flex={1}>
+        <Text>Category: {category}</Text>
+        <Text>Description: {description}</Text>
+        <Text>Start date: {startDateTime}</Text>
+        <Text>End date: {endDateTime}</Text>
+        <Text>Available tickets: {ticketLimit - ticketCount}</Text>
+        <EventTicketsButton
+          onPress={() => navigation.navigate('CompanyTickets')}
+          ticketCount={ticketCount}
+        />
+        <Button onPress={() => navigation.navigate('TicketTypes')}>
+          Redemptions
+        </Button>
+        <WebView
+          source={{
+            html: `
             <iframe
               width="100%"
               height="100%"
@@ -82,8 +88,9 @@ export const EventDetailsView = ({
                 &q=${addressQuery}">
             </iframe>
           `,
-        }}
-      />
+          }}
+        />
+      </VStack>
     </ViewContainer>
   )
 }
