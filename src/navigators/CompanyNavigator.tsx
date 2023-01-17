@@ -5,6 +5,8 @@ import { FontAwesome } from '@expo/vector-icons'
 import { CompanyDashboardScreen } from '../screens/CompanyDashboardScreen'
 import { CompanyDetailsScreen } from '../screens/CompanyDetailsScreen'
 import { CompanyEventScreen } from '../screens/CompanyEventScreen'
+import { CompanyTicketsScreen } from '../screens/CompanyTicketsScreen'
+import { TicketTypesScreen } from '../screens/TicketTypesScreen'
 
 import { CompanyStackParamList, CompanyStackScreenProps } from '../types'
 
@@ -73,6 +75,8 @@ export const CompanyStackNavigator = () => {
         name="Event"
         component={CompanyEventScreen}
       />
+      <Stack.Screen name="CompanyTickets" component={CompanyTicketsScreen} />
+      <Stack.Screen name="TicketTypes" component={TicketTypesScreen} />
     </Stack.Navigator>
   )
 }
