@@ -3,6 +3,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 
 import { IEvent } from './events'
+import { ITicketType } from './tickets'
 
 export type UnAuthBottomTabParamList = {
   DiscoveryStack: NavigatorScreenParams<DiscoveryStackParamList>
@@ -35,8 +36,11 @@ export type CompanyStackParamList = {
     category?: IEvent['category']
     activeView: 'EventDetails' | 'EventEditDetails'
   }
-  CompanyTickets: undefined
+  EventTickets: undefined
   TicketTypes: undefined
+  CreateEditTicket?: {
+    id: ITicketType['id']
+  }
 }
 
 export type UnAuthBottomTabScreenProps<
