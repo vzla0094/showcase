@@ -68,7 +68,7 @@ export const CompanyEventDetailsView = ({
         <Text>End date: {endDateTime}</Text>
         <Text>Available tickets: {ticketLimit - ticketCount}</Text>
         <EventTicketsButton
-          onPress={() => navigation.navigate('CompanyTickets')}
+          onPress={() => navigation.navigate('EventTickets')}
           ticketCount={ticketCount}
         />
         <Button onPress={() => navigation.navigate('TicketTypes')}>
