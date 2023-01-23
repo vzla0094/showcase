@@ -1,11 +1,11 @@
 import { Heading, Pressable, IPressableProps, Text } from 'native-base'
 
 interface IEventTicketsButtonProps extends IPressableProps {
-  ticketCount: number
+  ticketTypesCount: number
 }
 
 export const EventTicketsButton = ({
-  ticketCount,
+  ticketTypesCount,
   onPress,
 }: IEventTicketsButtonProps) => {
   return (
@@ -18,7 +18,9 @@ export const EventTicketsButton = ({
       onPress={onPress}
     >
       <Heading>Tickets</Heading>
-      <Text>{ticketCount ? ticketCount : 'Add tickets'}</Text>
+      <Text>
+        {ticketTypesCount ? `${ticketTypesCount} ticket types` : 'Add tickets'}
+      </Text>
     </Pressable>
   )
 }

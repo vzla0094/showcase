@@ -1,5 +1,6 @@
 import { ICompany } from './company'
 import { emptyGeoLocation, IAddress, IGeolocation } from './location'
+import { ITicket, ITicketType } from './tickets'
 
 export type ToggleButtonOnPress = (buttonValue: EVENT_CATEGORY_NAMES) => void
 
@@ -19,12 +20,6 @@ export type EventFormValuesType = {
   [key in EVENT_FORM_FIELD_NAMES]: string
 }
 
-interface ITicket {
-  reservedTimeStamp: string
-  redeemedTimeStamp: string
-  id: string
-}
-
 export interface IEvent extends IAddress, IGeolocation {
   id: string
   company: ICompany['companyId']
@@ -38,6 +33,7 @@ export interface IEvent extends IAddress, IGeolocation {
   ticketLimit: number
   tickets: Array<ITicket>
   timeSlots: []
+  ticketTypes: Array<ITicketType>
 }
 
 export interface IFirebaseInputField<FieldKeys, FieldValue> {
@@ -98,6 +94,7 @@ export const emptyEvent: IEvent = {
   ticketCount: 0,
   ticketLimit: 0,
   tickets: [],
+  ticketTypes: [],
   timeSlots: [],
   streetAddress: '',
   city: '',

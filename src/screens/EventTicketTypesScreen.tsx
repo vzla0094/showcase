@@ -1,4 +1,4 @@
-import { Button } from 'native-base'
+import { Button, FlatList, Box } from 'native-base'
 
 import { TicketTypeCard } from '../atoms/TicketTypeCard'
 import { ViewContainer } from '../atoms/ViewContainer'
@@ -13,16 +13,20 @@ export const EventTicketTypesScreen = ({
 
   return (
     <ViewContainer alignItems="stretch">
-      <TicketTypeCard
-        onPress={() =>
-          navigation.navigate('CreateEditTicket', { id: '1dummyTicketTypeId' })
-        }
-        name="dummy name"
-        sold={20}
-        quantity={50}
-        price={0}
+      <FlatList
+        data={event.ticketTypes}
+        ItemSeparatorComponent={() => <Box height={2} />}
+        renderItem={({ item: { id, name, sold, quantity, price } }) => (
+          <TicketTypeCard
+            onPress={() => navigation.navigate('CreateEditTicketType', { id })}
+            name={name}
+            sold={sold}
+            quantity={quantity}
+            price={price}
+          />
+        )}
       />
-      <Button onPress={() => navigation.navigate('CreateEditTicket')}>
+      <Button onPress={() => navigation.navigate('CreateEditTicketType')}>
         Create new ticket type
       </Button>
     </ViewContainer>

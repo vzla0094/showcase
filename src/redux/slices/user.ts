@@ -8,15 +8,17 @@ import {
   FBSetUserGeoLocation,
   FBSetSearchFilterSettings,
   FBGetEvent,
+  FBEditEvent,
 } from '../../firebase'
-
 import { RootState } from '../store'
+import { generateUniqueId } from '../../helpers/generateUniqueId'
 
 import {
   emptyEvent,
   emptyUser,
   IAuth,
   ISetActiveEventPayload,
+  ITicketType,
   IUser,
   IUserDetailsField,
   SearchFilterSettingsField,
@@ -84,6 +86,61 @@ export const setActiveEvent = createAsyncThunk(
   }
 )
 
+export const createTicketType = createAsyncThunk(
+  'user/createTicketType',
+  async (ticketType: ITicketType, thunkAPI) => {
+    const {
+      user: { activeEvent },
+    } = thunkAPI.getState() as RootState
+
+    const ticketTypeId = await generateUniqueId()
+    const ticketTypePayload: ITicketType = {
+      ...ticketType,
+      id: ticketTypeId,
+      eventId: activeEvent.id,
+      available: ticketType.quantity,
+    }
+
+    return await FBEditEvent(activeEvent, {
+      ...activeEvent,
+      ticketLimit: activeEvent.ticketLimit + ticketType.quantity,
+      ticketTypes: [...activeEvent.ticketTypes, ticketTypePayload],
+    })
+  }
+)
+
+export const editTicketType = createAsyncThunk(
+  'user/editTicketType',
+  async (updatedTicketType: ITicketType, thunkAPI) => {
+    const {
+      user: { activeEvent },
+    } = thunkAPI.getState() as RootState
+
+    let eventTicketLimit = activeEvent.ticketLimit
+
+    const ticketTypes = activeEvent.ticketTypes.map(ticketType => {
+      if (ticketType.id !== updatedTicketType.id) return ticketType
+
+      // If the ticket type quantity has changed, update the event ticket limit and ticket type available tickets
+      if (updatedTicketType.quantity !== ticketType.quantity) {
+        eventTicketLimit += updatedTicketType.quantity - ticketType.quantity
+        return {
+          ...updatedTicketType,
+          available: updatedTicketType.quantity - ticketType.sold,
+        }
+      }
+
+      return updatedTicketType
+    })
+
+    return await FBEditEvent(activeEvent, {
+      ...activeEvent,
+      ticketLimit: eventTicketLimit,
+      ticketTypes,
+    })
+  }
+)
+
 export const userSlice = createSlice({
   name: 'user',
   initialState: userInitialState,
@@ -110,6 +167,12 @@ export const userSlice = createSlice({
       state.geolocation = payload
     })
     builder.addCase(setActiveEvent.fulfilled, (state, { payload }) => {
+      state.activeEvent = payload
+    })
+    builder.addCase(createTicketType.fulfilled, (state, { payload }) => {
+      state.activeEvent = payload
+    })
+    builder.addCase(editTicketType.fulfilled, (state, { payload }) => {
       state.activeEvent = payload
     })
   },
