@@ -21,7 +21,7 @@ export const TicketTypeCard = ({
       alignItems="center"
       p={4}
       bgColor={'white'}
-      shadow={3}
+      shadow={1}
       onPress={onPress}
     >
       <Box>

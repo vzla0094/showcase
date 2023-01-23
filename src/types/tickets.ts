@@ -21,8 +21,33 @@ export interface ITicketType {
   sold: number
   available: number
   price: number
-  ticketsPerOrder: {
-    min: number
-    max: number
-  }
+  minTicketsPerOrder: number
+  maxTicketsPerOrder: number
 }
+
+export const emptyTicketType: ITicketType = {
+  id: '',
+  eventId: '',
+  name: '',
+  description: '',
+  quantity: 0,
+  sold: 0,
+  available: 0,
+  price: 0,
+  minTicketsPerOrder: 1,
+  maxTicketsPerOrder: 0,
+}
+
+export enum TICKET_TYPE_FORM_FIELDS {
+  Name = 'name',
+  Description = 'description',
+  Quantity = 'quantity',
+  Price = 'price',
+  MinTicketsPerOrder = 'minTicketsPerOrder',
+  MaxTicketsPerOrder = 'maxTicketsPerOrder',
+}
+
+export type TicketTypeFormValuesType = Omit<
+  ITicketType,
+  'id' | 'eventId' | 'sold' | 'available'
+>

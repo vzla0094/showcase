@@ -3,7 +3,7 @@ import { FormikValues } from 'formik'
 
 interface IFormikProps {
   handleBlur: FormikValues['handleBlur']
-  handleChange: FormikValues['handleChange']
+  handleChange: (value: string) => void
   errors: FormikValues['errors']
 }
 
