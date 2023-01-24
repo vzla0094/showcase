@@ -6,7 +6,7 @@ import * as yup from 'yup'
 import { ViewContainer } from '../atoms/ViewContainer'
 import { FormikInput } from '../atoms/FormikInput'
 import { useAppDispatch, useAppSelector } from '../hooks'
-import { createTicketType, editTicketType } from '../redux/slices/user'
+import { createTicketType, editTicketType } from '../redux/slices/company'
 
 import {
   CompanyStackScreenProps,
@@ -20,8 +20,8 @@ export const CreateEditTicketTypeScreen = ({
   navigation,
 }: CompanyStackScreenProps<'CreateEditTicketType'>) => {
   const ticketType = useAppSelector(
-    ({ user }) =>
-      user.activeEvent.ticketTypes.find(tt => tt.id === route.params?.id) ||
+    ({ company }) =>
+      company.activeEvent.ticketTypes.find(tt => tt.id === route.params?.id) ||
       emptyTicketType
   )
   const dispatch = useAppDispatch()
@@ -53,7 +53,12 @@ export const CreateEditTicketTypeScreen = ({
 
   const handleSubmit = async (values: TicketTypeFormValuesType) => {
     ticketTypeExists
-      ? await dispatch(editTicketType({ ...ticketType, ...values }))
+      ? await dispatch(
+          editTicketType({
+            prevTicketType: ticketType,
+            newTicketType: { ...ticketType, ...values },
+          })
+        )
       : await dispatch(createTicketType({ ...ticketType, ...values }))
 
     navigation.goBack()

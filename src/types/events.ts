@@ -31,8 +31,13 @@ export interface IEvent extends IAddress, IGeolocation {
   endDateTime: string
   ticketCount: number
   ticketLimit: number
-  tickets: Array<ITicket>
   timeSlots: []
+}
+
+// active event is an event that is currently being edited
+// it includes tickets and ticket types unlike IEvent that's stored in firebase
+export interface IActiveEvent extends IEvent {
+  tickets: Array<ITicket>
   ticketTypes: Array<ITicketType>
 }
 
@@ -93,8 +98,6 @@ export const emptyEvent: IEvent = {
   endDateTime: '',
   ticketCount: 0,
   ticketLimit: 0,
-  tickets: [],
-  ticketTypes: [],
   timeSlots: [],
   streetAddress: '',
   city: '',

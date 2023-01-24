@@ -1,5 +1,5 @@
 import { IUser } from './user'
-import { IEvent } from './events'
+import { EVENT_CATEGORY_NAMES, IEvent } from './events'
 
 export interface ITicket {
   id: string
@@ -14,7 +14,8 @@ export interface ITicket {
 
 export interface ITicketType {
   id: string
-  eventId: string
+  eventId: IEvent['id']
+  eventCategory: IEvent['category']
   name: string
   description: string
   quantity: number
@@ -28,6 +29,7 @@ export interface ITicketType {
 export const emptyTicketType: ITicketType = {
   id: '',
   eventId: '',
+  eventCategory: EVENT_CATEGORY_NAMES.Food,
   name: '',
   description: '',
   quantity: 0,
@@ -49,5 +51,10 @@ export enum TICKET_TYPE_FORM_FIELDS {
 
 export type TicketTypeFormValuesType = Omit<
   ITicketType,
-  'id' | 'eventId' | 'sold' | 'available'
+  'id' | 'eventId' | 'sold' | 'available' | 'eventCategory'
 >
+
+export interface IEditTicketTypePayload {
+  prevTicketType: ITicketType
+  newTicketType: ITicketType
+}

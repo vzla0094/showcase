@@ -4,14 +4,15 @@ import { useNavigation } from '@react-navigation/native'
 import { Button, IconButton, Text, VStack } from 'native-base'
 import { WebView } from 'react-native-webview'
 
-import { ViewContainer } from '../atoms/ViewContainer'
-
-import { CompanyStackScreenProps, IEvent } from '../types'
 import { getAddressQuery } from '../firebase'
+
+import { ViewContainer } from '../atoms/ViewContainer'
 import { EventTicketsButton } from '../molecules/EventTicketsButton'
 
+import { CompanyStackScreenProps, IActiveEvent } from '../types'
+
 interface ICompanyEventDetailsProps {
-  event: IEvent
+  event: IActiveEvent
 }
 
 export const CompanyEventDetailsView = ({
