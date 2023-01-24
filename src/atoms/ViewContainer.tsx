@@ -14,15 +14,10 @@ export const ViewContainer = ({
   alignItems = 'center',
   scroll = false,
 }: IViewContainerProps) => {
+  const prop = justifyContent === 'auto' ? {} : { justifyContent }
   const ContainedChildren = (
     <Center flex={1}>
-      <Container
-        safeArea
-        flex={1}
-        w={'100%'}
-        justifyContent={justifyContent}
-        alignItems={alignItems}
-      >
+      <Container safeArea flex={1} w={'100%'} alignItems={alignItems} {...prop}>
         {children}
       </Container>
     </Center>
