@@ -19,10 +19,12 @@ export const CompanyEventScreen = ({
   route,
   navigation,
 }: CompanyStackScreenProps<'Event'>) => {
-  const { companyId, event } = useAppSelector(({ company, user }) => ({
-    companyId: company.companyId,
-    event: user.activeEvent,
-  }))
+  const { companyId, event } = useAppSelector(
+    ({ company: { companyId, activeEvent } }) => ({
+      companyId,
+      event: activeEvent,
+    })
+  )
   const { activeView } = route.params
 
   const handleSubmit = async (payload: IOnSubmitPayload) => {

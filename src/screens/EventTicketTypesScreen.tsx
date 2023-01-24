@@ -9,7 +9,7 @@ import { CompanyStackScreenProps } from '../types'
 export const EventTicketTypesScreen = ({
   navigation,
 }: CompanyStackScreenProps<'EventTickets'>) => {
-  const event = useAppSelector(({ user }) => user.activeEvent)
+  const event = useAppSelector(({ company }) => company.activeEvent)
 
   return (
     <ViewContainer alignItems="stretch">

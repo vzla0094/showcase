@@ -5,13 +5,13 @@ import { Button } from 'native-base'
 import { FBGetCompanyEvents } from '../firebase'
 
 import { useAppDispatch, useAppSelector } from '../hooks'
-import { setActiveEvent } from '../redux/slices/user'
+import { actions } from '../redux/slices'
+import { setActiveEvent } from '../redux/slices/company'
 
 import { EventList } from '../molecules/EventList'
 import { ViewContainer } from '../atoms/ViewContainer'
 
 import { CompanyStackScreenProps, handleEventPressType, IEvent } from '../types'
-import { actions } from '../redux/slices'
 
 export const CompanyDashboardScreen = ({
   navigation,
