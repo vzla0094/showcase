@@ -8,6 +8,7 @@ import { CompanyEventScreen } from '../screens/CompanyEventScreen'
 import { EventTicketTypesScreen } from '../screens/EventTicketTypesScreen'
 import { CreateEditTicketTypeScreen } from '../screens/CreateEditTicketTypeScreen'
 import { TicketTypesScreen } from '../screens/TicketTypesScreen'
+import { RedeemTicketScreen } from '../screens/RedeemTicketScreen'
 import { RedemptionsScreen } from '../screens/RedemptionsScreen'
 
 import { CompanyStackParamList, CompanyStackScreenProps } from '../types'
@@ -92,7 +93,12 @@ export const CompanyStackNavigator = () => {
         options={{ title: 'Tickets' }}
         component={TicketTypesScreen}
       />
-      <Stack.Screen name="Redemptions" component={RedemptionsScreen} />
+      <Stack.Screen
+        options={{ title: 'Check in' }}
+        name="Redemptions"
+        component={RedemptionsScreen}
+      />
+      <Stack.Screen name="RedeemTicket" component={RedeemTicketScreen} />
     </Stack.Navigator>
   )
 }

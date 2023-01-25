@@ -44,6 +44,7 @@ export type CompanyStackParamList = {
   CreateEditTicketType?: {
     id: ITicketType['id']
   }
+  RedeemTicket: undefined
 }
 
 export type UnAuthBottomTabScreenProps<
