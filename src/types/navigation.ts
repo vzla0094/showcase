@@ -38,6 +38,9 @@ export type CompanyStackParamList = {
   }
   EventTickets: undefined
   TicketTypes: undefined
+  Redemptions: {
+    id: ITicketType['id']
+  }
   CreateEditTicketType?: {
     id: ITicketType['id']
   }
