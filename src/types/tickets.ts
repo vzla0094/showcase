@@ -26,6 +26,17 @@ export interface ITicketType {
   maxTicketsPerOrder: number
 }
 
+export const emptyTicket: ITicket = {
+  id: '',
+  userId: '',
+  userName: '',
+  eventId: '',
+  ticketTypeId: '',
+  state: 'reserved',
+  reservedTimeStamp: '',
+  redeemedTimeStamp: '',
+}
+
 export const emptyTicketType: ITicketType = {
   id: '',
   eventId: '',
