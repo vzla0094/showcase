@@ -192,7 +192,11 @@ export const redeemTicket = createAsyncThunk(
 export const companySlice = createSlice({
   name: 'company',
   initialState: companyInitialState,
-  reducers: {},
+  reducers: {
+    resetActiveEvent: state => {
+      state.activeEvent = companyInitialState.activeEvent
+    },
+  },
   extraReducers: builder => {
     builder.addCase(setCompany.fulfilled, (state, { payload }) => ({
       ...state,
