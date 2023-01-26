@@ -66,3 +66,9 @@ export type SearchFilterSettingsField = {
   fieldKey: keyof SearchFilterSettings
   value: number | boolean
 }
+
+export interface ISetUserActiveEventPayload {
+  eventId: IEvent['id']
+  eventCategory: EVENT_CATEGORY_NAMES
+  event?: IEvent
+}

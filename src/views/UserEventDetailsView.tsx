@@ -1,4 +1,4 @@
-import { Text } from 'native-base'
+import { Button, Text } from 'native-base'
 import { WebView } from 'react-native-webview'
 
 import { ViewContainer } from '../atoms/ViewContainer'
@@ -7,10 +7,14 @@ import { getAddressQuery } from '../firebase'
 import { IEvent } from '../types'
 
 interface IUserEventDetailsProps {
+  onRedeem: () => void
   event: IEvent
 }
 
-export const UserEventDetailsView = ({ event }: IUserEventDetailsProps) => {
+export const UserEventDetailsView = ({
+  event,
+  onRedeem,
+}: IUserEventDetailsProps) => {
   const {
     category,
     description,
@@ -29,6 +33,9 @@ export const UserEventDetailsView = ({ event }: IUserEventDetailsProps) => {
       <Text>Start date: {startDateTime}</Text>
       <Text>End date: {endDateTime}</Text>
       <Text>Available tickets: {ticketLimit - ticketCount}</Text>
+      <Button my={2} onPress={onRedeem}>
+        Reserve
+      </Button>
       <WebView
         source={{
           html: `
