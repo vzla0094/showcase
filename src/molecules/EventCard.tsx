@@ -2,6 +2,8 @@ import { useNavigation } from '@react-navigation/native'
 import { Heading, Pressable, Text } from 'native-base'
 
 import { DiscoveryStackScreenProps, IEvent } from '../types'
+import { setActiveEvent } from '../redux/slices/user'
+import { useAppDispatch } from '../hooks'
 
 interface IEventCardProps {
   event: IEvent
@@ -9,9 +11,16 @@ interface IEventCardProps {
 }
 
 export const EventCard = ({ event, large }: IEventCardProps) => {
+  const dispatch = useAppDispatch()
+
   const navigation =
     useNavigation<DiscoveryStackScreenProps<'EventCategory'>['navigation']>()
   const { name, description, id, category } = event
+
+  const onPress = async () => {
+    await dispatch(setActiveEvent({ eventId: id, eventCategory: category }))
+    navigation.navigate('Event')
+  }
 
   return (
     <Pressable
@@ -20,7 +29,7 @@ export const EventCard = ({ event, large }: IEventCardProps) => {
       justifyContent="center"
       borderColor="black"
       borderWidth={1}
-      onPress={() => navigation.navigate('Event', { id, category })}
+      onPress={onPress}
     >
       <Heading size="sm">{name}</Heading>
       <Text>{description}</Text>

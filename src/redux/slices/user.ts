@@ -7,6 +7,7 @@ import {
   FBSetUserDetail,
   FBSetUserGeoLocation,
   FBSetSearchFilterSettings,
+  FBGetEvent,
 } from '../../firebase'
 import { RootState } from '../store'
 
@@ -14,6 +15,7 @@ import {
   emptyEvent,
   emptyUser,
   IAuth,
+  ISetUserActiveEventPayload,
   IUser,
   IUserDetailsField,
   SearchFilterSettingsField,
@@ -30,6 +32,17 @@ export const login = createAsyncThunk(
 export const register = createAsyncThunk(
   'user/register',
   async (auth: IAuth) => await FBRegister(auth.email, auth.password)
+)
+
+export const setActiveEvent = createAsyncThunk(
+  'user/setActiveEvent',
+  async (payload: ISetUserActiveEventPayload) => {
+    const { event, eventId, eventCategory } = payload
+
+    if (event) return event
+
+    return FBGetEvent(eventId, eventCategory)
+  }
 )
 
 export const setUserDetail = createAsyncThunk(
@@ -84,6 +97,9 @@ export const userSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(login.fulfilled, (state, { payload }) => payload)
     builder.addCase(register.fulfilled, (state, { payload }) => payload)
+    builder.addCase(setActiveEvent.fulfilled, (state, { payload }) => {
+      state.activeEvent = payload
+    })
     builder.addCase(setUserDetail.fulfilled, (state, { payload }) => {
       state.details = { ...state.details, [payload.fieldKey]: payload.value }
     })

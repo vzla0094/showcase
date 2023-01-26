@@ -6,6 +6,7 @@ import { DiscoveryScreen } from '../screens/DiscoveryScreen'
 import { EventCategoryScreen } from '../screens/EventCategoryScreen'
 import { HighlightsScreen } from '../screens/HighlightsScreen'
 import { UserEventScreen } from '../screens/UserEventScreen'
+import { TicketPurchaseScreen } from '../screens/TicketPurchaseScreen'
 
 import { DiscoveryStackParamList, DiscoveryStackScreenProps } from '../types'
 
@@ -43,5 +44,6 @@ export const DiscoveryStackNavigator = () => (
       name="Event"
       component={UserEventScreen}
     />
+    <Stack.Screen name="TicketPurchase" component={TicketPurchaseScreen} />
   </Stack.Navigator>
 )
