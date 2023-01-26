@@ -9,10 +9,10 @@ import { getAddressQuery } from '../firebase'
 import { ViewContainer } from '../atoms/ViewContainer'
 import { EventTicketsButton } from '../molecules/EventTicketsButton'
 
-import { CompanyStackScreenProps, IActiveEvent } from '../types'
+import { CompanyStackScreenProps, ICompanyActiveEvent } from '../types'
 
 interface ICompanyEventDetailsProps {
-  event: IActiveEvent
+  event: ICompanyActiveEvent
 }
 
 export const CompanyEventDetailsView = ({

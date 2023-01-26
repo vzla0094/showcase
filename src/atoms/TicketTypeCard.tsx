@@ -13,24 +13,22 @@ export const TicketTypeCard = ({
   quantity,
   price,
   onPress,
-}: ITicketTypeCardProps) => {
-  return (
-    <Pressable
-      flexDirection="row"
-      justifyContent="space-between"
-      alignItems="center"
-      p={4}
-      bgColor={'white'}
-      shadow={1}
-      onPress={onPress}
-    >
-      <Box>
-        <Heading>{name}</Heading>
-        <Text>
-          {sold}/{quantity} sold
-        </Text>
-      </Box>
-      <Text>{price ? `$${price}` : 'Free'}</Text>
-    </Pressable>
-  )
-}
+}: ITicketTypeCardProps) => (
+  <Pressable
+    flexDirection="row"
+    justifyContent="space-between"
+    alignItems="center"
+    p={4}
+    bgColor={'white'}
+    shadow={1}
+    onPress={onPress}
+  >
+    <Box>
+      <Heading>{name}</Heading>
+      <Text>
+        {sold}/{quantity} sold
+      </Text>
+    </Box>
+    <Text>{price ? `$${price}` : 'Free'}</Text>
+  </Pressable>
+)

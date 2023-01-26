@@ -36,7 +36,7 @@ export interface IEvent extends IAddress, IGeolocation {
 
 // active event is an event that is currently being edited
 // it includes tickets and ticket types unlike IEvent that's stored in firebase
-export interface IActiveEvent extends IEvent {
+export interface ICompanyActiveEvent extends IEvent {
   tickets: Array<ITicket>
   ticketTypes: Array<ITicketType>
 }
