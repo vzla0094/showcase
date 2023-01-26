@@ -1,5 +1,5 @@
 import { IUser } from './user'
-import { EVENT_CATEGORY_NAMES, IActiveEvent, IEvent } from './events'
+import { EVENT_CATEGORY_NAMES, ICompanyActiveEvent, IEvent } from './events'
 import { IAddress } from './location'
 
 export interface ICompany extends IAddress {
@@ -11,7 +11,7 @@ export interface ICompany extends IAddress {
   telephoneNumber: string
   cellphoneNumber: string
   email: string
-  activeEvent: IActiveEvent
+  activeEvent: ICompanyActiveEvent
 }
 
 export enum COMPANY_DETAILS {
@@ -39,8 +39,8 @@ export interface IAddEventPayload {
   eventId: IEvent['id']
 }
 
-export interface ISetActiveEventPayload {
+export interface ISetCompanyActiveEventPayload {
   eventId: IEvent['id']
   eventCategory: EVENT_CATEGORY_NAMES
-  event?: IActiveEvent
+  event?: ICompanyActiveEvent
 }

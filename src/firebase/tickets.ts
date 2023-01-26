@@ -83,3 +83,20 @@ export const FBGetEventTickets = async (
     return e
   }
 }
+
+export const FBRedeemTicket = async (ticket: ITicket): Promise<ITicket> => {
+  // TODO: add validations
+  const ticketsPath = `${categoryPathMap[ticket.eventCategory]}/${
+    ticket.eventId
+  }/tickets`
+
+  try {
+    await setDoc(doc(db, ticketsPath, ticket.id), { state: 'redeemed' })
+
+    return ticket
+  } catch (e) {
+    console.error('Error redeeming ticket: ', e)
+
+    return e
+  }
+}

@@ -6,6 +6,7 @@ export interface ITicket {
   userId: IUser['uid']
   userName: IUser['details']['username']
   eventId: IEvent['id']
+  eventCategory: IEvent['category']
   ticketTypeId: ITicketType['id']
   state: 'reserved' | 'redeemed'
   reservedTimeStamp: string
@@ -32,6 +33,7 @@ export const emptyTicket: ITicket = {
   userName: '',
   eventId: '',
   ticketTypeId: '',
+  eventCategory: EVENT_CATEGORY_NAMES.Food,
   state: 'reserved',
   reservedTimeStamp: '',
   redeemedTimeStamp: '',

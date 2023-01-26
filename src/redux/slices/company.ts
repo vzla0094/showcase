@@ -13,16 +13,18 @@ import {
   FBEditTicketType,
   FBGetEventTickets,
   FBGetEventTicketTypes,
+  FBRedeemTicket,
 } from '../../firebase'
 
 import {
   emptyEvent,
-  IActiveEvent,
+  ICompanyActiveEvent,
   IAddEventPayload,
   ICompany,
   IEditTicketTypePayload,
   IInitializeCompanyData,
-  ISetActiveEventPayload,
+  ISetCompanyActiveEventPayload,
+  ITicket,
   ITicketType,
   IUser,
 } from '../../types'
@@ -165,7 +167,7 @@ export const editTicketType = createAsyncThunk(
 
 export const setActiveEvent = createAsyncThunk(
   'company/setActiveEvent',
-  async (payload: ISetActiveEventPayload) => {
+  async (payload: ISetCompanyActiveEventPayload) => {
     const { event, eventId, eventCategory } = payload
     if (event) return event
 
@@ -177,8 +179,13 @@ export const setActiveEvent = createAsyncThunk(
       ...eventData,
       ticketTypes: eventTicketTypes,
       tickets: eventTickets,
-    } as IActiveEvent
+    } as ICompanyActiveEvent
   }
+)
+
+export const redeemTicket = createAsyncThunk(
+  'company/redeemTicket',
+  async (ticket: ITicket) => await FBRedeemTicket(ticket)
 )
 
 // TODO, add uuid for companyId for the first time
@@ -214,6 +221,13 @@ export const companySlice = createSlice({
     })
     builder.addCase(setActiveEvent.fulfilled, (state, { payload }) => {
       state.activeEvent = payload
+    })
+    builder.addCase(redeemTicket.fulfilled, (state, { payload }) => {
+      const ticketIndex = state.activeEvent.tickets.findIndex(
+        ticket => ticket.id === payload.id
+      )
+
+      state.activeEvent.tickets[ticketIndex].state = 'redeemed'
     })
   },
 })
