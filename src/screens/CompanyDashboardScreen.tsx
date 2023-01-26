@@ -37,7 +37,7 @@ export const CompanyDashboardScreen = ({
   }
 
   const handleCreateEventPress = async () => {
-    await dispatch(actions.user.resetActiveEvent())
+    await dispatch(actions.company.resetActiveEvent())
     navigation.navigate('Event', {
       activeView: 'EventEditDetails',
     })
