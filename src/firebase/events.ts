@@ -58,7 +58,7 @@ export const FBCreateEvent = async (
 export const useEvents = () => {
   const eventsLimit = 3
   return categoryNamesArr.map(categoryName =>
-    useEventCategoryObserver(categoryName, eventsLimit)
+    useEventCategoryObserver(categoryName)
   )
 }
 
