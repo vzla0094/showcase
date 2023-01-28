@@ -24,6 +24,8 @@ export type DiscoveryStackParamList = {
   Highlights: undefined
   Event: undefined
   TicketPurchase: undefined
+  TicketConfirmation: undefined
+  UserEventTicket: undefined
 }
 
 export type CompanyStackParamList = {
