@@ -13,6 +13,7 @@ export const TicketTypeCard = ({
   quantity,
   price,
   onPress,
+  ...props
 }: ITicketTypeCardProps) => (
   <Pressable
     flexDirection="row"
@@ -22,6 +23,7 @@ export const TicketTypeCard = ({
     bgColor={'white'}
     shadow={1}
     onPress={onPress}
+    {...props}
   >
     <Box>
       <Heading>{name}</Heading>

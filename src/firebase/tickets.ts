@@ -1,4 +1,13 @@
-import { collection, doc, getDocs, setDoc } from 'firebase/firestore'
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+  QueryFieldFilterConstraint,
+} from 'firebase/firestore'
+import { WhereFilterOp } from '@firebase/firestore-types'
 import { db } from './config'
 
 import { categoryPathMap, IEvent, ITicket, ITicketType } from '../types'
@@ -49,14 +58,30 @@ export const FBEditTicketType = async (
   }
 }
 
+interface EventTicketTypesConditional {
+  key: keyof ITicketType
+  operator: WhereFilterOp
+  value: string | number | boolean // We don't want to filter by any value
+}
+
 export const FBGetEventTicketTypes = async (
   eventId: IEvent['id'],
-  eventCategory: IEvent['category']
+  eventCategory: IEvent['category'],
+  conditionals?: Array<EventTicketTypesConditional>
 ): Promise<Array<ITicketType>> => {
   const ticketTypesPath = `${categoryPathMap[eventCategory]}/${eventId}/ticketTypes`
 
   try {
-    const snapshot = await getDocs(collection(db, ticketTypesPath))
+    const whereConditionals: QueryFieldFilterConstraint[] = []
+
+    if (conditionals) {
+      conditionals.forEach(({ key, operator, value }) => {
+        whereConditionals.push(where(key, operator, value))
+      })
+    }
+
+    const q = query(collection(db, ticketTypesPath), ...whereConditionals)
+    const snapshot = await getDocs(q)
 
     return snapshot.docs.map(doc => doc.data()) as Array<ITicketType>
   } catch (e) {
