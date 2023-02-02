@@ -24,6 +24,7 @@ export type DiscoveryStackParamList = {
   Highlights: undefined
   Event: undefined
   TicketPurchase: undefined
+  UserEventsTickets: undefined
   TicketConfirmation: undefined
   UserEventTicket: undefined
 }
