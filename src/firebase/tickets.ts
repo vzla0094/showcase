@@ -4,13 +4,20 @@ import {
   getDocs,
   query,
   setDoc,
+  getDoc,
   where,
   QueryFieldFilterConstraint,
 } from 'firebase/firestore'
 import { WhereFilterOp } from '@firebase/firestore-types'
 import { db } from './config'
 
-import { categoryPathMap, IEvent, ITicket, ITicketType } from '../types'
+import {
+  categoryPathMap,
+  IEvent,
+  ITicket,
+  ITicketOrder,
+  ITicketType,
+} from '../types'
 
 export const FBCreateTicketType = async (
   ticketType: ITicketType
@@ -53,6 +60,28 @@ export const FBEditTicketType = async (
     return ticketType
   } catch (e) {
     console.error('Error editing ticketType: ', e)
+
+    return e
+  }
+}
+
+export const FBGetAvailableTicketsCount = async (
+  ticketOrder: ITicketOrder
+): Promise<number> => {
+  const ticketTypesPath = `${categoryPathMap[ticketOrder.eventCategory]}/${
+    ticketOrder.eventId
+  }/ticketTypes`
+
+  try {
+    const snapshot = await getDoc(
+      doc(db, ticketTypesPath, ticketOrder.ticketTypeId)
+    )
+
+    const data = snapshot.data() as ITicketType
+
+    return data.available
+  } catch (e) {
+    console.error('Error getting available tickets count: ', e)
 
     return e
   }
