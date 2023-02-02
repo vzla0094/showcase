@@ -11,6 +11,7 @@ import { TicketConfirmationScreen } from '../screens/TicketConfirmationScreen'
 import { UserEventTicketScreen } from '../screens/UserEventTicketScreen'
 
 import { DiscoveryStackParamList, DiscoveryStackScreenProps } from '../types'
+import { UserEventTicketsScreen } from '../screens/UserEventTicketsScreen'
 
 const Stack = createNativeStackNavigator<DiscoveryStackParamList>()
 
@@ -53,6 +54,11 @@ export const DiscoveryStackNavigator = () => (
         headerShown: false,
       }}
       component={TicketConfirmationScreen}
+    />
+    <Stack.Screen
+      options={{ title: 'My tickets' }}
+      name="UserEventsTickets"
+      component={UserEventTicketsScreen}
     />
     <Stack.Screen name="UserEventTicket" component={UserEventTicketScreen} />
   </Stack.Navigator>

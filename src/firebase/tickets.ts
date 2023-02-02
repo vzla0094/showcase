@@ -154,3 +154,21 @@ export const FBRedeemTicket = async (ticket: ITicket): Promise<ITicket> => {
     return e
   }
 }
+
+export const FBGetUserEventTickets = async (
+  eventId: IEvent['id'],
+  eventCategory: IEvent['category'],
+  userId: string
+): Promise<Array<ITicket>> => {
+  const path = `${categoryPathMap[eventCategory]}/${eventId}/tickets`
+  const _query = query(collection(db, path), where('userId', '==', userId))
+  try {
+    const snapshot = await getDocs(_query)
+
+    return snapshot.docs.map(doc => doc.data()) as Array<ITicket>
+  } catch (e) {
+    console.error('Error getting tickets: ', e)
+
+    return e
+  }
+}
