@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Spinner } from 'native-base'
 import { FormikConfig } from 'formik'
 
-import { FBGetEventTicketTypes } from '../firebase'
+import { FBGetEventTicketTypes, FBAddTicketsFromTicketOrder } from '../firebase'
 
 import { TicketPurchaseForm } from '../forms/TicketPurchaseForm'
 
@@ -16,22 +16,21 @@ export const TicketPurchaseScreen = ({
   navigation,
 }: DiscoveryStackScreenProps<'TicketPurchase'>) => {
   const [ticketTypes, setTicketTypes] = useState<Array<ITicketType>>([])
-  const { event } = useAppSelector(({ user: { activeEvent } }) => ({
-    event: activeEvent,
-  }))
+  const user = useAppSelector(({ user }) => user)
+  const { activeEvent } = user
 
   useEffect(() => {
     navigation.setOptions({
-      title: event.name ? event.name : 'Purchase Tickets',
+      title: activeEvent.name ? activeEvent.name : 'Purchase Tickets',
       headerBackTitle: 'Event Details',
     })
-  }, [event])
+  }, [activeEvent])
 
   useEffect(() => {
     const getTicketTypes = async () => {
       const dbTicketTypes = await FBGetEventTicketTypes(
-        event.id,
-        event.category,
+        activeEvent.id,
+        activeEvent.category,
         [
           {
             key: 'available',
@@ -45,9 +44,9 @@ export const TicketPurchaseScreen = ({
     }
 
     getTicketTypes()
-  }, [event])
+  }, [activeEvent])
 
-  const handleSubmit: FormikConfig<Array<ITicketOrder>>['onSubmit'] = (
+  const handleSubmit: FormikConfig<Array<ITicketOrder>>['onSubmit'] = async (
     ticketOrders,
     { setStatus }
   ) => {
@@ -57,8 +56,29 @@ export const TicketPurchaseScreen = ({
 
     console.log(filledTicketOrders)
 
+    await FBAddTicketsFromTicketOrder(filledTicketOrders)
+
     navigation.navigate('TicketConfirmation')
   }
+
+  const initialValues: Array<ITicketOrder> = ticketTypes.map(
+    ({
+      id,
+      eventCategory,
+      eventId,
+      minTicketsPerOrder,
+      maxTicketsPerOrder,
+    }) => ({
+      userId: user.uid,
+      userName: user.details.username,
+      ticketTypeId: id,
+      eventId,
+      eventCategory,
+      minTicketsPerOrder,
+      maxTicketsPerOrder,
+      amount: 0,
+    })
+  )
 
   return (
     <ViewContainer alignItems="stretch">
@@ -67,10 +87,11 @@ export const TicketPurchaseScreen = ({
       ) : (
         <TicketPurchaseForm
           onSubmit={handleSubmit}
-          eventName={event.name}
-          eventStart={event.startDateTime}
-          eventEnd={event.endDateTime}
+          eventName={activeEvent.name}
+          eventStart={activeEvent.startDateTime}
+          eventEnd={activeEvent.endDateTime}
           ticketTypes={ticketTypes}
+          initialValues={initialValues}
         />
       )}
     </ViewContainer>

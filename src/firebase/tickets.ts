@@ -6,6 +6,7 @@ import {
   setDoc,
   getDoc,
   where,
+  writeBatch,
   QueryFieldFilterConstraint,
 } from 'firebase/firestore'
 import { WhereFilterOp } from '@firebase/firestore-types'
@@ -150,6 +151,51 @@ export const FBRedeemTicket = async (ticket: ITicket): Promise<ITicket> => {
     return ticket
   } catch (e) {
     console.error('Error redeeming ticket: ', e)
+
+    return e
+  }
+}
+
+export const FBAddTicketsFromTicketOrder = async (
+  ticketOrders: Array<ITicketOrder>
+): Promise<Array<ITicket>> => {
+  try {
+    const batch = writeBatch(db)
+
+    const tickets: Array<ITicket> = []
+
+    ticketOrders.forEach(ticketOrder => {
+      for (let i = 0; i < ticketOrder.amount; i++) {
+        const ticketsPath = `${categoryPathMap[ticketOrder.eventCategory]}/${
+          ticketOrder.eventId
+        }/tickets`
+
+        const ticketRef = doc(collection(db, ticketsPath))
+        const generatedTicketId = ticketRef.id
+
+        const ticket: ITicket = {
+          id: generatedTicketId,
+          userId: ticketOrder.userId,
+          userName: ticketOrder.userName,
+          eventId: ticketOrder.eventId,
+          eventCategory: ticketOrder.eventCategory,
+          ticketTypeId: ticketOrder.ticketTypeId,
+          state: 'reserved',
+          reservedTimeStamp: new Date().toISOString(),
+          redeemedTimeStamp: '',
+        }
+
+        batch.set(ticketRef, ticket)
+
+        tickets.push(ticket)
+      }
+    })
+
+    await batch.commit()
+
+    return tickets
+  } catch (e) {
+    console.error('Error creating tickets: ', e)
 
     return e
   }

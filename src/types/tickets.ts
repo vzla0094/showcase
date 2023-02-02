@@ -73,6 +73,8 @@ export interface IEditTicketTypePayload {
 }
 
 export interface ITicketOrder {
+  userId: IUser['uid']
+  userName: IUser['details']['username']
   eventCategory: ITicketType['eventCategory']
   eventId: ITicketType['eventId']
   ticketTypeId: ITicketType['id']

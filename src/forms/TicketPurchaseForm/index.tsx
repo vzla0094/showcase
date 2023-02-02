@@ -13,6 +13,7 @@ interface ITicketPurchaseForm {
   eventStart: IEvent['startDateTime']
   eventEnd: IEvent['endDateTime']
   onSubmit: FormikConfig<Array<ITicketOrder>>['onSubmit']
+  initialValues: Array<ITicketOrder>
 }
 
 export const TicketPurchaseForm = ({
@@ -21,24 +22,8 @@ export const TicketPurchaseForm = ({
   eventStart,
   eventEnd,
   onSubmit,
+  initialValues,
 }: ITicketPurchaseForm) => {
-  const initialValues: Array<ITicketOrder> = ticketTypes.map(
-    ({
-      id,
-      eventCategory,
-      eventId,
-      minTicketsPerOrder,
-      maxTicketsPerOrder,
-    }) => ({
-      ticketTypeId: id,
-      eventId,
-      eventCategory,
-      minTicketsPerOrder,
-      maxTicketsPerOrder,
-      amount: 0,
-    })
-  )
-
   const handleChange = (
     value: number,
     index: number,
