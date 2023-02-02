@@ -71,3 +71,12 @@ export interface IEditTicketTypePayload {
   prevTicketType: ITicketType
   newTicketType: ITicketType
 }
+
+export interface ITicketOrder {
+  eventCategory: ITicketType['eventCategory']
+  eventId: ITicketType['eventId']
+  ticketTypeId: ITicketType['id']
+  minTicketsPerOrder: ITicketType['minTicketsPerOrder']
+  maxTicketsPerOrder: ITicketType['maxTicketsPerOrder']
+  amount: number
+}
