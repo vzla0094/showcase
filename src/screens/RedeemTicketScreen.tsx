@@ -7,7 +7,7 @@ import { FormikInput } from '../atoms/FormikInput'
 
 import { CompanyStackScreenProps, ITicket } from '../types'
 import { useAppDispatch, useAppSelector } from '../hooks'
-import { redeemTicket } from '../redux/slices/company'
+import { redeemTicket } from '../redux/slices/activeEvent'
 
 enum REDEMPTION_TICKET {
   TicketId = 'ticketId',
@@ -32,7 +32,7 @@ const schema = yup.object({
 export const RedeemTicketScreen = ({
   navigation,
 }: CompanyStackScreenProps<'RedeemTicket'>) => {
-  const { tickets } = useAppSelector(({ company }) => company.activeEvent)
+  const { tickets } = useAppSelector(({ activeEvent }) => activeEvent)
   const dispatch = useAppDispatch()
 
   const findTicket = (ticketId: ITicket['id']) =>

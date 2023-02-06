@@ -16,7 +16,6 @@ import { FormikInput } from '../atoms/FormikInput'
 
 import {
   CompanyStackScreenProps,
-  emptyEvent,
   EVENT_FORM_FIELD_NAMES,
   EventFormValuesType,
   IEvent,
@@ -28,13 +27,13 @@ export interface IOnSubmitPayload {
 }
 
 interface IEventEditDetailsViewProps {
-  event?: IEvent
+  event: IEvent
   onSubmit: (payload: IOnSubmitPayload) => void
   onDelete: (event: IEvent) => void
 }
 
 export const EventEditDetailsView = ({
-  event = emptyEvent,
+  event,
   onSubmit,
   onDelete,
 }: IEventEditDetailsViewProps) => {

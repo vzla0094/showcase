@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Heading, Pressable, Text } from 'native-base'
 
 import { DiscoveryStackScreenProps, IEvent } from '../types'
-import { setActiveEvent } from '../redux/slices/user'
+import { setActiveEvent } from '../redux/slices/activeEvent'
 import { useAppDispatch } from '../hooks'
 
 interface IEventCardProps {

@@ -1,7 +1,5 @@
 import * as yup from 'yup'
 
-import { FBGetAvailableTicketsCount } from '../../firebase'
-
 import { ITicketOrder } from '../../types'
 
 export const TicketsPurchaseFormSchema = yup.array().of(
@@ -12,19 +10,6 @@ export const TicketsPurchaseFormSchema = yup.array().of(
     amount: yup
       .number()
       .required()
-      .test('is-available', async (value, context) => {
-        if (value === 0) return true // no need to check if 0
-        const ticketOrder = context.parent as ITicketOrder
-        const availableTicketsCount = await FBGetAvailableTicketsCount(
-          ticketOrder
-        )
-
-        if (value && value <= availableTicketsCount) return true
-
-        return context.createError({
-          message: `Only ${availableTicketsCount} tickets available`,
-        })
-      })
       .test('is-min', (value, context) => {
         if (value === 0) return true // no need to check if 0
         const { minTicketsPerOrder } = context.parent as ITicketOrder

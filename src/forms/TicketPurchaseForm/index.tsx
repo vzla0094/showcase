@@ -75,9 +75,9 @@ export const TicketPurchaseForm = ({
               )}
             />
 
-            {status === 'empty' && (
+            {status && (
               <Text textAlign="center" color="error.500">
-                You must select at least one ticket
+                {status}
               </Text>
             )}
 

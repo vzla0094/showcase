@@ -6,7 +6,7 @@ import * as yup from 'yup'
 import { ViewContainer } from '../atoms/ViewContainer'
 import { FormikInput } from '../atoms/FormikInput'
 import { useAppDispatch, useAppSelector } from '../hooks'
-import { createTicketType, editTicketType } from '../redux/slices/company'
+import { createTicketType, editTicketType } from '../redux/slices/activeEvent'
 
 import {
   CompanyStackScreenProps,
@@ -20,8 +20,8 @@ export const CreateEditTicketTypeScreen = ({
   navigation,
 }: CompanyStackScreenProps<'CreateEditTicketType'>) => {
   const ticketType = useAppSelector(
-    ({ company }) =>
-      company.activeEvent.ticketTypes.find(tt => tt.id === route.params?.id) ||
+    ({ activeEvent }) =>
+      activeEvent.ticketTypes.find(tt => tt.id === route.params?.id) ||
       emptyTicketType
   )
   const dispatch = useAppDispatch()

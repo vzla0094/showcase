@@ -6,7 +6,7 @@ import { CompanyStackScreenProps } from '../types'
 export const TicketTypesScreen = ({
   navigation,
 }: CompanyStackScreenProps<'TicketTypes'>) => {
-  const { ticketTypes } = useAppSelector(({ company }) => company.activeEvent)
+  const { ticketTypes } = useAppSelector(({ activeEvent }) => activeEvent)
   return (
     <FlatList
       data={ticketTypes}

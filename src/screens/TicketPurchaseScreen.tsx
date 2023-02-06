@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Spinner } from 'native-base'
 import { FormikConfig } from 'formik'
 
-import { FBGetEventTicketTypes, FBAddTicketsFromTicketOrder } from '../firebase'
+import { FBGetEventTicketTypes, FBProcessTicketOrder } from '../firebase'
 
 import { TicketPurchaseForm } from '../forms/TicketPurchaseForm'
 
@@ -16,21 +16,24 @@ export const TicketPurchaseScreen = ({
   navigation,
 }: DiscoveryStackScreenProps<'TicketPurchase'>) => {
   const [ticketTypes, setTicketTypes] = useState<Array<ITicketType>>([])
-  const user = useAppSelector(({ user }) => user)
-  const { activeEvent } = user
+  const { user, event } = useAppSelector(({ user, activeEvent }) => ({
+    user,
+    event: activeEvent.event,
+  }))
 
   useEffect(() => {
     navigation.setOptions({
-      title: activeEvent.name ? activeEvent.name : 'Purchase Tickets',
+      title: event.name ? event.name : 'Purchase Tickets',
       headerBackTitle: 'Event Details',
     })
-  }, [activeEvent])
+  }, [event])
 
   useEffect(() => {
+    if (!event) return
     const getTicketTypes = async () => {
       const dbTicketTypes = await FBGetEventTicketTypes(
-        activeEvent.id,
-        activeEvent.category,
+        event.id,
+        event.category,
         [
           {
             key: 'available',
@@ -44,7 +47,7 @@ export const TicketPurchaseScreen = ({
     }
 
     getTicketTypes()
-  }, [activeEvent])
+  }, [event])
 
   const handleSubmit: FormikConfig<Array<ITicketOrder>>['onSubmit'] = async (
     ticketOrders,
@@ -52,14 +55,20 @@ export const TicketPurchaseScreen = ({
   ) => {
     const filledTicketOrders = ticketOrders.filter(({ amount }) => amount > 0)
 
-    if (filledTicketOrders.length === 0) return setStatus('empty')
+    if (filledTicketOrders.length === 0)
+      return setStatus('You must select at least one ticket')
 
-    console.log(filledTicketOrders)
+    try {
+      await FBProcessTicketOrder(filledTicketOrders)
 
-    await FBAddTicketsFromTicketOrder(filledTicketOrders)
-
-    navigation.navigate('TicketConfirmation')
+      navigation.navigate('TicketConfirmation')
+    } catch (e) {
+      setStatus(e.message)
+      console.error(e.message)
+    }
   }
+
+  if (ticketTypes.length === 0) return <Spinner size="lg" />
 
   const initialValues: Array<ITicketOrder> = ticketTypes.map(
     ({
@@ -82,18 +91,14 @@ export const TicketPurchaseScreen = ({
 
   return (
     <ViewContainer alignItems="stretch">
-      {ticketTypes.length === 0 ? (
-        <Spinner size="lg" />
-      ) : (
-        <TicketPurchaseForm
-          onSubmit={handleSubmit}
-          eventName={activeEvent.name}
-          eventStart={activeEvent.startDateTime}
-          eventEnd={activeEvent.endDateTime}
-          ticketTypes={ticketTypes}
-          initialValues={initialValues}
-        />
-      )}
+      <TicketPurchaseForm
+        onSubmit={handleSubmit}
+        eventName={event.name}
+        eventStart={event.startDateTime}
+        eventEnd={event.endDateTime}
+        ticketTypes={ticketTypes}
+        initialValues={initialValues}
+      />
     </ViewContainer>
   )
 }

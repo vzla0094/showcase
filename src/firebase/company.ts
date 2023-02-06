@@ -11,7 +11,13 @@ import { companyInitialState } from '../redux/slices/company'
 
 import { db } from './config'
 
-import { ICompany, IEvent, IInitializeCompanyData, IUser } from '../types'
+import {
+  emptyCompany,
+  ICompany,
+  IEvent,
+  IInitializeCompanyData,
+  IUser,
+} from '../types'
 
 export const FBInitializeCompany = async ({
   companyId,
@@ -22,14 +28,16 @@ export const FBInitializeCompany = async ({
     // Hydrate redux state with existing company data from firebase
     const companySnap = await getDoc(doc(db, 'companies', companyId))
 
-    return companySnap.data() as ICompany
+    const data = companySnap.data() as ICompany
+
+    return { ...companyInitialState, ...data }
   } catch (e) {
     console.error('Error initializing company', e)
 
     return e
   }
 }
-export const FBCreateCompany = async (uid: IUser['uid']) => {
+export const FBCreateCompany = async (uid: IUser['uid']): Promise<ICompany> => {
   try {
     // Adds a new company document with a generated id
     const companyRef = await doc(collection(db, 'companies'))
@@ -37,9 +45,10 @@ export const FBCreateCompany = async (uid: IUser['uid']) => {
 
     // Adds initial data shape to company document including new generated id
     const newCompanyData = {
-      ...companyInitialState,
+      ...emptyCompany,
       companyId: generatedCompanyId,
     }
+
     await setDoc(companyRef, newCompanyData)
 
     const userRef = doc(db, 'users', uid)

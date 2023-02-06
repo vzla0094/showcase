@@ -1,5 +1,5 @@
 import { IUser } from './user'
-import { EVENT_CATEGORY_NAMES, ICompanyActiveEvent, IEvent } from './events'
+import { IEvent } from './events'
 import { IAddress } from './location'
 
 export interface ICompany extends IAddress {
@@ -11,7 +11,22 @@ export interface ICompany extends IAddress {
   telephoneNumber: string
   cellphoneNumber: string
   email: string
-  activeEvent: ICompanyActiveEvent
+}
+
+export const emptyCompany: ICompany = {
+  companyId: '',
+  name: '',
+  members: [],
+  events: [],
+  active: false,
+  streetAddress: '',
+  city: '',
+  stateProvince: '',
+  country: '',
+  zipCode: '',
+  telephoneNumber: '',
+  cellphoneNumber: '',
+  email: '',
 }
 
 export enum COMPANY_DETAILS {
@@ -37,10 +52,4 @@ export interface IInitializeCompanyData {
 export interface IAddEventPayload {
   companyId: ICompany['companyId']
   eventId: IEvent['id']
-}
-
-export interface ISetCompanyActiveEventPayload {
-  eventId: IEvent['id']
-  eventCategory: EVENT_CATEGORY_NAMES
-  event?: ICompanyActiveEvent
 }
