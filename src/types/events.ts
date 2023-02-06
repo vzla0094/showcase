@@ -34,9 +34,8 @@ export interface IEvent extends IAddress, IGeolocation {
   timeSlots: []
 }
 
-// active event is an event that is currently being edited
-// it includes tickets and ticket types unlike IEvent that's stored in firebase
-export interface ICompanyActiveEvent extends IEvent {
+export interface IActiveEventState {
+  event: IEvent
   tickets: Array<ITicket>
   ticketTypes: Array<ITicketType>
 }
@@ -105,4 +104,9 @@ export const emptyEvent: IEvent = {
   country: '',
   zipCode: '',
   ...emptyGeoLocation,
+}
+
+export interface ISetActiveEventPayload {
+  eventId: IEvent['id']
+  eventCategory: EVENT_CATEGORY_NAMES
 }

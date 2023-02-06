@@ -7,6 +7,7 @@ export const store = configureStore({
   reducer: {
     user: reducers.user,
     company: reducers.company,
+    activeEvent: reducers.activeEvent,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({ serializableCheck: false }),

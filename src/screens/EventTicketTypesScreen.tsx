@@ -9,12 +9,12 @@ import { CompanyStackScreenProps } from '../types'
 export const EventTicketTypesScreen = ({
   navigation,
 }: CompanyStackScreenProps<'EventTickets'>) => {
-  const event = useAppSelector(({ company }) => company.activeEvent)
+  const { ticketTypes } = useAppSelector(({ activeEvent }) => activeEvent)
 
   return (
     <ViewContainer alignItems="stretch">
       <FlatList
-        data={event.ticketTypes}
+        data={ticketTypes}
         ItemSeparatorComponent={() => <Box height={2} />}
         renderItem={({ item: { id, name, sold, quantity, price } }) => (
           <TicketTypeCard

@@ -19,10 +19,10 @@ export const CompanyEventScreen = ({
   route,
   navigation,
 }: CompanyStackScreenProps<'Event'>) => {
-  const { companyId, event } = useAppSelector(
-    ({ company: { companyId, activeEvent } }) => ({
+  const { companyId, activeEvent } = useAppSelector(
+    ({ company: { companyId }, activeEvent }) => ({
       companyId,
-      event: activeEvent,
+      activeEvent,
     })
   )
   const { activeView } = route.params
@@ -46,10 +46,10 @@ export const CompanyEventScreen = ({
   }
 
   return activeView === 'EventDetails' ? (
-    <CompanyEventDetailsView event={event} />
+    <CompanyEventDetailsView activeEvent={activeEvent} />
   ) : (
     <EventEditDetailsView
-      event={event}
+      event={activeEvent.event}
       onSubmit={handleSubmit}
       onDelete={handleDelete}
     />

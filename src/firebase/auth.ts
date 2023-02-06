@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth'
 
-import { setUserGeoLocation, userInitialState } from '../redux/slices/user'
+import { setUserGeoLocation } from '../redux/slices/user'
 import { getUser, setUser } from './user'
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from '../hooks'
@@ -12,7 +12,12 @@ import { actions } from '../redux/slices'
 import { initializeCompany } from '../redux/slices/company'
 import { auth } from './config'
 
-export const FBRegister = async (email: string, password: string) => {
+import { emptyUser, IUser } from '../types'
+
+export const FBRegister = async (
+  email: string,
+  password: string
+): Promise<IUser> => {
   try {
     const { user: FBUser } = await createUserWithEmailAndPassword(
       auth,
@@ -21,7 +26,7 @@ export const FBRegister = async (email: string, password: string) => {
     )
 
     return await setUser({
-      ...userInitialState,
+      ...emptyUser,
       uid: FBUser.uid,
     })
   } catch (e) {

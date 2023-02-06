@@ -1,7 +1,7 @@
 import { DocumentData, DocumentReference } from 'firebase/firestore'
 
 import { emptyGeoLocation, IGeolocation } from './location'
-import { emptyEvent, EVENT_CATEGORY_NAMES, IEvent } from './events'
+import { EVENT_CATEGORY_NAMES } from './events'
 
 export interface IUser {
   uid: string
@@ -9,7 +9,6 @@ export interface IUser {
   geolocation: IGeolocation
   company: DocumentReference<DocumentData> | ''
   searchFilterSettings: SearchFilterSettings
-  activeEvent: IEvent
 }
 
 export const emptyUser: IUser = {
@@ -31,7 +30,6 @@ export const emptyUser: IUser = {
     venues: false,
     radiusDistance: 0,
   },
-  activeEvent: emptyEvent,
 }
 
 export enum USER_DETAILS {
@@ -65,10 +63,4 @@ type SearchFilterSettings = {
 export type SearchFilterSettingsField = {
   fieldKey: keyof SearchFilterSettings
   value: number | boolean
-}
-
-export interface ISetUserActiveEventPayload {
-  eventId: IEvent['id']
-  eventCategory: EVENT_CATEGORY_NAMES
-  event?: IEvent
 }

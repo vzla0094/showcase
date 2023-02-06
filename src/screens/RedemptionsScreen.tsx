@@ -5,7 +5,7 @@ import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
 import { AntDesign } from '@expo/vector-icons'
 
 import { useAppDispatch, useAppSelector } from '../hooks'
-import { redeemTicket } from '../redux/slices/company'
+import { redeemTicket } from '../redux/slices/activeEvent'
 
 import { TicketList } from '../molecules/TicketList'
 import { RedeemTicketDialog } from '../molecules/RedeemTicketDialog'
@@ -17,8 +17,8 @@ export const RedemptionsScreen = ({
   navigation,
 }: CompanyStackScreenProps<'Redemptions'>) => {
   const dispatch = useAppDispatch()
-  const tickets = useAppSelector(({ company }) =>
-    company.activeEvent.tickets.filter(
+  const tickets = useAppSelector(({ activeEvent }) =>
+    activeEvent.tickets.filter(
       ticket => ticket.ticketTypeId === route.params.id
     )
   )

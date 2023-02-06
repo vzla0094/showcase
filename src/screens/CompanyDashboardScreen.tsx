@@ -6,7 +6,11 @@ import { FBGetCompanyEvents } from '../firebase'
 
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { actions } from '../redux/slices'
-import { setActiveEvent } from '../redux/slices/company'
+import {
+  setActiveEvent,
+  setEventTickets,
+  setEventTicketTypes,
+} from '../redux/slices/activeEvent'
 
 import { EventList } from '../molecules/EventList'
 import { ViewContainer } from '../atoms/ViewContainer'
@@ -31,13 +35,17 @@ export const CompanyDashboardScreen = ({
   })
 
   const handleEventPress: handleEventPressType = async ({ id, category }) => {
-    await dispatch(setActiveEvent({ eventId: id, eventCategory: category }))
+    await Promise.all([
+      dispatch(setActiveEvent({ eventId: id, eventCategory: category })),
+      dispatch(setEventTickets({ eventId: id, eventCategory: category })),
+      dispatch(setEventTicketTypes({ eventId: id, eventCategory: category })),
+    ])
 
     navigation.navigate('Event', { id, category, activeView: 'EventDetails' })
   }
 
   const handleCreateEventPress = async () => {
-    await dispatch(actions.company.resetActiveEvent())
+    await dispatch(actions.activeEvent.resetActiveEvent())
     navigation.navigate('Event', {
       activeView: 'EventEditDetails',
     })

@@ -9,7 +9,7 @@ import {
   SearchFilterSettingsField,
 } from '../types'
 
-export const setUser = async (user: IUser) => {
+export const setUser = async (user: IUser): Promise<IUser> => {
   try {
     await setDoc(doc(db, 'users', user.uid), user)
 

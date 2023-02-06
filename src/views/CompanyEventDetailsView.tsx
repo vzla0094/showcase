@@ -9,14 +9,14 @@ import { getAddressQuery } from '../firebase'
 import { ViewContainer } from '../atoms/ViewContainer'
 import { EventTicketsButton } from '../molecules/EventTicketsButton'
 
-import { CompanyStackScreenProps, ICompanyActiveEvent } from '../types'
+import { CompanyStackScreenProps, IActiveEventState } from '../types'
 
 interface ICompanyEventDetailsProps {
-  event: ICompanyActiveEvent
+  activeEvent: IActiveEventState
 }
 
 export const CompanyEventDetailsView = ({
-  event,
+  activeEvent,
 }: ICompanyEventDetailsProps) => {
   const navigation =
     useNavigation<CompanyStackScreenProps<'Event'>['navigation']>()
@@ -28,7 +28,7 @@ export const CompanyEventDetailsView = ({
     endDateTime,
     ticketCount,
     ticketLimit,
-  } = event
+  } = activeEvent.event
 
   useEffect(() => {
     navigation.setOptions({
@@ -56,9 +56,9 @@ export const CompanyEventDetailsView = ({
       ),
       title: name,
     })
-  }, [navigation, event])
+  }, [navigation, activeEvent])
 
-  const addressQuery = getAddressQuery(event)
+  const addressQuery = getAddressQuery(activeEvent.event)
 
   return (
     <ViewContainer alignItems="stretch">
@@ -70,7 +70,7 @@ export const CompanyEventDetailsView = ({
         <Text>Available tickets: {ticketLimit - ticketCount}</Text>
         <EventTicketsButton
           onPress={() => navigation.navigate('EventTickets')}
-          ticketTypesCount={event.ticketTypes.length}
+          ticketTypesCount={activeEvent.ticketTypes.length}
         />
         <Button onPress={() => navigation.navigate('TicketTypes')}>
           Redemptions

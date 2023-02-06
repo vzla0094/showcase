@@ -4,10 +4,11 @@ import {
   getDocs,
   query,
   setDoc,
-  getDoc,
   where,
   writeBatch,
   QueryFieldFilterConstraint,
+  increment,
+  runTransaction,
 } from 'firebase/firestore'
 import { WhereFilterOp } from '@firebase/firestore-types'
 import { db } from './config'
@@ -61,28 +62,6 @@ export const FBEditTicketType = async (
     return ticketType
   } catch (e) {
     console.error('Error editing ticketType: ', e)
-
-    return e
-  }
-}
-
-export const FBGetAvailableTicketsCount = async (
-  ticketOrder: ITicketOrder
-): Promise<number> => {
-  const ticketTypesPath = `${categoryPathMap[ticketOrder.eventCategory]}/${
-    ticketOrder.eventId
-  }/ticketTypes`
-
-  try {
-    const snapshot = await getDoc(
-      doc(db, ticketTypesPath, ticketOrder.ticketTypeId)
-    )
-
-    const data = snapshot.data() as ITicketType
-
-    return data.available
-  } catch (e) {
-    console.error('Error getting available tickets count: ', e)
 
     return e
   }
@@ -156,48 +135,74 @@ export const FBRedeemTicket = async (ticket: ITicket): Promise<ITicket> => {
   }
 }
 
-export const FBAddTicketsFromTicketOrder = async (
+export const FBProcessTicketOrder = async (
   ticketOrders: Array<ITicketOrder>
 ): Promise<Array<ITicket>> => {
   try {
-    const batch = writeBatch(db)
+    const ticketsBatch = writeBatch(db)
 
     const tickets: Array<ITicket> = []
 
-    ticketOrders.forEach(ticketOrder => {
-      for (let i = 0; i < ticketOrder.amount; i++) {
-        const ticketsPath = `${categoryPathMap[ticketOrder.eventCategory]}/${
+    await Promise.all(
+      ticketOrders.map(async ticketOrder => {
+        const eventPath = `${categoryPathMap[ticketOrder.eventCategory]}/${
           ticketOrder.eventId
-        }/tickets`
+        }`
 
-        const ticketRef = doc(collection(db, ticketsPath))
-        const generatedTicketId = ticketRef.id
+        // update available tickets on the ticket type document
+        await runTransaction(db, async transaction => {
+          // This feature ensures that the transaction runs on up-to-date and consistent data.
+          // https://firebase.google.com/docs/firestore/manage-data/transactions#transactions
 
-        const ticket: ITicket = {
-          id: generatedTicketId,
-          userId: ticketOrder.userId,
-          userName: ticketOrder.userName,
-          eventId: ticketOrder.eventId,
-          eventCategory: ticketOrder.eventCategory,
-          ticketTypeId: ticketOrder.ticketTypeId,
-          state: 'reserved',
-          reservedTimeStamp: new Date().toISOString(),
-          redeemedTimeStamp: '',
-        }
+          const ticketTypeRef = doc(
+            db,
+            `${eventPath}/ticketTypes`,
+            ticketOrder.ticketTypeId
+          )
 
-        batch.set(ticketRef, ticket)
+          const ticketTypeSnapshot = await transaction.get(ticketTypeRef)
 
-        tickets.push(ticket)
-      }
-    })
+          const availableCount = ticketTypeSnapshot.data()?.available
 
-    await batch.commit()
+          if (availableCount < ticketOrder.amount) {
+            throw new Error(`Only ${availableCount} tickets available`)
+          }
+
+          transaction.update(ticketTypeRef, {
+            available: increment(-ticketOrder.amount),
+            sold: increment(ticketOrder.amount),
+          })
+
+          // add ticket order tickets to /tickets sub collection
+          for (let i = 0; i < ticketOrder.amount; i++) {
+            const ticketRef = doc(collection(db, `${eventPath}/tickets`))
+            const generatedTicketId = ticketRef.id
+
+            const ticket: ITicket = {
+              id: generatedTicketId,
+              userId: ticketOrder.userId,
+              userName: ticketOrder.userName,
+              eventId: ticketOrder.eventId,
+              eventCategory: ticketOrder.eventCategory,
+              ticketTypeId: ticketOrder.ticketTypeId,
+              state: 'reserved',
+              reservedTimeStamp: new Date().toISOString(),
+              redeemedTimeStamp: '',
+            }
+
+            ticketsBatch.set(ticketRef, ticket)
+
+            tickets.push(ticket)
+          }
+        })
+      })
+    )
+
+    await ticketsBatch.commit()
 
     return tickets
   } catch (e) {
-    console.error('Error creating tickets: ', e)
-
-    return e
+    throw new Error(e)
   }
 }
 

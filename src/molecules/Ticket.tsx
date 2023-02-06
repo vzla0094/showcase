@@ -1,16 +1,16 @@
 import { Box, Center, Heading, VStack, Text } from 'native-base'
-import { ICompanyActiveEvent, ITicket } from '../types'
+import { IActiveEventState, ITicket } from '../types'
 
 interface TicketProps {
   ticket: ITicket
-  event: ICompanyActiveEvent
+  activeEvent: IActiveEventState
 }
 
-export const Ticket = ({ ticket, event }: TicketProps) => {
+export const Ticket = ({ ticket, activeEvent }: TicketProps) => {
   return (
     <Box p={4} m={4} backgroundColor="white">
       <Center>
-        <Heading>{event.name}</Heading>
+        <Heading>{activeEvent.event.name}</Heading>
       </Center>
       <VStack my={2}>
         <Text color="gray.500">Name</Text>
@@ -20,7 +20,7 @@ export const Ticket = ({ ticket, event }: TicketProps) => {
         <Text color="gray.500">Ticket</Text>
         <Text fontSize={18}>
           {
-            event.ticketTypes.find(
+            activeEvent.ticketTypes.find(
               ticketType => ticketType.id === ticket.ticketTypeId
             )?.name
           }
@@ -33,7 +33,7 @@ export const Ticket = ({ ticket, event }: TicketProps) => {
       <VStack my={2}>
         <Text color="gray.500">Date</Text>
         <Text fontSize={18}>
-          {event.startDateTime} - {event.endDateTime}
+          {activeEvent.event.startDateTime} - {activeEvent.event.endDateTime}
         </Text>
       </VStack>
     </Box>

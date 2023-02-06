@@ -7,9 +7,9 @@ export const TicketConfirmationScreen = ({
   navigation,
 }: DiscoveryStackScreenProps<'TicketConfirmation'>) => {
   const { details, event } = useAppSelector(
-    ({ user: { details, activeEvent } }) => ({
+    ({ user: { details }, activeEvent: { event } }) => ({
       details,
-      event: activeEvent,
+      event,
     })
   )
 

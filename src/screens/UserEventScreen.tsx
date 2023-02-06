@@ -8,15 +8,15 @@ import { useAppSelector } from '../hooks'
 export const UserEventScreen = ({
   navigation,
 }: DiscoveryStackScreenProps<'Event'>) => {
-  const { activeEvent } = useAppSelector(({ user }) => user)
+  const { event } = useAppSelector(({ activeEvent }) => activeEvent)
 
   useEffect(() => {
-    navigation.setOptions({ title: activeEvent.name })
-  }, [navigation, activeEvent])
+    navigation.setOptions({ title: event.name })
+  }, [navigation, event])
 
   return (
     <UserEventDetailsView
-      event={activeEvent}
+      event={event}
       onRedeem={() => navigation.navigate('TicketPurchase')}
     />
   )
