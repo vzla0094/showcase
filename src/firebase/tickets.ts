@@ -135,7 +135,7 @@ export const FBRedeemTicket = async (ticket: ITicket): Promise<ITicket> => {
   }
 }
 
-export const FBProcessTicketOrder = async (
+export const FBProcessTicketOrders = async (
   ticketOrders: Array<ITicketOrder>
 ): Promise<Array<ITicket>> => {
   try {
@@ -149,7 +149,6 @@ export const FBProcessTicketOrder = async (
           ticketOrder.eventId
         }`
 
-        // update available tickets on the ticket type document
         await runTransaction(db, async transaction => {
           // This feature ensures that the transaction runs on up-to-date and consistent data.
           // https://firebase.google.com/docs/firestore/manage-data/transactions#transactions
@@ -168,12 +167,18 @@ export const FBProcessTicketOrder = async (
             throw new Error(`Only ${availableCount} tickets available`)
           }
 
+          // update available tickets on the ticket type document
           transaction.update(ticketTypeRef, {
             available: increment(-ticketOrder.amount),
             sold: increment(ticketOrder.amount),
           })
 
-          // add ticket order tickets to /tickets sub collection
+          // update ticket count on the event document
+          transaction.update(doc(db, eventPath), {
+            ticketCount: increment(ticketOrder.amount),
+          })
+
+          // add new tickets to /tickets sub collection
           for (let i = 0; i < ticketOrder.amount; i++) {
             const ticketRef = doc(collection(db, `${eventPath}/tickets`))
             const generatedTicketId = ticketRef.id
