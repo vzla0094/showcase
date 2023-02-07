@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Spinner } from 'native-base'
 import { FormikConfig } from 'formik'
 
-import { FBGetEventTicketTypes, FBProcessTicketOrder } from '../firebase'
+import { FBGetEventTicketTypes, FBProcessTicketOrders } from '../firebase'
 
 import { TicketPurchaseForm } from '../forms/TicketPurchaseForm'
 
@@ -59,7 +59,7 @@ export const TicketPurchaseScreen = ({
       return setStatus('You must select at least one ticket')
 
     try {
-      await FBProcessTicketOrder(filledTicketOrders)
+      await FBProcessTicketOrders(filledTicketOrders)
 
       navigation.navigate('TicketConfirmation')
     } catch (e) {
