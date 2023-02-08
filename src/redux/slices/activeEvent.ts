@@ -1,12 +1,5 @@
-import {
-  emptyEvent,
-  IEditTicketTypePayload,
-  IActiveEventState,
-  ISetActiveEventPayload,
-  ITicket,
-  ITicketType,
-} from '../../types'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
 import {
   FBCreateTicketType,
   FBEditTicketType,
@@ -16,6 +9,15 @@ import {
   FBRedeemTicket,
 } from '../../firebase'
 import { RootState } from '../store'
+
+import {
+  emptyEvent,
+  IEditTicketTypePayload,
+  IActiveEventState,
+  IEventSelector,
+  ITicket,
+  ITicketType,
+} from '../../types'
 
 export const activeEventInitialState: IActiveEventState = {
   event: emptyEvent,
@@ -29,16 +31,23 @@ export const createTicketType = createAsyncThunk(
     const {
       activeEvent: { event },
     } = thunkApi.getState() as RootState
+    const eventId = event.id
+    const eventCategory = event.category
+    const dispatch = thunkApi.dispatch
 
     const newTicketType: ITicketType = {
       ...ticketType,
-      eventId: event.id,
-      eventCategory: event.category,
+      eventId,
+      eventCategory,
       available: ticketType.quantity,
     }
 
-    // TODO: modify FBCreateTicketType to do a transaction for the event ticket limit
-    return await FBCreateTicketType(newTicketType)
+    const ticketTypeData = await FBCreateTicketType(newTicketType)
+
+    // re-fetch activeEvent to reflect new ticket limit
+    await dispatch(setActiveEvent({ eventId, eventCategory }))
+
+    return ticketTypeData
   }
 )
 
@@ -62,8 +71,8 @@ export const editTicketType = createAsyncThunk(
 
 export const setActiveEvent = createAsyncThunk(
   'activeEvent/setActiveEvent',
-  async (payload: ISetActiveEventPayload) => {
-    const { eventId, eventCategory } = payload
+  async (eventSelector: IEventSelector) => {
+    const { eventId, eventCategory } = eventSelector
 
     return await FBGetEvent(eventId, eventCategory)
   }
@@ -71,8 +80,8 @@ export const setActiveEvent = createAsyncThunk(
 
 export const setEventTickets = createAsyncThunk(
   'activeEvent/setEventTickets',
-  async (payload: ISetActiveEventPayload) => {
-    const { eventId, eventCategory } = payload
+  async (eventSelector: IEventSelector) => {
+    const { eventId, eventCategory } = eventSelector
 
     return await FBGetEventTickets(eventId, eventCategory)
   }
@@ -80,8 +89,8 @@ export const setEventTickets = createAsyncThunk(
 
 export const setEventTicketTypes = createAsyncThunk(
   'activeEvent/setEventTicketTypes',
-  async (payload: ISetActiveEventPayload) => {
-    const { eventId, eventCategory } = payload
+  async (eventSelector: IEventSelector) => {
+    const { eventId, eventCategory } = eventSelector
 
     return await FBGetEventTicketTypes(eventId, eventCategory)
   }

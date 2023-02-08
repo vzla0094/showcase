@@ -2,16 +2,21 @@ import {
   collection,
   doc,
   getDocs,
+  increment,
   query,
+  QueryFieldFilterConstraint,
+  runTransaction,
   setDoc,
+  updateDoc,
   where,
   writeBatch,
-  QueryFieldFilterConstraint,
-  increment,
-  runTransaction,
+  WriteBatch,
 } from 'firebase/firestore'
 import { WhereFilterOp } from '@firebase/firestore-types'
 import { db } from './config'
+
+import { AppDispatch } from '../redux/store'
+import { addUserEvent } from '../redux/slices/user'
 
 import {
   categoryPathMap,
@@ -19,18 +24,19 @@ import {
   ITicket,
   ITicketOrder,
   ITicketType,
+  UserEvent,
 } from '../types'
 
 export const FBCreateTicketType = async (
   ticketType: ITicketType
 ): Promise<ITicketType> => {
-  const ticketTypesPath = `${categoryPathMap[ticketType.eventCategory]}/${
+  const eventPath = `${categoryPathMap[ticketType.eventCategory]}/${
     ticketType.eventId
-  }/ticketTypes`
+  }`
 
   try {
     // Adds a new ticketType document with a generated id
-    const ticketTypeRef = await doc(collection(db, ticketTypesPath))
+    const ticketTypeRef = await doc(collection(db, `${eventPath}/ticketTypes`))
     const generatedTicketTypeId = ticketTypeRef.id
 
     // Adds initial data shape to the ticketType document including
@@ -40,6 +46,10 @@ export const FBCreateTicketType = async (
       id: generatedTicketTypeId,
     }
     await setDoc(ticketTypeRef, data)
+
+    // update the event document ticketLimit
+    const eventRef = doc(db, eventPath)
+    await updateDoc(eventRef, { ticketLimit: increment(ticketType.quantity) })
 
     return data
   } catch (e) {
@@ -135,80 +145,107 @@ export const FBRedeemTicket = async (ticket: ITicket): Promise<ITicket> => {
   }
 }
 
+/**
+ * Process ticket orders by ...
+ * - validating ticket quantities
+ * - generating tickets
+ * - updating ticket quantities
+ * - adding userEvent to the user document
+ *
+ * @param {Array} ticketOrders - An array of ticket orders
+ * @param {Function} dispatch - A Redux dispatch function
+ *
+ * @returns {Promise}
+ */
 export const FBProcessTicketOrders = async (
-  ticketOrders: Array<ITicketOrder>
-): Promise<Array<ITicket>> => {
+  ticketOrders: Array<ITicketOrder>,
+  dispatch: AppDispatch
+): Promise<void> => {
   try {
     const ticketsBatch = writeBatch(db)
 
-    const tickets: Array<ITicket> = []
+    const userEvent: UserEvent = {
+      eventId: ticketOrders[0].eventId,
+      eventCategory: ticketOrders[0].eventCategory,
+    }
 
     await Promise.all(
-      ticketOrders.map(async ticketOrder => {
-        const eventPath = `${categoryPathMap[ticketOrder.eventCategory]}/${
-          ticketOrder.eventId
-        }`
-
-        await runTransaction(db, async transaction => {
-          // This feature ensures that the transaction runs on up-to-date and consistent data.
-          // https://firebase.google.com/docs/firestore/manage-data/transactions#transactions
-
-          const ticketTypeRef = doc(
-            db,
-            `${eventPath}/ticketTypes`,
-            ticketOrder.ticketTypeId
-          )
-
-          const ticketTypeSnapshot = await transaction.get(ticketTypeRef)
-
-          const availableCount = ticketTypeSnapshot.data()?.available
-
-          if (availableCount < ticketOrder.amount) {
-            throw new Error(`Only ${availableCount} tickets available`)
-          }
-
-          // update available tickets on the ticket type document
-          transaction.update(ticketTypeRef, {
-            available: increment(-ticketOrder.amount),
-            sold: increment(ticketOrder.amount),
-          })
-
-          // update ticket count on the event document
-          transaction.update(doc(db, eventPath), {
-            ticketCount: increment(ticketOrder.amount),
-          })
-
-          // add new tickets to /tickets sub collection
-          for (let i = 0; i < ticketOrder.amount; i++) {
-            const ticketRef = doc(collection(db, `${eventPath}/tickets`))
-            const generatedTicketId = ticketRef.id
-
-            const ticket: ITicket = {
-              id: generatedTicketId,
-              userId: ticketOrder.userId,
-              userName: ticketOrder.userName,
-              eventId: ticketOrder.eventId,
-              eventCategory: ticketOrder.eventCategory,
-              ticketTypeId: ticketOrder.ticketTypeId,
-              state: 'reserved',
-              reservedTimeStamp: new Date().toISOString(),
-              redeemedTimeStamp: '',
-            }
-
-            ticketsBatch.set(ticketRef, ticket)
-
-            tickets.push(ticket)
-          }
-        })
-      })
+      ticketOrders.map(ticketOrder =>
+        validateTicketQuantities(ticketsBatch, ticketOrder)
+      )
     )
 
+    // add new tickets to /tickets sub collection
     await ticketsBatch.commit()
 
-    return tickets
+    // add userEvent to the user document
+    await dispatch(addUserEvent(userEvent))
   } catch (e) {
     throw new Error(e)
   }
+}
+
+/**
+ * Validate ticket quantities and generate tickets for each order.
+ *
+ * @param {WriteBatch} ticketsBatch - The Firestore tickets batch
+ * @param {ITicketOrder} ticketOrder - The ticket order to validate
+ *
+ * @returns {Promise}
+ */
+const validateTicketQuantities = async (
+  ticketsBatch: WriteBatch,
+  ticketOrder: ITicketOrder
+): Promise<void> => {
+  const { eventId, eventCategory, ticketTypeId } = ticketOrder
+
+  const eventPath = `${categoryPathMap[eventCategory]}/${eventId}`
+
+  await runTransaction(db, async transaction => {
+    // This feature ensures that the transaction runs on up-to-date and consistent data.
+    // https://firebase.google.com/docs/firestore/manage-data/transactions#transactions
+
+    const ticketTypeRef = doc(db, `${eventPath}/ticketTypes`, ticketTypeId)
+
+    const ticketTypeSnapshot = await transaction.get(ticketTypeRef)
+
+    const availableCount = ticketTypeSnapshot.data()?.available
+
+    if (availableCount < ticketOrder.amount) {
+      throw new Error(`Only ${availableCount} tickets available`)
+    }
+
+    // update available tickets on the ticket type document
+    transaction.update(ticketTypeRef, {
+      available: increment(-ticketOrder.amount),
+      sold: increment(ticketOrder.amount),
+    })
+
+    // update ticket count on the event document
+    transaction.update(doc(db, eventPath), {
+      ticketCount: increment(ticketOrder.amount),
+    })
+
+    // generate new tickets
+    for (let i = 0; i < ticketOrder.amount; i++) {
+      const ticketRef = doc(collection(db, `${eventPath}/tickets`))
+      const generatedTicketId = ticketRef.id
+
+      const ticket: ITicket = {
+        id: generatedTicketId,
+        userId: ticketOrder.userId,
+        userName: ticketOrder.userName,
+        eventId: ticketOrder.eventId,
+        eventCategory: ticketOrder.eventCategory,
+        ticketTypeId: ticketOrder.ticketTypeId,
+        state: 'reserved',
+        reservedTimeStamp: new Date().toISOString(),
+        redeemedTimeStamp: '',
+      }
+
+      ticketsBatch.set(ticketRef, ticket)
+    }
+  })
 }
 
 export const FBGetUserEventTickets = async (

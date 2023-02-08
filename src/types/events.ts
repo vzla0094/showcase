@@ -106,7 +106,8 @@ export const emptyEvent: IEvent = {
   ...emptyGeoLocation,
 }
 
-export interface ISetActiveEventPayload {
+// used for retrieving event documents from firebase
+export interface IEventSelector {
   eventId: IEvent['id']
   eventCategory: EVENT_CATEGORY_NAMES
 }

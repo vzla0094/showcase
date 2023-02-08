@@ -7,6 +7,7 @@ import {
   FBSetUserDetail,
   FBSetUserGeoLocation,
   FBSetSearchFilterSettings,
+  FBAddUserEvent,
 } from '../../firebase'
 import { RootState } from '../store'
 
@@ -17,6 +18,7 @@ import {
   IUserDetailsField,
   SearchFilterSettingsField,
   StatusIUserLocation,
+  UserEvent,
 } from '../../types'
 
 export const userInitialState = emptyUser
@@ -70,6 +72,15 @@ export const setUserGeoLocation = createAsyncThunk(
   }
 )
 
+export const addUserEvent = createAsyncThunk(
+  'user/addUserEvent',
+  async (userEvent: UserEvent, thunkAPI) => {
+    const { user } = thunkAPI.getState() as RootState
+
+    return await FBAddUserEvent(user.uid, userEvent)
+  }
+)
+
 export const userSlice = createSlice({
   name: 'user',
   initialState: userInitialState,
@@ -94,6 +105,9 @@ export const userSlice = createSlice({
     })
     builder.addCase(setUserGeoLocation.fulfilled, (state, { payload }) => {
       state.geolocation = payload
+    })
+    builder.addCase(addUserEvent.fulfilled, (state, { payload }) => {
+      state.events = [...state.events, payload]
     })
   },
 })

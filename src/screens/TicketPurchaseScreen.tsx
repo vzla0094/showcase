@@ -8,7 +8,7 @@ import { TicketPurchaseForm } from '../forms/TicketPurchaseForm'
 
 import { ViewContainer } from '../atoms/ViewContainer'
 
-import { useAppSelector } from '../hooks'
+import { useAppDispatch, useAppSelector } from '../hooks'
 
 import { DiscoveryStackScreenProps, ITicketOrder, ITicketType } from '../types'
 
@@ -20,6 +20,7 @@ export const TicketPurchaseScreen = ({
     user,
     event: activeEvent.event,
   }))
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     navigation.setOptions({
@@ -29,7 +30,7 @@ export const TicketPurchaseScreen = ({
   }, [event])
 
   useEffect(() => {
-    if (!event) return
+    if (!event.category) return
     const getTicketTypes = async () => {
       const dbTicketTypes = await FBGetEventTicketTypes(
         event.id,
@@ -59,7 +60,7 @@ export const TicketPurchaseScreen = ({
       return setStatus('You must select at least one ticket')
 
     try {
-      await FBProcessTicketOrders(filledTicketOrders)
+      await FBProcessTicketOrders(filledTicketOrders, dispatch)
 
       navigation.navigate('TicketConfirmation')
     } catch (e) {
