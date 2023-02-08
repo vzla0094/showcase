@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
 
 import { db } from './config'
 
@@ -7,6 +7,7 @@ import {
   IUser,
   IUserDetailsField,
   SearchFilterSettingsField,
+  UserEvent,
 } from '../types'
 
 export const setUser = async (user: IUser): Promise<IUser> => {
@@ -78,6 +79,23 @@ export const getUser = async (userId: IUser['uid']) => {
     return userSnap.data()
   } catch (e) {
     console.error('Error getting user: ', e)
+
+    return e
+  }
+}
+
+export const FBAddUserEvent = async (
+  uid: IUser['uid'],
+  userEvent: UserEvent
+): Promise<UserEvent> => {
+  try {
+    await updateDoc(doc(db, 'users', uid), {
+      events: arrayUnion(userEvent),
+    })
+
+    return userEvent
+  } catch (e) {
+    console.error('Error adding user event: ', e)
 
     return e
   }
