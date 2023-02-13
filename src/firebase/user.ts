@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore'
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 
 import { db } from './config'
 
@@ -6,8 +6,8 @@ import {
   IGeolocation,
   IUser,
   IUserDetailsField,
+  IUserEventDataRef,
   SearchFilterSettingsField,
-  UserEvent,
 } from '../types'
 
 export const setUser = async (user: IUser): Promise<IUser> => {
@@ -84,16 +84,36 @@ export const getUser = async (userId: IUser['uid']) => {
   }
 }
 
-export const FBAddUserEvent = async (
+export const FBUpdateUserEventsDataRefs = async (
   uid: IUser['uid'],
-  userEvent: UserEvent
-): Promise<UserEvent> => {
+  newUserEventDataRef: IUserEventDataRef
+): Promise<Array<IUserEventDataRef>> => {
   try {
+    const userSnap = await getDoc(doc(db, 'users', uid))
+    const { eventsDataRefs } = userSnap.data() as IUser
+
+    const newEventsDataRefs = [...eventsDataRefs]
+
+    // Check if the new event data ref already exists in the array
+    const userEventIndex = newEventsDataRefs.findIndex(
+      eventDataRef => eventDataRef.eventId === newUserEventDataRef.eventId
+    )
+
+    // If the user event already exists, update its ticket count
+    if (userEventIndex !== -1) {
+      newEventsDataRefs[userEventIndex].ticketCount +=
+        newUserEventDataRef.ticketCount
+    }
+    // If the event does not exist, add it to the array
+    else {
+      newEventsDataRefs.push(newUserEventDataRef)
+    }
+
     await updateDoc(doc(db, 'users', uid), {
-      events: arrayUnion(userEvent),
+      eventsDataRefs: newEventsDataRefs,
     })
 
-    return userEvent
+    return newEventsDataRefs
   } catch (e) {
     console.error('Error adding user event: ', e)
 

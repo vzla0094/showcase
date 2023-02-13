@@ -6,11 +6,11 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
   onSnapshot,
   query,
   setDoc,
   where,
-  limit,
 } from 'firebase/firestore'
 
 import { db } from './config'
@@ -25,6 +25,8 @@ import {
   ICompany,
   IEvent,
   IEventCategory,
+  IUser,
+  IUserEventData,
 } from '../types'
 
 export const FBCreateEvent = async (
@@ -78,6 +80,7 @@ export const useEventCategoryObserver = (
         q = query(
           collection(db, path),
           where('state', '==', 'published'),
+          // TODO: add filter for events with available tickets
           limit(eventsLimit)
         )
       } else {
@@ -233,4 +236,51 @@ export const FBDeleteEvent = async (event: IEvent) => {
 
     return e
   }
+}
+
+export const FBGetUserEvents = async (
+  userId: IUser['uid'],
+  eventsDataRefs: IUser['eventsDataRefs']
+): Promise<Array<IUserEventData>> => {
+  try {
+    return await Promise.all(
+      eventsDataRefs.map(async ({ eventRef, ticketCount }) => {
+        const eventSnap = await getDoc(eventRef)
+        const event = eventSnap.data() as IEvent
+
+        return { event, ticketCount }
+      })
+    )
+  } catch (e) {
+    console.error('Error getting user events: ', e)
+
+    return e
+  }
+}
+
+export const useUserEvents = (
+  userId: IUser['uid'],
+  eventsDataRefs: IUser['eventsDataRefs']
+) => {
+  const [eventsData, setEventsData] = useState<Array<IUserEventData>>([])
+  const [loading, setLoading] = useState<boolean>(true)
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchEvents = async () => {
+        const data = await FBGetUserEvents(userId, eventsDataRefs)
+        setEventsData(data)
+        setLoading(false)
+      }
+
+      fetchEvents()
+
+      return () => {
+        setEventsData([])
+        setLoading(true)
+      }
+    }, [userId, eventsDataRefs])
+  )
+
+  return { eventsData, loading }
 }

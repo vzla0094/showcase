@@ -16,7 +16,7 @@ import { WhereFilterOp } from '@firebase/firestore-types'
 import { db } from './config'
 
 import { AppDispatch } from '../redux/store'
-import { addUserEvent } from '../redux/slices/user'
+import { updateUserEventsDataRefs } from '../redux/slices/user'
 
 import {
   categoryPathMap,
@@ -24,7 +24,6 @@ import {
   ITicket,
   ITicketOrder,
   ITicketType,
-  UserEvent,
 } from '../types'
 
 export const FBCreateTicketType = async (
@@ -164,22 +163,14 @@ export const FBProcessTicketOrders = async (
   try {
     const ticketsBatch = writeBatch(db)
 
-    const userEvent: UserEvent = {
-      eventId: ticketOrders[0].eventId,
-      eventCategory: ticketOrders[0].eventCategory,
-    }
-
     await Promise.all(
       ticketOrders.map(ticketOrder =>
-        validateTicketQuantities(ticketsBatch, ticketOrder)
+        validateTicketQuantities(ticketsBatch, ticketOrder, dispatch)
       )
     )
 
     // add new tickets to /tickets sub collection
     await ticketsBatch.commit()
-
-    // add userEvent to the user document
-    await dispatch(addUserEvent(userEvent))
   } catch (e) {
     throw new Error(e)
   }
@@ -190,12 +181,14 @@ export const FBProcessTicketOrders = async (
  *
  * @param {WriteBatch} ticketsBatch - The Firestore tickets batch
  * @param {ITicketOrder} ticketOrder - The ticket order to validate
+ * @param dispatch - A Redux dispatch function
  *
  * @returns {Promise}
  */
 const validateTicketQuantities = async (
   ticketsBatch: WriteBatch,
-  ticketOrder: ITicketOrder
+  ticketOrder: ITicketOrder,
+  dispatch: AppDispatch
 ): Promise<void> => {
   const { eventId, eventCategory, ticketTypeId } = ticketOrder
 
@@ -206,6 +199,7 @@ const validateTicketQuantities = async (
     // https://firebase.google.com/docs/firestore/manage-data/transactions#transactions
 
     const ticketTypeRef = doc(db, `${eventPath}/ticketTypes`, ticketTypeId)
+    const eventRef = doc(db, eventPath)
 
     const ticketTypeSnapshot = await transaction.get(ticketTypeRef)
 
@@ -222,9 +216,17 @@ const validateTicketQuantities = async (
     })
 
     // update ticket count on the event document
-    transaction.update(doc(db, eventPath), {
+    transaction.update(eventRef, {
       ticketCount: increment(ticketOrder.amount),
     })
+
+    await dispatch(
+      updateUserEventsDataRefs({
+        eventId,
+        eventRef,
+        ticketCount: ticketOrder.amount,
+      })
+    )
 
     // generate new tickets
     for (let i = 0; i < ticketOrder.amount; i++) {

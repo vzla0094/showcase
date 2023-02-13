@@ -13,6 +13,7 @@ export type UnAuthBottomTabParamList = {
 export type AuthBottomTabParamList = {
   DiscoveryStack: NavigatorScreenParams<DiscoveryStackParamList>
   Search: undefined
+  UserTicketsStack: NavigatorScreenParams<UserTicketsStackParamList>
   Filter: undefined
   Profile: undefined
   CompanyStack: NavigatorScreenParams<CompanyStackParamList>
@@ -24,9 +25,14 @@ export type DiscoveryStackParamList = {
   Highlights: undefined
   Event: undefined
   TicketPurchase: undefined
-  UserEventsTickets: undefined
+  UserEventTickets: undefined
   TicketConfirmation: undefined
   UserEventTicket: undefined
+}
+
+export type UserTicketsStackParamList = {
+  UserTickets: undefined
+  UserEventTickets: undefined
 }
 
 export type CompanyStackParamList = {
@@ -59,6 +65,10 @@ export type AuthBottomTabScreenProps<
 export type DiscoveryStackScreenProps<
   Screen extends keyof DiscoveryStackParamList
 > = NativeStackScreenProps<DiscoveryStackParamList, Screen>
+
+export type UserTicketsStackScreenProps<
+  Screen extends keyof UserTicketsStackParamList
+> = NativeStackScreenProps<UserTicketsStackParamList, Screen>
 
 export type CompanyStackScreenProps<
   Screen extends keyof CompanyStackParamList

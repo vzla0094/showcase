@@ -57,7 +57,7 @@ export const DiscoveryStackNavigator = () => (
     />
     <Stack.Screen
       options={{ title: 'My tickets' }}
-      name="UserEventsTickets"
+      name="UserEventTickets"
       component={UserEventTicketsScreen}
     />
     <Stack.Screen name="UserEventTicket" component={UserEventTicketScreen} />

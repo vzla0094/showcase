@@ -12,8 +12,8 @@ import { RootState } from '../store'
 
 import {
   emptyEvent,
-  IEditTicketTypePayload,
   IActiveEventState,
+  IEditTicketTypePayload,
   IEventSelector,
   ITicket,
   ITicketType,
@@ -56,8 +56,8 @@ export const editTicketType = createAsyncThunk(
   async (payload: IEditTicketTypePayload) => {
     let newTicketType: ITicketType = payload.newTicketType
 
-    // If the ticket type quantity has changed, update the event ticket limit and the ticket type available tickets
-    // TODO: handle in a firebase transaction
+    // If the ticket type quantity has changed, update the ticket type available tickets
+    // TODO: update the event ticket limit also, handle in a firebase transaction
     if (payload.prevTicketType.quantity !== payload.newTicketType.quantity) {
       newTicketType = {
         ...payload.newTicketType,

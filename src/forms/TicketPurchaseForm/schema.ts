@@ -26,6 +26,8 @@ export const TicketsPurchaseFormSchema = yup.array().of(
 
         if (value && value <= maxTicketsPerOrder) return true
 
+        // TODO: also return true if available tickets < maxTicketsPerOrder
+
         return context.createError({
           message: `Maximum amount of tickets is ${maxTicketsPerOrder}`,
         })
