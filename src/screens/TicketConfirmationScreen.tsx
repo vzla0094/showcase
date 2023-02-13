@@ -25,7 +25,7 @@ export const TicketConfirmationScreen = ({
       </Box>
 
       <Box width="full">
-        <Button onPress={() => navigation.navigate('UserEventsTickets')}>
+        <Button onPress={() => navigation.navigate('UserEventTickets')}>
           View My Tickets
         </Button>
       </Box>

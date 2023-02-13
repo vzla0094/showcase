@@ -4,6 +4,7 @@ import { IconButton } from 'native-base'
 
 import { CompanyStackNavigator } from './CompanyNavigator'
 import { DiscoveryStackNavigator } from './DiscoveryStackNavigator'
+import { UserTicketsStackNavigator } from './UserTicketsNavigator'
 
 import { SearchScreen } from '../screens/SearchScreen'
 import { SearchFilterScreen } from '../screens/SearchFilterScreen'
@@ -48,6 +49,16 @@ export const AuthBottomNavigator = () => {
         })}
         name="Search"
         component={SearchScreen}
+      />
+      <Tab.Screen
+        options={{
+          title: 'Tickets',
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="ticket" color={color} size={size} />
+          ),
+        }}
+        name="UserTicketsStack"
+        component={UserTicketsStackNavigator}
       />
       <Tab.Screen
         options={{

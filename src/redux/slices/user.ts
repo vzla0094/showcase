@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import {
-  requestPermissionsAsync,
   FBLogin,
   FBRegister,
+  FBSetSearchFilterSettings,
   FBSetUserDetail,
   FBSetUserGeoLocation,
-  FBSetSearchFilterSettings,
-  FBAddUserEvent,
+  FBUpdateUserEventsDataRefs,
+  requestPermissionsAsync,
 } from '../../firebase'
 import { RootState } from '../store'
 
@@ -16,9 +16,9 @@ import {
   IAuth,
   IUser,
   IUserDetailsField,
+  IUserEventDataRef,
   SearchFilterSettingsField,
   StatusIUserLocation,
-  UserEvent,
 } from '../../types'
 
 export const userInitialState = emptyUser
@@ -72,12 +72,12 @@ export const setUserGeoLocation = createAsyncThunk(
   }
 )
 
-export const addUserEvent = createAsyncThunk(
-  'user/addUserEvent',
-  async (userEvent: UserEvent, thunkAPI) => {
+export const updateUserEventsDataRefs = createAsyncThunk(
+  'user/updateUserEventDataRefs',
+  async (userEventDataRef: IUserEventDataRef, thunkAPI) => {
     const { user } = thunkAPI.getState() as RootState
 
-    return await FBAddUserEvent(user.uid, userEvent)
+    return await FBUpdateUserEventsDataRefs(user.uid, userEventDataRef)
   }
 )
 
@@ -106,9 +106,12 @@ export const userSlice = createSlice({
     builder.addCase(setUserGeoLocation.fulfilled, (state, { payload }) => {
       state.geolocation = payload
     })
-    builder.addCase(addUserEvent.fulfilled, (state, { payload }) => {
-      state.events = [...state.events, payload]
-    })
+    builder.addCase(
+      updateUserEventsDataRefs.fulfilled,
+      (state, { payload }) => {
+        state.eventsDataRefs = payload
+      }
+    )
   },
 })
 
