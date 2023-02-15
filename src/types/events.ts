@@ -14,6 +14,8 @@ export enum EVENT_FORM_FIELD_NAMES {
   StateProvince = 'stateProvince',
   Country = 'country',
   ZipCode = 'zipCode',
+  StartDateTime = 'startDateTime',
+  EndDateTime = 'endDateTime',
 }
 
 export type EventFormValuesType = {

@@ -1,16 +1,17 @@
 import { useEffect, useRef } from 'react'
 import {
   Button,
+  HStack,
   IconButton,
   Select,
-  VStack,
   Switch,
-  HStack,
   Text,
+  VStack,
 } from 'native-base'
 import { Formik, FormikProps, FormikValues } from 'formik'
 import { useNavigation } from '@react-navigation/native'
 
+import { FormikInputDate } from '../molecules/FormikInputDate'
 import { ViewContainer } from '../atoms/ViewContainer'
 import { FormikInput } from '../atoms/FormikInput'
 
@@ -62,6 +63,8 @@ export const EventEditDetailsView = ({
     stateProvince: event.stateProvince,
     country: event.country,
     zipCode: event.zipCode,
+    startDateTime: event.startDateTime,
+    endDateTime: event.endDateTime,
   }
 
   return (
@@ -177,6 +180,24 @@ export const EventEditDetailsView = ({
                 handleChange={handleChange(EVENT_FORM_FIELD_NAMES.ZipCode)}
                 errors={errors}
                 label="Zip Code"
+              />
+
+              <FormikInputDate
+                value={values[EVENT_FORM_FIELD_NAMES.StartDateTime]}
+                fieldName={EVENT_FORM_FIELD_NAMES.StartDateTime}
+                handleChange={handleChange(
+                  EVENT_FORM_FIELD_NAMES.StartDateTime
+                )}
+                errors={errors}
+                label="Start date"
+              />
+
+              <FormikInputDate
+                value={values[EVENT_FORM_FIELD_NAMES.EndDateTime]}
+                fieldName={EVENT_FORM_FIELD_NAMES.EndDateTime}
+                handleChange={handleChange(EVENT_FORM_FIELD_NAMES.EndDateTime)}
+                errors={errors}
+                label="End date"
               />
 
               <HStack alignItems="center" space={4}>
