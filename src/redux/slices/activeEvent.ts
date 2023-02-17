@@ -7,6 +7,7 @@ import {
   FBGetEventTickets,
   FBGetEventTicketTypes,
   FBRedeemTicket,
+  FBUpdateEventTicketLimit,
 } from '../../firebase'
 import { RootState } from '../store'
 
@@ -55,17 +56,31 @@ export const editTicketType = createAsyncThunk(
   'activeEvent/editTicketType',
   async (payload: IEditTicketTypePayload) => {
     let newTicketType: ITicketType = payload.newTicketType
+    let newEventTicketLimit: number | undefined
+    const ticketTypeQtyDelta =
+      payload.newTicketType.quantity - payload.prevTicketType.quantity
 
     // If the ticket type quantity has changed, update the ticket type available tickets
     // TODO: update the event ticket limit also, handle in a firebase transaction
-    if (payload.prevTicketType.quantity !== payload.newTicketType.quantity) {
+
+    if (ticketTypeQtyDelta) {
       newTicketType = {
         ...payload.newTicketType,
         available: payload.newTicketType.quantity - payload.prevTicketType.sold, // TODO: add validation to prevent quantity < sold
       }
+      newEventTicketLimit = await FBUpdateEventTicketLimit(
+        payload.prevTicketType.eventId,
+        payload.prevTicketType.eventCategory,
+        ticketTypeQtyDelta
+      )
     }
 
-    return await FBEditTicketType(newTicketType)
+    const ticketType = await FBEditTicketType(newTicketType)
+
+    return {
+      ticketType,
+      newTicketLimit: newEventTicketLimit,
+    }
   }
 )
 
@@ -113,9 +128,11 @@ export const activeEventSlice = createSlice({
     })
     builder.addCase(editTicketType.fulfilled, (state, { payload }) => {
       const ticketTypeIndex = state.ticketTypes.findIndex(
-        ticketType => ticketType.id === payload.id
+        ticketType => ticketType.id === payload.ticketType.id
       )
-      state.ticketTypes[ticketTypeIndex] = payload
+      state.ticketTypes[ticketTypeIndex] = payload.ticketType
+      if (typeof payload.newTicketLimit === 'number')
+        state.event.ticketLimit = Number(payload.newTicketLimit)
     })
     builder.addCase(setActiveEvent.fulfilled, (state, { payload }) => {
       state.event = payload

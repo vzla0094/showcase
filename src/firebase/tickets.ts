@@ -267,3 +267,31 @@ export const FBGetUserEventTickets = async (
     return e
   }
 }
+
+export const FBUpdateEventTicketLimit = async (
+  eventId: IEvent['id'],
+  eventCategory: IEvent['category'],
+  ticketTypeQtyDelta: number
+): Promise<number> => {
+  try {
+    let eventTicketLimit = 0
+    await runTransaction(db, async transaction => {
+      const eventPath = `${categoryPathMap[eventCategory]}/${eventId}`
+      const eventRef = doc(db, eventPath)
+
+      const eventSnapshot = await transaction.get(eventRef)
+
+      eventTicketLimit = eventSnapshot.data()?.ticketLimit
+
+      if (ticketTypeQtyDelta) {
+        transaction.update(eventRef, {
+          ticketLimit: increment(ticketTypeQtyDelta),
+        })
+      }
+    })
+    return eventTicketLimit + ticketTypeQtyDelta
+  } catch (e) {
+    console.error(`Error updating event's ticket limit:`, e)
+    return e
+  }
+}
