@@ -3,6 +3,8 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    'jest/globals': true,
+    node: true,
   },
   extends: [
     'eslint:recommended',
@@ -19,7 +21,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', '@typescript-eslint', 'jest'],
   rules: {
     'react/prop-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
