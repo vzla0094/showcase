@@ -6,7 +6,13 @@ import { UserEventTicketsScreen } from '../screens/UserEventTicketsScreen'
 const Stack = createNativeStackNavigator<UserTicketsStackParamList>()
 
 export const UserTicketsStackNavigator = () => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: 'transparent',
+      },
+    }}
+  >
     <Stack.Screen name="UserTickets" component={UserTicketsScreen} />
     <Stack.Screen name="UserEventTickets" component={UserEventTicketsScreen} />
   </Stack.Navigator>

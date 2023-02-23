@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { FontAwesome } from '@expo/vector-icons'
-import { IconButton } from 'native-base'
+import { IconButton, useTheme } from 'native-base'
 
 import { CompanyStackNavigator } from './CompanyNavigator'
 import { DiscoveryStackNavigator } from './DiscoveryStackNavigator'
@@ -18,9 +18,19 @@ const Tab = createBottomTabNavigator<AuthBottomTabParamList>()
 
 export const AuthBottomNavigator = () => {
   const hasCompany = useAppSelector(state => Boolean(state.company.companyId))
+  const theme = useTheme()
 
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        headerStyle: {
+          backgroundColor: 'transparent',
+        },
+        tabBarActiveTintColor: theme.colors.tertiary[400],
+        tabBarInactiveTintColor: theme.colors.text[900],
+      }}
+    >
       <Tab.Screen
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -65,6 +75,7 @@ export const AuthBottomNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="user" color={color} size={size} />
           ),
+          headerShown: true,
         }}
         name="Profile"
         component={ProfileScreen}
