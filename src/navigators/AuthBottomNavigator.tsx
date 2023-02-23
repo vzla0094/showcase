@@ -9,6 +9,7 @@ import { UserTicketsStackNavigator } from './UserTicketsNavigator'
 import { SearchScreen } from '../screens/SearchScreen'
 import { SearchFilterScreen } from '../screens/SearchFilterScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
+import { CompanyIcon, HomeIcon, SearchIcon, UserIcon } from '../icons'
 
 import { useAppSelector } from '../hooks'
 
@@ -33,9 +34,7 @@ export const AuthBottomNavigator = () => {
     >
       <Tab.Screen
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="home" color={color} size={size} />
-          ),
+          tabBarIcon: tabBarIconProps => <HomeIcon {...tabBarIconProps} />,
           title: 'Discovery',
         }}
         name="DiscoveryStack"
@@ -53,9 +52,7 @@ export const AuthBottomNavigator = () => {
               }}
             />
           ),
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="search" color={color} size={size} />
-          ),
+          tabBarIcon: tabBarIconProps => <SearchIcon {...tabBarIconProps} />,
         })}
         name="Search"
         component={SearchScreen}
@@ -72,10 +69,7 @@ export const AuthBottomNavigator = () => {
       />
       <Tab.Screen
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="user" color={color} size={size} />
-          ),
-          headerShown: true,
+          tabBarIcon: tabBarIconProps => <UserIcon {...tabBarIconProps} />,
         }}
         name="Profile"
         component={ProfileScreen}
@@ -83,9 +77,7 @@ export const AuthBottomNavigator = () => {
       {hasCompany && (
         <Tab.Screen
           options={{
-            tabBarIcon: ({ color, size }) => (
-              <FontAwesome name="building" color={color} size={size} />
-            ),
+            tabBarIcon: tabBarIconProps => <CompanyIcon {...tabBarIconProps} />,
             title: 'Company',
           }}
           name="CompanyStack"
