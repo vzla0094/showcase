@@ -17,7 +17,13 @@ const Stack = createNativeStackNavigator<CompanyStackParamList>()
 
 export const CompanyStackNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: 'transparent',
+        },
+      }}
+    >
       <Stack.Screen
         name="CompanyDashboard"
         options={({

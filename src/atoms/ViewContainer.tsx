@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { Center, Container, ScrollView, IContainerProps } from 'native-base'
+import { Center, Container, IContainerProps, ScrollView } from 'native-base'
 
 interface IViewContainerProps {
   children: ReactNode
@@ -16,7 +16,7 @@ export const ViewContainer = ({
 }: IViewContainerProps) => {
   const prop = justifyContent === 'auto' ? {} : { justifyContent }
   const ContainedChildren = (
-    <Center flex={1}>
+    <Center flex={1} bg="white" rounded="xl" m={4}>
       <Container safeArea flex={1} w={'100%'} alignItems={alignItems} {...prop}>
         {children}
       </Container>

@@ -16,7 +16,13 @@ import { UserEventTicketsScreen } from '../screens/UserEventTicketsScreen'
 const Stack = createNativeStackNavigator<DiscoveryStackParamList>()
 
 export const DiscoveryStackNavigator = () => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: 'transparent',
+      },
+    }}
+  >
     <Stack.Screen
       name="Discovery"
       options={({ navigation }: DiscoveryStackScreenProps<'Discovery'>) => ({
