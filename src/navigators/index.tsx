@@ -19,7 +19,7 @@ export default function RootNavigator() {
         ...DefaultTheme,
         colors: {
           ...DefaultTheme.colors,
-          text: theme.colors.white,
+          text: theme.colors.lightText,
           background: theme.colors.primary[900],
         },
       }}
