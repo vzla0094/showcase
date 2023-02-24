@@ -8,6 +8,8 @@ export const theme = extendTheme({
     tertiary: {
       400: '#1ABF8F',
     },
+    lightText: '#CDD4F4',
+    darkText: '#1C0221',
   },
   fontConfig: {
     Raleway: {

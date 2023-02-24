@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { Button } from 'native-base'
 
@@ -20,10 +20,14 @@ import { CompanyStackScreenProps, handleEventPressType, IEvent } from '../types'
 export const CompanyDashboardScreen = ({
   navigation,
 }: CompanyStackScreenProps<'CompanyDashboard'>) => {
-  const companyId = useAppSelector(({ company }) => company.companyId)
+  const { companyId, name } = useAppSelector(({ company }) => company)
   const dispatch = useAppDispatch()
 
   const [companyEvents, setCompanyEvents] = useState<Array<IEvent>>([])
+
+  useEffect(() => {
+    navigation.setOptions({ title: name })
+  }, [])
 
   useFocusEffect(() => {
     const fetchCompanyEvents = async () => {

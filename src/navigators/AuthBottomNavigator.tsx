@@ -9,7 +9,14 @@ import { UserTicketsStackNavigator } from './UserTicketsNavigator'
 import { SearchScreen } from '../screens/SearchScreen'
 import { SearchFilterScreen } from '../screens/SearchFilterScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
-import { CompanyIcon, HomeIcon, SearchIcon, UserIcon } from '../icons'
+import {
+  ChevronLeftIcon,
+  CompanyIcon,
+  HomeIcon,
+  SearchIcon,
+  SlidersIcon,
+  UserIcon,
+} from '../icons'
 
 import { useAppSelector } from '../hooks'
 
@@ -19,7 +26,7 @@ const Tab = createBottomTabNavigator<AuthBottomTabParamList>()
 
 export const AuthBottomNavigator = () => {
   const hasCompany = useAppSelector(state => Boolean(state.company.companyId))
-  const theme = useTheme()
+  const { colors, fontSizes } = useTheme()
 
   return (
     <Tab.Navigator
@@ -28,8 +35,12 @@ export const AuthBottomNavigator = () => {
         headerStyle: {
           backgroundColor: 'transparent',
         },
-        tabBarActiveTintColor: theme.colors.tertiary[400],
-        tabBarInactiveTintColor: theme.colors.text[900],
+        tabBarActiveTintColor: colors.tertiary[400],
+        tabBarInactiveTintColor: colors.text[900],
+        headerTitleStyle: {
+          fontSize: fontSizes['xl'],
+          fontWeight: '400',
+        },
       }}
     >
       <Tab.Screen
@@ -46,10 +57,7 @@ export const AuthBottomNavigator = () => {
           headerRight: () => (
             <IconButton
               onPress={() => navigation.navigate('Filter')}
-              _icon={{
-                as: FontAwesome,
-                name: 'sliders',
-              }}
+              icon={<SlidersIcon color={colors.white} size={25} />}
             />
           ),
           tabBarIcon: tabBarIconProps => <SearchIcon {...tabBarIconProps} />,
@@ -70,6 +78,7 @@ export const AuthBottomNavigator = () => {
       <Tab.Screen
         options={{
           tabBarIcon: tabBarIconProps => <UserIcon {...tabBarIconProps} />,
+          headerShown: true,
         }}
         name="Profile"
         component={ProfileScreen}
@@ -101,10 +110,7 @@ export const AuthBottomNavigator = () => {
           headerLeft: () => (
             <IconButton
               onPress={() => navigation.navigate('Search')}
-              _icon={{
-                as: FontAwesome,
-                name: 'chevron-left',
-              }}
+              icon={<ChevronLeftIcon color={colors.white} size={25} />}
             />
           ),
         })}

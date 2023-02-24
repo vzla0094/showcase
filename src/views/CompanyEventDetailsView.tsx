@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
-import { FontAwesome } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { Button, IconButton, Text, VStack } from 'native-base'
+import { Button, IconButton, Text, useTheme, VStack } from 'native-base'
 import { WebView } from 'react-native-webview'
 
 import { getAddressQuery } from '../firebase'
 
 import { ViewContainer } from '../atoms/ViewContainer'
 import { EventTicketsButton } from '../molecules/EventTicketsButton'
+import { ChevronLeftIcon, SettingsIcon } from '../icons'
 
 import { CompanyStackScreenProps, IActiveEventState } from '../types'
 
@@ -29,16 +29,14 @@ export const CompanyEventDetailsView = ({
     ticketCount,
     ticketLimit,
   } = activeEvent.event
+  const { colors } = useTheme()
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
         <IconButton
           onPress={() => navigation.goBack()}
-          _icon={{
-            as: FontAwesome,
-            name: 'chevron-left',
-          }}
+          icon={<ChevronLeftIcon color={colors.white} size={25} />}
         />
       ),
       headerRight: () => (
@@ -48,10 +46,7 @@ export const CompanyEventDetailsView = ({
               activeView: 'EventEditDetails',
             })
           }}
-          _icon={{
-            as: FontAwesome,
-            name: 'gear',
-          }}
+          icon={<SettingsIcon color={colors.white} size={25} />}
         />
       ),
       title: name,
