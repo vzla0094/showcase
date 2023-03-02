@@ -1,6 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { FontAwesome } from '@expo/vector-icons'
 import { IconButton, useTheme } from 'native-base'
+import {
+  House,
+  MagnifyingGlass,
+  Storefront,
+  Ticket,
+  User,
+} from 'phosphor-react-native'
 
 import { CompanyStackNavigator } from './CompanyNavigator'
 import { DiscoveryStackNavigator } from './DiscoveryStackNavigator'
@@ -9,14 +15,7 @@ import { UserTicketsStackNavigator } from './UserTicketsNavigator'
 import { SearchScreen } from '../screens/SearchScreen'
 import { SearchFilterScreen } from '../screens/SearchFilterScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
-import {
-  ChevronLeftIcon,
-  CompanyIcon,
-  HomeIcon,
-  SearchIcon,
-  SlidersIcon,
-  UserIcon,
-} from '../icons'
+import { ChevronLeftIcon, SlidersIcon } from '../icons'
 
 import { useAppSelector } from '../hooks'
 
@@ -35,17 +34,25 @@ export const AuthBottomNavigator = () => {
         headerStyle: {
           backgroundColor: 'transparent',
         },
-        tabBarActiveTintColor: colors.tertiary[400],
-        tabBarInactiveTintColor: colors.text[900],
         headerTitleStyle: {
           fontSize: fontSizes['xl'],
           fontWeight: '400',
+        },
+        tabBarActiveTintColor: colors.tertiary[400],
+        tabBarInactiveTintColor: colors.darkText,
+        tabBarStyle: {
+          height: 80,
+          paddingBottom: 0,
+          paddingTop: 10,
+        },
+        tabBarLabelStyle: {
+          flex: 1,
         },
       }}
     >
       <Tab.Screen
         options={{
-          tabBarIcon: tabBarIconProps => <HomeIcon {...tabBarIconProps} />,
+          tabBarIcon: ({ color, size }) => <House color={color} size={size} />,
           title: 'Discovery',
         }}
         name="DiscoveryStack"
@@ -60,7 +67,9 @@ export const AuthBottomNavigator = () => {
               icon={<SlidersIcon color={colors.white} size={25} />}
             />
           ),
-          tabBarIcon: tabBarIconProps => <SearchIcon {...tabBarIconProps} />,
+          tabBarIcon: ({ color, size }) => (
+            <MagnifyingGlass color={color} size={size} />
+          ),
         })}
         name="Search"
         component={SearchScreen}
@@ -68,16 +77,14 @@ export const AuthBottomNavigator = () => {
       <Tab.Screen
         options={{
           title: 'Tickets',
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="ticket" color={color} size={size} />
-          ),
+          tabBarIcon: ({ color, size }) => <Ticket color={color} size={size} />,
         }}
         name="UserTicketsStack"
         component={UserTicketsStackNavigator}
       />
       <Tab.Screen
         options={{
-          tabBarIcon: tabBarIconProps => <UserIcon {...tabBarIconProps} />,
+          tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
           headerShown: true,
         }}
         name="Profile"
@@ -86,7 +93,9 @@ export const AuthBottomNavigator = () => {
       {hasCompany && (
         <Tab.Screen
           options={{
-            tabBarIcon: tabBarIconProps => <CompanyIcon {...tabBarIconProps} />,
+            tabBarIcon: ({ color, size }) => (
+              <Storefront color={color} size={size} />
+            ),
             title: 'Company',
           }}
           name="CompanyStack"
