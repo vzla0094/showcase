@@ -1,7 +1,3 @@
-export { SearchIcon } from './search'
-export { HomeIcon } from './home'
-export { UserIcon } from './user'
-export { CompanyIcon } from './company'
 export { SlidersIcon } from './sliders'
 export { ChevronLeftIcon } from './chevronLeft'
 export { SettingsIcon } from './settings'

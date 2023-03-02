@@ -1,6 +1,9 @@
 import 'react-native-gesture-handler'
+
 import { Provider as ReduxProvider } from 'react-redux'
 import { NativeBaseProvider } from 'native-base'
+import { IconContext } from 'phosphor-react-native'
+
 import {
   Raleway_400Regular,
   Raleway_600SemiBold,
@@ -23,9 +26,11 @@ export default function App() {
 
   return (
     <ReduxProvider store={store}>
-      <NativeBaseProvider theme={theme}>
-        <RootNavigator />
-      </NativeBaseProvider>
+      <IconContext.Provider value={{ weight: 'thin' }}>
+        <NativeBaseProvider theme={theme}>
+          <RootNavigator />
+        </NativeBaseProvider>
+      </IconContext.Provider>
     </ReduxProvider>
   )
 }

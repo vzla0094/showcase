@@ -1,8 +1,11 @@
 import { PropsWithChildren } from 'react'
+
 import { Provider as ReduxProvider } from 'react-redux'
+import { NativeBaseProvider } from 'native-base'
+import { IconContext } from 'phosphor-react-native'
+
 import { render, RenderOptions } from '@testing-library/react-native'
 import { PreloadedState } from '@reduxjs/toolkit'
-import { NativeBaseProvider } from 'native-base'
 
 import { AppStore, RootState, setupStore } from './src/redux/store'
 
@@ -35,9 +38,11 @@ export const renderWithProviders = (
       // Do not try to mock selector functions or the React-Redux hooks! Mocking imports from libraries is fragile, and doesn't give you confidence that your actual app code is working.
       // https://redux.js.org/usage/writing-tests#guiding-principles
       <ReduxProvider store={store}>
-        <NativeBaseProvider initialWindowMetrics={inset}>
-          {children}
-        </NativeBaseProvider>
+        <IconContext.Provider value={{ weight: 'thin' }}>
+          <NativeBaseProvider initialWindowMetrics={inset}>
+            {children}
+          </NativeBaseProvider>
+        </IconContext.Provider>
       </ReduxProvider>
     )
   }
