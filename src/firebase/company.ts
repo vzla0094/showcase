@@ -11,30 +11,23 @@ import { companyInitialState } from '../redux/slices/company'
 
 import { db } from './config'
 
-import {
-  emptyCompany,
-  ICompany,
-  IEvent,
-  IInitializeCompanyData,
-  IUser,
-} from '../types'
+import { emptyCompany, ICompany, IEvent, IUser } from '../types'
+import { handleError } from '../helpers/errors'
 
-export const FBInitializeCompany = async ({
-  companyId,
-}: IInitializeCompanyData): Promise<ICompany> => {
+export const FBInitializeCompany = async (
+  companyRef: IUser['companyRef']
+): Promise<ICompany> => {
   // Hydrates company redux state from firebase data
-  if (!companyId) return companyInitialState
+  if (!companyRef) return companyInitialState
   try {
     // Hydrate redux state with existing company data from firebase
-    const companySnap = await getDoc(doc(db, 'companies', companyId))
+    const companySnap = await getDoc(companyRef)
 
     const data = companySnap.data() as ICompany
 
     return { ...companyInitialState, ...data }
   } catch (e) {
-    console.error('Error initializing company', e)
-
-    return e
+    throw handleError('Error initializing company: ', e)
   }
 }
 export const FBCreateCompany = async (uid: IUser['uid']): Promise<ICompany> => {
@@ -58,9 +51,7 @@ export const FBCreateCompany = async (uid: IUser['uid']): Promise<ICompany> => {
 
     return newCompanyData
   } catch (e) {
-    console.error('Error creating company', e)
-
-    return e
+    throw handleError('Error creating company: ', e)
   }
 }
 export const FBSetCompany = async (
@@ -74,9 +65,7 @@ export const FBSetCompany = async (
 
     return payload
   } catch (e) {
-    console.error('Error setting company contact information: ', e)
-
-    return e
+    throw handleError('Error setting company: ', e)
   }
 }
 export const FBAddEvent = async (
@@ -93,8 +82,6 @@ export const FBAddEvent = async (
 
     return eventId
   } catch (e) {
-    console.error('Error adding event to company: ', e)
-
-    return e
+    throw handleError('Error adding event to company: ', e)
   }
 }

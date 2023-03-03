@@ -6,17 +6,16 @@ import {
   FBAddEvent,
   FBCreateCompany,
   FBInitializeCompany,
-  FBSetCompany,
   FBRedeemTicket,
+  FBSetCompany,
 } from '../../firebase'
 
 import {
+  emptyCompany,
   IAddEventPayload,
   ICompany,
-  IInitializeCompanyData,
   ITicket,
   IUser,
-  emptyCompany,
 } from '../../types'
 
 export const companyInitialState = emptyCompany
@@ -49,7 +48,8 @@ const setCompanyActive = createAsyncThunk(
 
 export const initializeCompany = createAsyncThunk(
   'company/initializeCompany',
-  async (data: IInitializeCompanyData) => await FBInitializeCompany(data)
+  async (companyRef: IUser['companyRef']) =>
+    await FBInitializeCompany(companyRef)
 )
 
 export const createCompany = createAsyncThunk(

@@ -28,6 +28,7 @@ import {
   IUser,
   IUserEventData,
 } from '../types'
+import { handleError } from '../helpers/errors'
 
 export const FBCreateEvent = async (
   companyId: ICompany['companyId'],
@@ -51,9 +52,7 @@ export const FBCreateEvent = async (
 
     return data
   } catch (e) {
-    console.error('Error creating event: ', e)
-
-    return e
+    throw handleError('Error creating event: ', e)
   }
 }
 
@@ -140,9 +139,7 @@ export const FBGetEvent = async (
 
     return eventSnap.data() as IEvent
   } catch (e) {
-    console.error('Error getting event: ', e)
-
-    return e
+    throw handleError('Error getting event: ', e)
   }
 }
 
@@ -252,9 +249,7 @@ export const FBGetUserEvents = async (
       })
     )
   } catch (e) {
-    console.error('Error getting user events: ', e)
-
-    return e
+    throw handleError('Error getting user events: ', e)
   }
 }
 

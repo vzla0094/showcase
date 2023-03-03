@@ -13,6 +13,7 @@ import { initializeCompany } from '../redux/slices/company'
 import { auth } from './config'
 
 import { emptyUser, IUser } from '../types'
+import { handleError } from '../helpers/errors'
 
 export const FBRegister = async (
   email: string,
@@ -30,13 +31,14 @@ export const FBRegister = async (
       uid: FBUser.uid,
     })
   } catch (e) {
-    console.error('Error registering : ', e)
-
-    return e
+    throw handleError('Error registering: ', e)
   }
 }
 
-export const FBLogin = async (email: string, password: string) => {
+export const FBLogin = async (
+  email: string,
+  password: string
+): Promise<IUser> => {
   try {
     const { user: FBUser } = await signInWithEmailAndPassword(
       auth,
@@ -46,9 +48,7 @@ export const FBLogin = async (email: string, password: string) => {
 
     return await getUser(FBUser.uid)
   } catch (e) {
-    console.error('Error logging in: ', e)
-
-    return e
+    throw handleError('Error logging in: ', e)
   }
 }
 
@@ -65,14 +65,12 @@ export const useAuth = () => {
         dispatch(actions.user.setUser(user))
 
         // user location
+        // TODO: take this out of here. Calling this here causes the location to be set only once when user logs in.
+        // This should be called on the RootNavigator component after calling useAuth.
         await dispatch(setUserGeoLocation())
 
         // company hydration
-        dispatch(
-          initializeCompany({
-            companyId: user.company?.id || '',
-          })
-        )
+        dispatch(initializeCompany(user.companyRef))
 
         setAuthenticated(true)
         setLoading(false)

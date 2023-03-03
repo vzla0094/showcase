@@ -36,6 +36,11 @@ Tests that fall in this category are:
 * [Where and how to start testing 🧪 your react-native app ⚛️ and how to keep on testin’](https://medium.com/@stevegalili/where-and-how-to-start-testing-your-react-native-app-%EF%B8%8F-and-how-to-keep-on-testin-ec3464fb9b41)
 * [Static vs Unit vs Integration vs E2E Testing for Frontend Apps](https://kentcdodds.com/blog/static-vs-unit-vs-integration-vs-e2e-tests)
 
+# Error Handling
+We have a special function to help us type check and DRY our error handling logic. It is called `handleError` and it is located in `src/helpers/errors.js`. It takes in an `error: unknown` and a `message: string` that describes the error. It then logs the error to the console and returns the typed error for further bubbling if needed. 
+
+Please use this function whenever you need to handle an error.
+
 # User flows
 
 ### Discovery

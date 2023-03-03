@@ -13,6 +13,7 @@ import {
   IUseLocationRequest,
   StatusIUserLocation,
 } from '../types'
+import { handleError } from '../helpers/errors'
 
 export const requestPermissionsAsync =
   async (): Promise<IUseLocationRequest> => {
@@ -88,9 +89,7 @@ export const getEventGeoLocation = async (
       geoHash,
     }
   } catch (e) {
-    console.error('Error getting event geo location: ', e)
-
-    return e
+    throw handleError('Error getting event geo location: ', e)
   }
 }
 

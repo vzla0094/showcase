@@ -7,6 +7,7 @@ import { login, register } from '../redux/slices/user'
 import { useAppDispatch } from '../hooks'
 
 import { IAuth } from '../types'
+import { getErrorMessage } from '../helpers/errors'
 
 export const LoginOrRegisterScreen = () => {
   const [loginOrRegister, setLoginOrRegister] = useState<'login' | 'register'>(
@@ -68,7 +69,7 @@ export const LoginOrRegisterScreen = () => {
         : dispatch(register(auth))
     } catch (e) {
       toast.show({
-        description: e.message,
+        description: getErrorMessage(e),
         variant: 'error',
       })
       console.error('Error registering: ', e)

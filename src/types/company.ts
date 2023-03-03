@@ -46,7 +46,7 @@ export type CompanyDetailsType = {
 }
 
 export interface IInitializeCompanyData {
-  companyId: ICompany['companyId']
+  companyRef: IUser['companyRef']
 }
 
 export interface IAddEventPayload {
