@@ -11,6 +11,7 @@ import { ViewContainer } from '../atoms/ViewContainer'
 import { useAppDispatch, useAppSelector } from '../hooks'
 
 import { DiscoveryStackScreenProps, ITicketOrder, ITicketType } from '../types'
+import { getErrorMessage } from '../helpers/errors'
 
 export const TicketPurchaseScreen = ({
   navigation,
@@ -64,8 +65,7 @@ export const TicketPurchaseScreen = ({
 
       navigation.navigate('TicketConfirmation')
     } catch (e) {
-      setStatus(e.message)
-      console.error(e.message)
+      setStatus(getErrorMessage(e))
     }
   }
 

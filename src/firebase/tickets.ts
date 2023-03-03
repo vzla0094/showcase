@@ -25,6 +25,7 @@ import {
   ITicketOrder,
   ITicketType,
 } from '../types'
+import { handleError } from '../helpers/errors'
 
 export const FBCreateTicketType = async (
   ticketType: ITicketType
@@ -52,9 +53,7 @@ export const FBCreateTicketType = async (
 
     return data
   } catch (e) {
-    console.error('Error creating ticketType: ', e)
-
-    return e
+    throw handleError('Error creating ticketType: ', e)
   }
 }
 
@@ -70,9 +69,7 @@ export const FBEditTicketType = async (
 
     return ticketType
   } catch (e) {
-    console.error('Error editing ticketType: ', e)
-
-    return e
+    throw handleError('Error editing ticketType: ', e)
   }
 }
 
@@ -103,9 +100,7 @@ export const FBGetEventTicketTypes = async (
 
     return snapshot.docs.map(doc => doc.data()) as Array<ITicketType>
   } catch (e) {
-    console.error('Error getting ticketTypes: ', e)
-
-    return e
+    throw handleError('Error getting ticketTypes: ', e)
   }
 }
 
@@ -121,9 +116,7 @@ export const FBGetEventTickets = async (
 
     return snapshot.docs.map(doc => doc.data()) as Array<ITicket>
   } catch (e) {
-    console.error('Error getting tickets: ', e)
-
-    return e
+    throw handleError('Error getting tickets: ', e)
   }
 }
 
@@ -138,9 +131,7 @@ export const FBRedeemTicket = async (ticket: ITicket): Promise<ITicket> => {
 
     return ticket
   } catch (e) {
-    console.error('Error redeeming ticket: ', e)
-
-    return e
+    throw handleError('Error redeeming ticket: ', e)
   }
 }
 
@@ -172,7 +163,7 @@ export const FBProcessTicketOrders = async (
     // add new tickets to /tickets sub collection
     await ticketsBatch.commit()
   } catch (e) {
-    throw new Error(e)
+    throw handleError('Error processing ticket orders: ', e)
   }
 }
 
@@ -262,9 +253,7 @@ export const FBGetUserEventTickets = async (
 
     return snapshot.docs.map(doc => doc.data()) as Array<ITicket>
   } catch (e) {
-    console.error('Error getting tickets: ', e)
-
-    return e
+    throw handleError('Error getting user event tickets: ', e)
   }
 }
 
@@ -291,7 +280,6 @@ export const FBUpdateEventTicketLimit = async (
     })
     return eventTicketLimit + ticketTypeQtyDelta
   } catch (e) {
-    console.error(`Error updating event's ticket limit:`, e)
-    return e
+    throw handleError("Error updating event's ticket limit: ", e)
   }
 }

@@ -1,6 +1,7 @@
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 
 import { db } from './config'
+import { handleError } from '../helpers/errors'
 
 import {
   IGeolocation,
@@ -8,7 +9,9 @@ import {
   IUserDetailsField,
   IUserEventDataRef,
   SearchFilterSettingsField,
+  StatusIUserLocation,
 } from '../types'
+import { requestPermissionsAsync } from './location'
 
 export const setUser = async (user: IUser): Promise<IUser> => {
   try {
@@ -16,24 +19,33 @@ export const setUser = async (user: IUser): Promise<IUser> => {
 
     return user
   } catch (e) {
-    console.error('Error setting user: ', e)
-
-    return e
+    throw handleError('Error setting user: ', e)
   }
 }
 
 export const FBSetUserGeoLocation = async (
-  geolocation: IGeolocation,
   uid: IUser['uid']
 ): Promise<IGeolocation> => {
   try {
-    await updateDoc(doc(db, 'users', uid), { geolocation })
+    const location = await requestPermissionsAsync()
 
-    return geolocation
+    if (location.status === StatusIUserLocation.allowed) {
+      const geolocation = location.geolocation
+
+      await updateDoc(doc(db, 'users', uid), {
+        geolocation,
+      })
+
+      return geolocation
+    }
+
+    if (location.status === StatusIUserLocation.denied) {
+      throw new Error(location.description)
+    }
+
+    throw new Error()
   } catch (e) {
-    console.error('Error setting user data', e)
-
-    return e
+    throw handleError('Error setting user geolocation: ', e)
   }
 }
 
@@ -49,9 +61,7 @@ export const FBSetUserDetail = async (
 
     return userDetailsField
   } catch (e) {
-    console.error('Error setting user details: ', e)
-
-    return e
+    throw handleError('Error setting user details: ', e)
   }
 }
 
@@ -67,20 +77,16 @@ export const FBSetSearchFilterSettings = async (
 
     return searchFilterSettingsField
   } catch (e) {
-    console.error('Error setting search filter setting: ', e)
-
-    return e
+    throw handleError('Error setting search filter settings: ', e)
   }
 }
 
-export const getUser = async (userId: IUser['uid']) => {
+export const getUser = async (userId: IUser['uid']): Promise<IUser> => {
   try {
     const userSnap = await getDoc(doc(db, 'users', userId))
-    return userSnap.data()
+    return userSnap.data() as IUser
   } catch (e) {
-    console.error('Error getting user: ', e)
-
-    return e
+    throw handleError('Error getting user: ', e)
   }
 }
 
@@ -115,8 +121,6 @@ export const FBUpdateUserEventsDataRefs = async (
 
     return newEventsDataRefs
   } catch (e) {
-    console.error('Error adding user event: ', e)
-
-    return e
+    throw handleError('Error updating user events data refs: ', e)
   }
 }

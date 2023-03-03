@@ -7,7 +7,7 @@ export interface IUser {
   uid: string
   details: UserDetailsType
   geolocation: IGeolocation
-  company: DocumentReference<DocumentData> | ''
+  companyRef: DocumentReference<DocumentData> | ''
   searchFilterSettings: SearchFilterSettings
   eventsDataRefs: Array<IUserEventDataRef>
 }
@@ -22,7 +22,7 @@ export const emptyUser: IUser = {
     phoneNumber: '',
   },
   geolocation: emptyGeoLocation,
-  company: '',
+  companyRef: '',
   searchFilterSettings: {
     activities: false,
     accommodation: false,

@@ -7,7 +7,6 @@ import {
   FBSetUserDetail,
   FBSetUserGeoLocation,
   FBUpdateUserEventsDataRefs,
-  requestPermissionsAsync,
 } from '../../firebase'
 import { RootState } from '../store'
 
@@ -18,7 +17,6 @@ import {
   IUserDetailsField,
   IUserEventDataRef,
   SearchFilterSettingsField,
-  StatusIUserLocation,
 } from '../../types'
 
 export const userInitialState = emptyUser
@@ -54,21 +52,7 @@ export const setUserGeoLocation = createAsyncThunk(
   async (_, thunkAPI) => {
     const { user } = thunkAPI.getState() as RootState
 
-    try {
-      const location = await requestPermissionsAsync()
-
-      if (location.status === StatusIUserLocation.allowed) {
-        return await FBSetUserGeoLocation(location.geolocation, user.uid)
-      }
-
-      if (location.status === StatusIUserLocation.denied) {
-        throw new Error(location.description)
-      }
-    } catch (e) {
-      console.error('Error setting user geo location', e)
-
-      return e
-    }
+    return await FBSetUserGeoLocation(user.uid)
   }
 )
 
