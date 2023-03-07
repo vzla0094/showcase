@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { IconButton, useTheme } from 'native-base'
+import { CaretLeft } from 'phosphor-react-native'
 
 import { UserTicketsStackParamList } from '../types'
 import { UserTicketsScreen } from '../screens/UserTicketsScreen'
 import { UserEventTicketsScreen } from '../screens/UserEventTicketsScreen'
-import { ChevronLeftIcon } from '../icons'
 
 const Stack = createNativeStackNavigator<UserTicketsStackParamList>()
 
@@ -30,7 +30,7 @@ export const UserTicketsStackNavigator = () => {
           headerLeft: () => (
             <IconButton
               onPress={() => navigation.goBack()}
-              icon={<ChevronLeftIcon color={colors.white} size={25} />}
+              icon={<CaretLeft color={colors.lightText} size={24} />}
             />
           ),
         })}

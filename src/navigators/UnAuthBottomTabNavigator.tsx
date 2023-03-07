@@ -1,12 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { IconButton, Image, useTheme } from 'native-base'
+import { CaretLeft } from 'phosphor-react-native'
 
 import { DiscoveryStackNavigator } from './DiscoveryStackNavigator'
 import { LoginOrRegisterScreen } from '../screens/LoginOrRegisterScreen'
 import { UnAuthBottomTabBar } from '../components/UnAuthBottomTabBar'
 
 import { UnAuthBottomTabParamList } from '../types'
-import { ChevronLeftIcon } from '../icons'
 
 const Tab = createBottomTabNavigator<UnAuthBottomTabParamList>()
 
@@ -46,7 +46,7 @@ export const UnAuthBottomTabNavigator = () => {
           headerLeft: () => (
             <IconButton
               onPress={() => navigation.goBack()}
-              icon={<ChevronLeftIcon color={colors.white} size={25} />}
+              icon={<CaretLeft color={colors.lightText} size={24} />}
             />
           ),
           headerStyle: {
