@@ -1,5 +1,6 @@
 import { IconButton, useTheme } from 'native-base'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { CaretLeft, Gear } from 'phosphor-react-native'
 
 import { CompanyDashboardScreen } from '../screens/CompanyDashboardScreen'
 import { CompanyDetailsScreen } from '../screens/CompanyDetailsScreen'
@@ -9,7 +10,6 @@ import { CreateEditTicketTypeScreen } from '../screens/CreateEditTicketTypeScree
 import { TicketTypesScreen } from '../screens/TicketTypesScreen'
 import { RedeemTicketScreen } from '../screens/RedeemTicketScreen'
 import { RedemptionsScreen } from '../screens/RedemptionsScreen'
-import { ChevronLeftIcon, SettingsIcon } from '../icons'
 
 import { CompanyStackParamList, CompanyStackScreenProps } from '../types'
 
@@ -31,7 +31,7 @@ export const CompanyStackNavigator = () => {
         headerLeft: () => (
           <IconButton
             onPress={() => navigation.goBack()}
-            icon={<ChevronLeftIcon color={colors.white} size={25} />}
+            icon={<CaretLeft color={colors.lightText} size={24} />}
           />
         ),
       })}
@@ -46,7 +46,7 @@ export const CompanyStackNavigator = () => {
           headerRight: () => (
             <IconButton
               onPress={() => navigation.navigate('CompanyDetails')}
-              icon={<SettingsIcon color={colors.white} size={25} />}
+              icon={<Gear color={colors.lightText} size={24} />}
             />
           ),
         })}

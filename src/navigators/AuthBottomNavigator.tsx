@@ -1,6 +1,8 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { IconButton, useTheme } from 'native-base'
 import {
+  CaretLeft,
+  Faders,
   House,
   MagnifyingGlass,
   Storefront,
@@ -15,7 +17,6 @@ import { UserTicketsStackNavigator } from './UserTicketsNavigator'
 import { SearchScreen } from '../screens/SearchScreen'
 import { SearchFilterScreen } from '../screens/SearchFilterScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
-import { ChevronLeftIcon, SlidersIcon } from '../icons'
 
 import { useAppSelector } from '../hooks'
 
@@ -64,7 +65,7 @@ export const AuthBottomNavigator = () => {
           headerRight: () => (
             <IconButton
               onPress={() => navigation.navigate('Filter')}
-              icon={<SlidersIcon color={colors.white} size={25} />}
+              icon={<Faders color={colors.lightText} size={24} />}
             />
           ),
           tabBarIcon: ({ color, size }) => (
@@ -119,7 +120,7 @@ export const AuthBottomNavigator = () => {
           headerLeft: () => (
             <IconButton
               onPress={() => navigation.navigate('Search')}
-              icon={<ChevronLeftIcon color={colors.white} size={25} />}
+              icon={<CaretLeft color={colors.lightText} size={24} />}
             />
           ),
         })}

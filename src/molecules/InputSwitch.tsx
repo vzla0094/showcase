@@ -1,15 +1,13 @@
-import { Switch, ISwitchProps, Box, VStack, Text } from 'native-base'
+import { Box, ISwitchProps, Switch, Text, VStack } from 'native-base'
 
 interface IInputSwitchProps extends ISwitchProps {
   label: string
   description?: string
-  variant?: ISwitchProps['colorScheme']
   value: boolean
 }
 
 export const InputSwitch = ({
   label,
-  variant = 'primary',
   value,
   description,
   onToggle,
@@ -24,6 +22,6 @@ export const InputSwitch = ({
       <Text fontSize={16}>{label}</Text>
       {description && <Text color="dark.400">{description}</Text>}
     </VStack>
-    <Switch colorScheme={variant} value={value} onToggle={onToggle} />
+    <Switch value={value} onToggle={onToggle} />
   </Box>
 )

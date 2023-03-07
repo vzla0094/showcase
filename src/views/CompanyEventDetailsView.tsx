@@ -2,12 +2,12 @@ import { useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { Button, IconButton, Text, useTheme, VStack } from 'native-base'
 import { WebView } from 'react-native-webview'
+import { CaretLeft, Gear } from 'phosphor-react-native'
 
 import { getAddressQuery } from '../firebase'
 
 import { ViewContainer } from '../atoms/ViewContainer'
 import { EventTicketsButton } from '../molecules/EventTicketsButton'
-import { ChevronLeftIcon, SettingsIcon } from '../icons'
 
 import { CompanyStackScreenProps, IActiveEventState } from '../types'
 
@@ -36,7 +36,7 @@ export const CompanyEventDetailsView = ({
       headerLeft: () => (
         <IconButton
           onPress={() => navigation.goBack()}
-          icon={<ChevronLeftIcon color={colors.white} size={25} />}
+          icon={<CaretLeft color={colors.lightText} size={24} />}
         />
       ),
       headerRight: () => (
@@ -46,7 +46,7 @@ export const CompanyEventDetailsView = ({
               activeView: 'EventEditDetails',
             })
           }}
-          icon={<SettingsIcon color={colors.white} size={25} />}
+          icon={<Gear color={colors.lightText} size={24} />}
         />
       ),
       title: name,

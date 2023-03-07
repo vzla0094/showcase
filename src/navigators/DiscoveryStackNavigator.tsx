@@ -1,5 +1,6 @@
 import { IconButton, useTheme } from 'native-base'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { CaretLeft, Faders } from 'phosphor-react-native'
 
 import { DiscoveryScreen } from '../screens/DiscoveryScreen'
 import { EventCategoryScreen } from '../screens/EventCategoryScreen'
@@ -11,7 +12,6 @@ import { UserEventTicketScreen } from '../screens/UserEventTicketScreen'
 
 import { DiscoveryStackParamList, DiscoveryStackScreenProps } from '../types'
 import { UserEventTicketsScreen } from '../screens/UserEventTicketsScreen'
-import { ChevronLeftIcon, SlidersIcon } from '../icons'
 
 const Stack = createNativeStackNavigator<DiscoveryStackParamList>()
 
@@ -36,7 +36,7 @@ export const DiscoveryStackNavigator = () => {
           headerRight: () => (
             <IconButton
               onPress={() => navigation.navigate('Highlights')}
-              icon={<SlidersIcon color={colors.white} size={25} />}
+              icon={<Faders color={colors.lightText} size={24} />}
             />
           ),
         })}
@@ -53,7 +53,7 @@ export const DiscoveryStackNavigator = () => {
           headerLeft: () => (
             <IconButton
               onPress={() => navigation.goBack()}
-              icon={<ChevronLeftIcon color={colors.white} size={25} />}
+              icon={<CaretLeft color={colors.lightText} size={24} />}
             />
           ),
         })}
@@ -66,7 +66,7 @@ export const DiscoveryStackNavigator = () => {
           headerLeft: () => (
             <IconButton
               onPress={() => navigation.goBack()}
-              icon={<ChevronLeftIcon color={colors.white} size={25} />}
+              icon={<CaretLeft color={colors.lightText} size={24} />}
             />
           ),
         })}
