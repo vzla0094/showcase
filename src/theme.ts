@@ -175,6 +175,13 @@ export const theme = extendTheme({
       variants: {
         description: {
           fontSize: 'xs',
+          lineHeight: 'xs',
+        },
+        button: {
+          fontSize: 'sm',
+          fontFamily: 'heading',
+          fontWeight: 'semibold',
+          color: 'black',
         },
       },
     },

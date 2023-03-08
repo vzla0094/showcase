@@ -1,21 +1,25 @@
 import { useNavigation } from '@react-navigation/native'
-import { Heading, Pressable, Text } from 'native-base'
+import { Box, Heading, Pressable, Square, Text } from 'native-base'
 
-import { DiscoveryStackScreenProps, IEvent } from '../types'
 import { setActiveEvent } from '../redux/slices/activeEvent'
 import { useAppDispatch } from '../hooks'
 
+import { EventCategory } from './EventCategory'
+
+import { formatDate } from '../helpers/formatDate'
+
+import { DiscoveryStackScreenProps, IEvent } from '../types'
+
 interface IEventCardProps {
   event: IEvent
-  large?: boolean
 }
 
-export const EventCard = ({ event, large }: IEventCardProps) => {
+export const EventCard = ({ event }: IEventCardProps) => {
   const dispatch = useAppDispatch()
 
   const navigation =
     useNavigation<DiscoveryStackScreenProps<'EventCategory'>['navigation']>()
-  const { name, description, id, category } = event
+  const { name, description, id, category, startDateTime } = event
 
   const onPress = async () => {
     await dispatch(setActiveEvent({ eventId: id, eventCategory: category }))
@@ -24,15 +28,31 @@ export const EventCard = ({ event, large }: IEventCardProps) => {
 
   return (
     <Pressable
-      size={large ? '320' : '150'}
-      alignItems="center"
-      justifyContent="center"
+      flex={1}
       borderColor="black"
       borderWidth={1}
+      borderRadius={'md'}
       onPress={onPress}
+      flexDirection="row"
     >
-      <Heading size="sm">{name}</Heading>
-      <Text>{description}</Text>
+      <Square height={147} width={147} borderRightWidth={1}>
+        <Text>Image placeholder</Text>
+      </Square>
+      <Box flex={1} p={2} justifyContent="space-between">
+        <Box flex={1} justifyContent={'space-around'}>
+          <Heading size="h3" color="tertiary.400">
+            {name}
+          </Heading>
+          <Text variant="description" noOfLines={4}>
+            {description}
+          </Text>
+        </Box>
+
+        <Box>
+          <Text variant="button">{formatDate(startDateTime)}</Text>
+          <EventCategory category={category} />
+        </Box>
+      </Box>
     </Pressable>
   )
 }
