@@ -1,4 +1,3 @@
-import { ReactNode } from 'react'
 import {
   Bed,
   Bus,
@@ -9,57 +8,52 @@ import {
 import { Box, Text, useTheme } from 'native-base'
 
 import { EVENT_CATEGORY_NAMES } from '../types'
+import { ChipIcon, IChipIcon } from '../atoms/ChipIcon'
 
 interface IEventCategory {
   category: EVENT_CATEGORY_NAMES
   variant?: 'badge' | 'chip'
+  active?: boolean
+  onPress?: (category: EVENT_CATEGORY_NAMES) => void
 }
 
 export const EventCategory = ({
   category,
   variant = 'badge',
+  active,
+  onPress,
 }: IEventCategory) => {
   const { colors } = useTheme()
 
-  const variants = {
-    badge: {
-      color: colors.trueGray['300'],
-      _container: {},
-    },
-    chip: {
-      color: colors.darkText,
-      _container: {
-        p: 3,
-        bg: 'white',
-        rounded: 'full',
-        alignSelf: 'start',
-      },
-    },
+  const categoryIconMap: Record<
+    EVENT_CATEGORY_NAMES,
+    IChipIcon<EVENT_CATEGORY_NAMES>['icon']
+  > = {
+    [EVENT_CATEGORY_NAMES.Accommodation]: props => <Bed {...props} />,
+    [EVENT_CATEGORY_NAMES.Activities]: props => <PersonSimpleRun {...props} />,
+    [EVENT_CATEGORY_NAMES.Food]: props => <Pizza {...props} />,
+    [EVENT_CATEGORY_NAMES.Transportation]: props => <Bus {...props} />,
+    [EVENT_CATEGORY_NAMES.Venues]: props => <MicrophoneStage {...props} />,
   }
 
-  const color = variants[variant].color
-
-  const categoryIconMap: Record<EVENT_CATEGORY_NAMES, ReactNode> = {
-    [EVENT_CATEGORY_NAMES.Accommodation]: <Bed size={24} color={color} />,
-    [EVENT_CATEGORY_NAMES.Activities]: (
-      <PersonSimpleRun size={24} color={color} />
-    ),
-    [EVENT_CATEGORY_NAMES.Food]: <Pizza size={24} color={color} />,
-    [EVENT_CATEGORY_NAMES.Transportation]: <Bus size={24} color={color} />,
-    [EVENT_CATEGORY_NAMES.Venues]: <MicrophoneStage size={24} color={color} />,
-  }
+  if (variant === 'chip')
+    return (
+      <ChipIcon
+        onPress={onPress}
+        active={active}
+        icon={categoryIconMap[category]}
+      >
+        {category}
+      </ChipIcon>
+    )
 
   return (
-    <Box
-      flexDirection="row"
-      alignItems="center"
-      {...variants[variant]._container}
-    >
-      {categoryIconMap[category]}
+    <Box flexDirection="row" alignItems="center">
+      {categoryIconMap[category]({ size: 24, color: colors.trueGray['300'] })}
       <Text
         ml={2}
         variant="description"
-        color={color}
+        color="trueGray.300"
         textTransform="capitalize"
       >
         {category}
