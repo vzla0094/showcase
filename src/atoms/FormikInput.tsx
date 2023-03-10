@@ -7,7 +7,7 @@ interface IFormikProps {
   errors: FormikValues['errors']
 }
 
-interface IFormikInputProps extends IFormikProps {
+export interface IFormikInputProps extends IFormikProps {
   value: Partial<FormikValues>['values']
   fieldName: string
   label?: string
@@ -24,13 +24,16 @@ export const FormikInput = ({
   placeholder,
 }: IFormikInputProps) => (
   <FormControl isInvalid={fieldName in errors}>
-    {label && <FormControl.Label>{label}</FormControl.Label>}
+    {label && <FormControl.Label testID={'label'}>{label}</FormControl.Label>}
     <Input
       onBlur={handleBlur}
       onChangeText={handleChange}
       value={value}
       placeholder={placeholder}
+      testID={'input'}
     />
-    <FormControl.ErrorMessage>{errors[fieldName]}</FormControl.ErrorMessage>
+    <FormControl.ErrorMessage testID={'errorMessage'}>
+      {errors[fieldName]}
+    </FormControl.ErrorMessage>
   </FormControl>
 )
