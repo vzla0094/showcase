@@ -15,7 +15,7 @@ export const EventCategoryScreen = ({
     <ViewContainer scroll>
       <Stack space="sm">
         {data.events.map(event => (
-          <EventCard key={event.id} event={event} large />
+          <EventCard key={event.id} event={event} />
         ))}
       </Stack>
     </ViewContainer>
