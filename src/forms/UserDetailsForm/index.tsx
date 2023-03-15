@@ -1,4 +1,4 @@
-import { Heading, VStack } from 'native-base'
+import { Box, VStack } from 'native-base'
 
 import { FirebaseInput } from '../../firebaseComponents/FirebaseInput'
 import { UserDetailsSchema } from './schema'
@@ -13,28 +13,49 @@ interface IUserDetailsFormProps {
 export const UserDetailsForm = ({
   onSubmit,
   initialValues,
-}: IUserDetailsFormProps) => {
-  const userDetailsData = [
-    { key: USER_DETAILS.Username, label: 'Display name' },
-    { key: USER_DETAILS.BirthDay, label: 'Day of birth' },
-    { key: USER_DETAILS.BirthMonth, label: 'Month of birth' },
-    { key: USER_DETAILS.BirthYear, label: 'Year of birth' },
-    { key: USER_DETAILS.PhoneNumber, label: 'Phone number' },
-  ]
-
-  return (
-    <VStack space={2}>
-      <Heading>User details</Heading>
-      {userDetailsData.map(({ key, label }) => (
-        <FirebaseInput
-          fieldKey={key}
-          validationSchema={UserDetailsSchema[key]}
-          onSubmit={onSubmit}
-          label={label}
-          initialValue={initialValues[key]}
-          key={key}
-        />
-      ))}
-    </VStack>
-  )
-}
+}: IUserDetailsFormProps) => (
+  <VStack space={8} alignItems="stretch" flex={1} justifyContent="flex-start">
+    <FirebaseInput
+      fieldKey={USER_DETAILS.Username}
+      validationSchema={UserDetailsSchema['username']}
+      onSubmit={onSubmit}
+      label="Display name"
+      initialValue={initialValues.username}
+    />
+    <Box flexDirection="row">
+      <FirebaseInput
+        flex={1}
+        mr={1}
+        fieldKey={USER_DETAILS.BirthDay}
+        validationSchema={UserDetailsSchema['birthDay']}
+        onSubmit={onSubmit}
+        label="Day"
+        initialValue={initialValues.birthDay}
+      />
+      <FirebaseInput
+        flex={1}
+        mr={1}
+        fieldKey={USER_DETAILS.BirthMonth}
+        validationSchema={UserDetailsSchema['birthMonth']}
+        onSubmit={onSubmit}
+        label="Month"
+        initialValue={initialValues.birthMonth}
+      />
+      <FirebaseInput
+        flex={1}
+        fieldKey={USER_DETAILS.BirthYear}
+        validationSchema={UserDetailsSchema['birthYear']}
+        onSubmit={onSubmit}
+        label="Year"
+        initialValue={initialValues.birthYear}
+      />
+    </Box>
+    <FirebaseInput
+      fieldKey={USER_DETAILS.PhoneNumber}
+      validationSchema={UserDetailsSchema['phoneNumber']}
+      onSubmit={onSubmit}
+      label="Phone number"
+      initialValue={initialValues.phoneNumber}
+    />
+  </VStack>
+)

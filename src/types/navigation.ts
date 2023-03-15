@@ -15,7 +15,7 @@ export type AuthBottomTabParamList = {
   Search: undefined
   UserTicketsStack: NavigatorScreenParams<UserTicketsStackParamList>
   Filter: undefined
-  Profile: undefined
+  Profile: { edit: boolean }
   CompanyStack: NavigatorScreenParams<CompanyStackParamList>
 }
 
