@@ -88,6 +88,7 @@ export const AuthBottomNavigator = () => {
           tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
           headerShown: true,
         }}
+        initialParams={{ edit: false }}
         name="Profile"
         component={ProfileScreen}
       />

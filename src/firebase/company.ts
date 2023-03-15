@@ -46,7 +46,7 @@ export const FBCreateCompany = async (uid: IUser['uid']): Promise<ICompany> => {
 
     const userRef = doc(db, 'users', uid)
     await updateDoc(userRef, {
-      company: companyRef,
+      companyRef,
     })
 
     return newCompanyData

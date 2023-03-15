@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import {
   Box,
   Heading,
+  IBoxProps,
   IContainerProps,
   ScrollView,
   useSafeArea,
@@ -14,6 +15,8 @@ interface IViewContainerProps {
   scroll?: boolean
   safeArea?: boolean
   title?: string
+  flex?: IBoxProps['flex']
+  flexGrow?: IBoxProps['flexGrow']
 }
 
 export const ViewContainer = ({
@@ -23,8 +26,10 @@ export const ViewContainer = ({
   scroll = false,
   safeArea = false,
   title,
+  flex = 1,
+  flexGrow,
 }: IViewContainerProps) => {
-  const { pt: safeAreaValue } = useSafeArea({ safeAreaTop: safeArea })
+  const { pt } = useSafeArea({ safeAreaTop: safeArea })
 
   const optionalProps = {
     alignItems,
@@ -32,18 +37,20 @@ export const ViewContainer = ({
   }
 
   const ContainedChildren = (
-    <Box
-      flex={1}
-      bg="white"
-      rounded="xl"
-      mt={safeArea && safeAreaValue}
-      m={2}
-      px={5}
-      py={4}
-      {...optionalProps}
-    >
-      {title && <Heading mb={4}>{title}</Heading>}
-      {children}
+    // TODO: remove pt={5} when react-navigation fixes the header height issue
+    // https://github.com/react-navigation/react-navigation/issues/10097
+    <Box bg="red" flex={flex} p={2} pt={safeArea ? pt : 5}>
+      <Box
+        flex={flex}
+        flexGrow={flexGrow}
+        bg="white"
+        rounded="xl"
+        p={5}
+        {...optionalProps}
+      >
+        {title && <Heading mb={4}>{title}</Heading>}
+        {children}
+      </Box>
     </Box>
   )
 

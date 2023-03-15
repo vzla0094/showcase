@@ -36,7 +36,6 @@ export const FirebaseInput = <FieldKey, FieldValue extends string>({
         <FormControl
           isRequired={isRequired}
           isInvalid={'value' in errors}
-          width="100%"
           {...props}
         >
           {label ? <FormControl.Label>{label}</FormControl.Label> : null}

@@ -67,7 +67,6 @@ export const DiscoveryView = ({ eventCategories }: IDashboardView) => {
         flexGrow={0}
         pt={2}
         pl={2}
-        pb={6}
         ItemSeparatorComponent={() => <Box width={2} />}
         data={eventCategoryNames}
         renderItem={({ item }) => (
