@@ -29,7 +29,7 @@ export const ChipIcon = <T extends ReactNode>({
       p={3}
       bg={bg}
       rounded="full"
-      alignSelf="start"
+      alignSelf="flex-start"
       onPress={() => onPress?.(children)}
       {...props}
     >
