@@ -1,7 +1,7 @@
 import { IconButton } from 'native-base'
 import { FontAwesome } from '@expo/vector-icons'
 
-interface ICountSelector {
+export interface ICountSelector {
   isDisabled: boolean
   iconName: string
   onPress: () => void
@@ -17,6 +17,7 @@ export const CountSelector = ({
     isDisabled={isDisabled}
     variant="solid"
     colorScheme="blue"
+    testID="iconButton"
     _icon={{
       as: FontAwesome,
       marginLeft: 0.5,
