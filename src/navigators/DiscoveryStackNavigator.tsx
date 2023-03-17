@@ -28,6 +28,7 @@ export const DiscoveryStackNavigator = () => {
           fontSize: fontSizes['xl'],
           fontWeight: '400',
         },
+        headerShadowVisible: false,
       }}
     >
       <Stack.Screen

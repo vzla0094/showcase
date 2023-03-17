@@ -13,6 +13,7 @@ interface IFirebaseInputProps<FieldKey, FieldValue> extends IFormControlProps {
   initialValue: FieldValue
   validationSchema: yup.AnySchema
   onSubmit: (field: IFirebaseInputField<FieldKey, FieldValue>) => void
+  isDisabled?: boolean
 }
 
 export const FirebaseInput = <FieldKey, FieldValue extends string>({
@@ -24,6 +25,7 @@ export const FirebaseInput = <FieldKey, FieldValue extends string>({
   validationSchema,
   onSubmit,
   isRequired,
+  isDisabled,
   ...props
 }: IFirebaseInputProps<FieldKey, FieldValue>) => {
   return (
@@ -41,6 +43,7 @@ export const FirebaseInput = <FieldKey, FieldValue extends string>({
           {label ? <FormControl.Label>{label}</FormControl.Label> : null}
 
           <Input
+            isDisabled={isDisabled}
             value={values.value}
             placeholder={placeholder}
             multiline={multiline}

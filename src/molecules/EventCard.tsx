@@ -20,6 +20,7 @@ export const EventCard = ({ event }: IEventCardProps) => {
   const navigation =
     useNavigation<DiscoveryStackScreenProps<'EventCategory'>['navigation']>()
   const { name, description, id, category, startDateTime } = event
+  const { full: date } = formatDate(startDateTime)
 
   const onPress = async () => {
     await dispatch(setActiveEvent({ eventId: id, eventCategory: category }))
@@ -49,7 +50,7 @@ export const EventCard = ({ event }: IEventCardProps) => {
         </Box>
 
         <Box>
-          <Text variant="button">{formatDate(startDateTime)}</Text>
+          <Text variant="button">{date}</Text>
           <EventCategory category={category} />
         </Box>
       </Box>

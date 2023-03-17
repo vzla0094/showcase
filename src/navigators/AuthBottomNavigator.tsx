@@ -49,6 +49,7 @@ export const AuthBottomNavigator = () => {
         tabBarLabelStyle: {
           flex: 1,
         },
+        headerShadowVisible: false,
       }}
     >
       <Tab.Screen

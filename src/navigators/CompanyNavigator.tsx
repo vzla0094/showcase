@@ -34,6 +34,7 @@ export const CompanyStackNavigator = () => {
             icon={<CaretLeft color={colors.lightText} size={24} />}
           />
         ),
+        headerShadowVisible: false,
       })}
     >
       <Stack.Screen

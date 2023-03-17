@@ -182,6 +182,7 @@ export const theme = extendTheme({
           fontFamily: 'heading',
           fontWeight: 'semibold',
           color: 'black',
+          textTransform: 'uppercase',
         },
       },
     },

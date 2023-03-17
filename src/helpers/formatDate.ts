@@ -19,5 +19,5 @@ export const formatDate = (dateString: string) => {
   const day = date.getDate()
   const year = date.getFullYear()
 
-  return `${month} ${day}, ${year}`
+  return { full: `${month} ${day}, ${year}`, month, day, year }
 }
