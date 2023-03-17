@@ -23,6 +23,7 @@ export const UnAuthBottomTabNavigator = () => {
           fontSize: fontSizes['xl'],
           fontWeight: '400',
         },
+        headerShadowVisible: false,
       }}
       tabBar={props => <UnAuthBottomTabBar {...props} />}
     >

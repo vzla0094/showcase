@@ -21,6 +21,7 @@ export const UserTicketsStackNavigator = () => {
           fontSize: fontSizes['xl'],
           fontWeight: '400',
         },
+        headerShadowVisible: false,
       }}
     >
       <Stack.Screen name="UserTickets" component={UserTicketsScreen} />
