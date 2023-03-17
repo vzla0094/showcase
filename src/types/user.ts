@@ -16,10 +16,8 @@ export const emptyUser: IUser = {
   uid: '',
   details: {
     username: '',
-    birthDay: '',
-    birthMonth: '',
-    birthYear: '',
     phoneNumber: '',
+    birthDate: '',
   },
   geolocation: emptyGeoLocation,
   companyRef: '',
@@ -36,19 +34,12 @@ export const emptyUser: IUser = {
 
 export enum USER_DETAILS {
   Username = 'username',
-  BirthDay = 'birthDay',
-  BirthMonth = 'birthMonth',
-  BirthYear = 'birthYear',
   PhoneNumber = 'phoneNumber',
+  BirthDate = 'birthDate',
 }
 
 export type UserDetailsType = {
   [key in USER_DETAILS]: string
-}
-
-export interface IUserDetailsField {
-  fieldKey: USER_DETAILS
-  value: string
 }
 
 export interface IAuth {
@@ -77,3 +68,5 @@ export interface IUserEventData {
   event: IEvent
   ticketCount: number
 }
+
+export type EditUserDetailsSubmitType = (userDetails: IUser['details']) => void

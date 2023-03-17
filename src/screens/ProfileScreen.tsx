@@ -1,15 +1,21 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Box, Button, IconButton, Text, useTheme } from 'native-base'
+import { FormikProps } from 'formik'
 import { CaretLeft, PencilSimple } from 'phosphor-react-native'
 
-import { ProfileView } from '../views/ProfileView'
+import { EditableProfileView } from '../views/EditableProfileView'
+import { UserDetailsForm } from '../forms/UserDetailsForm'
 import { ViewContainer } from '../atoms/ViewContainer'
 
-import { setUserDetail } from '../redux/slices/user'
+import { editUser } from '../redux/slices/user'
 import { createCompany } from '../redux/slices/company'
 import { useAppDispatch, useAppSelector } from '../hooks'
 
-import { AuthBottomTabScreenProps, IUserDetailsField } from '../types'
+import {
+  AuthBottomTabScreenProps,
+  EditUserDetailsSubmitType,
+  IUser,
+} from '../types'
 
 export const ProfileScreen = ({
   navigation,
@@ -18,6 +24,7 @@ export const ProfileScreen = ({
   const dispatch = useAppDispatch()
   const { colors } = useTheme()
   const { edit } = route.params
+  const formikRef = useRef<FormikProps<IUser['details']>>(null)
 
   useEffect(() => {
     navigation.setOptions({
@@ -33,7 +40,7 @@ export const ProfileScreen = ({
         edit && (
           <IconButton
             ml={2}
-            onPress={() => navigation.setParams({ edit: false })}
+            onPress={() => formikRef.current?.handleSubmit()}
             icon={<CaretLeft color={colors.lightText} size={24} />}
           />
         ),
@@ -45,8 +52,10 @@ export const ProfileScreen = ({
 
   const companyId = useAppSelector(({ company }) => company.companyId)
 
-  const handleUserDetailsSubmit = (userDetailsField: IUserDetailsField) =>
-    dispatch(setUserDetail(userDetailsField))
+  const handleSubmit: EditUserDetailsSubmitType = async userDetails => {
+    await dispatch(editUser(userDetails))
+    navigation.setParams({ edit: false })
+  }
 
   const handleAddCompany = async () => {
     await dispatch(createCompany(uid))
@@ -57,11 +66,13 @@ export const ProfileScreen = ({
 
   return (
     <Box flex={1} justifyContent="space-between">
-      <ProfileView
-        edit={edit}
-        onSubmit={handleUserDetailsSubmit}
-        userDetails={userDetails}
-      />
+      <EditableProfileView editable={edit} userDetails={userDetails}>
+        <UserDetailsForm
+          onSubmit={handleSubmit}
+          ref={formikRef}
+          initialValues={userDetails}
+        />
+      </EditableProfileView>
       {!companyId && (
         <ViewContainer flex={0} alignItems="stretch" title="Company">
           <Text mb={4}>

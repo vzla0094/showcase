@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import {
+  FBEditUserDetails,
   FBLogin,
   FBRegister,
   FBSetSearchFilterSettings,
-  FBSetUserDetail,
   FBSetUserGeoLocation,
   FBUpdateUserEventsDataRefs,
 } from '../../firebase'
@@ -14,7 +14,6 @@ import {
   emptyUser,
   IAuth,
   IUser,
-  IUserDetailsField,
   IUserEventDataRef,
   SearchFilterSettingsField,
 } from '../../types'
@@ -31,11 +30,12 @@ export const register = createAsyncThunk(
   async (auth: IAuth) => await FBRegister(auth.email, auth.password)
 )
 
-export const setUserDetail = createAsyncThunk(
-  'user/setUserDetail',
-  async (userField: IUserDetailsField, thunkAPI) => {
+export const editUser = createAsyncThunk(
+  'user/editUser',
+  async (userDetails: IUser['details'], thunkAPI) => {
     const { user } = thunkAPI.getState() as RootState
-    return await FBSetUserDetail(user.uid, userField)
+
+    return await FBEditUserDetails(user.uid, userDetails)
   }
 )
 
@@ -78,9 +78,6 @@ export const userSlice = createSlice({
       ...state,
       ...payload,
     }))
-    builder.addCase(setUserDetail.fulfilled, (state, { payload }) => {
-      state.details = { ...state.details, [payload.fieldKey]: payload.value }
-    })
     builder.addCase(setSearchFilterSetting.fulfilled, (state, { payload }) => {
       state.searchFilterSettings = {
         ...state.searchFilterSettings,
@@ -96,6 +93,9 @@ export const userSlice = createSlice({
         state.eventsDataRefs = payload
       }
     )
+    builder.addCase(editUser.fulfilled, (state, { payload }) => {
+      state.details = payload
+    })
   },
 })
 

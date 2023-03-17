@@ -6,7 +6,6 @@ import { handleError } from '../helpers/errors'
 import {
   IGeolocation,
   IUser,
-  IUserDetailsField,
   IUserEventDataRef,
   SearchFilterSettingsField,
   StatusIUserLocation,
@@ -49,19 +48,16 @@ export const FBSetUserGeoLocation = async (
   }
 }
 
-export const FBSetUserDetail = async (
+export const FBEditUserDetails = async (
   uid: IUser['uid'],
-  userDetailsField: IUserDetailsField
-): Promise<IUserDetailsField> => {
-  const { fieldKey, value } = userDetailsField
+  userDetails: IUser['details']
+): Promise<IUser['details']> => {
   try {
-    await updateDoc(doc(db, 'users', uid), {
-      [`details.${fieldKey}`]: value,
-    })
+    await updateDoc(doc(db, 'users', uid), { details: userDetails })
 
-    return userDetailsField
+    return userDetails
   } catch (e) {
-    throw handleError('Error setting user details: ', e)
+    throw handleError('Error editing user: ', e)
   }
 }
 
