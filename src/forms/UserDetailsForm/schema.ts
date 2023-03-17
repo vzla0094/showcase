@@ -1,12 +1,6 @@
 import * as yup from 'yup'
 
-import { IUser } from '../../types'
-
-type UserDetailsSchemaType = {
-  [key in keyof IUser['details']]: yup.AnySchema
-}
-
-export const UserDetailsSchema: UserDetailsSchemaType = {
+export const UserDetailsSchema = yup.object({
   username: yup.string(),
   birthDay: yup
     .number()
@@ -27,5 +21,6 @@ export const UserDetailsSchema: UserDetailsSchemaType = {
       value =>
         Boolean(!value) || Boolean(value && value.toString().length === 4)
     ),
+  birthDate: yup.string(),
   phoneNumber: yup.number().typeError('Must be a number'),
-}
+})
