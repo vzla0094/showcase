@@ -7,13 +7,24 @@ import { EventCategory } from '../molecules/EventCategory'
 import { ViewContainer } from '../atoms/ViewContainer'
 import { ChipIcon } from '../atoms/ChipIcon'
 
-import { EVENT_CATEGORY_NAMES, IEventCategory } from '../types'
+import {
+  DiscoveryStackScreenProps,
+  EVENT_CATEGORY_NAMES,
+  IEvent,
+  IEventCategory,
+} from '../types'
+import { useAppDispatch } from '../hooks'
+import { setActiveEvent } from '../redux/slices/activeEvent'
 
 interface IDashboardView {
   eventCategories: Array<IEventCategory>
+  navigation: DiscoveryStackScreenProps<'Discovery'>['navigation']
 }
 
-export const DiscoveryView = ({ eventCategories }: IDashboardView) => {
+export const DiscoveryView = ({
+  eventCategories,
+  navigation,
+}: IDashboardView) => {
   const activeCategoriesInitialState: Record<EVENT_CATEGORY_NAMES, boolean> = {
     [EVENT_CATEGORY_NAMES.Accommodation]: false,
     [EVENT_CATEGORY_NAMES.Activities]: false,
@@ -26,6 +37,7 @@ export const DiscoveryView = ({ eventCategories }: IDashboardView) => {
     typeof activeCategoriesInitialState
   >(activeCategoriesInitialState)
   const [activeLatest, setActiveLatest] = useState<boolean>(true)
+  const dispatch = useAppDispatch()
 
   const events = eventCategories
     .map(eventCategory => eventCategory.events)
@@ -48,6 +60,11 @@ export const DiscoveryView = ({ eventCategories }: IDashboardView) => {
       return newState
     })
     setActiveLatest(false)
+  }
+
+  const handleEventPress = async ({ id, category }: IEvent) => {
+    await dispatch(setActiveEvent({ eventId: id, eventCategory: category }))
+    navigation.navigate('Event')
   }
 
   return (
@@ -83,7 +100,9 @@ export const DiscoveryView = ({ eventCategories }: IDashboardView) => {
         <FlatList
           data={events}
           ItemSeparatorComponent={() => <Box height={2} />}
-          renderItem={({ item }) => <EventCard event={item} />}
+          renderItem={({ item }) => (
+            <EventCard onPress={() => handleEventPress(item)} event={item} />
+          )}
         />
       </ViewContainer>
     </>

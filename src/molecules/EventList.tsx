@@ -1,6 +1,7 @@
-import { Box, Heading, Pressable, Text, VStack } from 'native-base'
+import { Box, FlatList, Text } from 'native-base'
 
 import { handleEventPressType, IEvent } from '../types'
+import { EventCard } from './EventCard'
 
 interface IEventListProps {
   events: Array<IEvent>
@@ -8,19 +9,22 @@ interface IEventListProps {
 }
 
 export const EventList = ({ events, onPress }: IEventListProps) => (
-  <Box>
-    <Heading>Events</Heading>
-    <VStack space="sm">
-      {events.map(({ id, name, description, category, state }) => (
-        <Box key={id} borderWidth={1}>
-          <Pressable onPress={() => onPress({ id, category })}>
-            <Heading size="sm">Name: {name}</Heading>
-            {Boolean(description) && <Text>Description: {description}</Text>}
-            <Text>Category: {category}</Text>
-            <Text>State: {state}</Text>
-          </Pressable>
-        </Box>
-      ))}
-    </VStack>
-  </Box>
+  <FlatList
+    mt={6}
+    ItemSeparatorComponent={() => <Box h={1} />}
+    ListEmptyComponent={
+      <Text
+        mt={12}
+        alignSelf="center"
+        variant="description"
+        color="trueGray.300"
+      >
+        There are no events!
+      </Text>
+    }
+    data={events}
+    renderItem={({ item }) => (
+      <EventCard showState event={item} onPress={() => onPress(item)} />
+    )}
+  />
 )

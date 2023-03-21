@@ -1,31 +1,39 @@
-import { useNavigation } from '@react-navigation/native'
-import { Box, Heading, Pressable, Square, Text } from 'native-base'
-
-import { setActiveEvent } from '../redux/slices/activeEvent'
-import { useAppDispatch } from '../hooks'
+import {
+  Badge,
+  Box,
+  Heading,
+  IPressableProps,
+  Pressable,
+  Square,
+  Text,
+} from 'native-base'
 
 import { EventCategory } from './EventCategory'
 
 import { formatDate } from '../helpers/formatDate'
 
-import { DiscoveryStackScreenProps, IEvent } from '../types'
+import { IEvent } from '../types'
 
-interface IEventCardProps {
+interface IEventCardProps extends Pick<IPressableProps, 'onPress'> {
   event: IEvent
+  showState?: boolean
 }
 
-export const EventCard = ({ event }: IEventCardProps) => {
-  const dispatch = useAppDispatch()
-
-  const navigation =
-    useNavigation<DiscoveryStackScreenProps<'EventCategory'>['navigation']>()
-  const { name, description, id, category, startDateTime } = event
+export const EventCard = ({
+  event,
+  showState = false,
+  onPress,
+}: IEventCardProps) => {
+  const { name, description, category, startDateTime, state } = event
   const { full: date } = formatDate(startDateTime)
 
-  const onPress = async () => {
-    await dispatch(setActiveEvent({ eventId: id, eventCategory: category }))
-    navigation.navigate('Event')
+  const stateBadgeBg: Record<IEvent['state'], string> = {
+    published: 'tertiary.400',
+    draft: 'trueGray.300',
+    expired: 'darkText',
   }
+
+  const stateBadgeText = event.state === 'draft' ? 'darkText' : 'text.50'
 
   return (
     <Pressable
@@ -49,9 +57,15 @@ export const EventCard = ({ event }: IEventCardProps) => {
           </Text>
         </Box>
 
-        <Box>
-          <Text variant="button">{date}</Text>
+        <Text variant="button">{date}</Text>
+
+        <Box flexDirection="row" justifyContent="space-between">
           <EventCategory category={category} />
+          {showState && (
+            <Badge bg={stateBadgeBg[state]} _text={{ color: stateBadgeText }}>
+              {state}
+            </Badge>
+          )}
         </Box>
       </Box>
     </Pressable>

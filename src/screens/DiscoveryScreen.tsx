@@ -1,9 +1,14 @@
 import { DiscoveryView } from '../views/DiscoveryView'
 
 import { useEvents } from '../firebase'
+import { DiscoveryStackScreenProps } from '../types'
 
-export const DiscoveryScreen = () => {
+export const DiscoveryScreen = ({
+  navigation,
+}: DiscoveryStackScreenProps<'Discovery'>) => {
   const eventCategories = useEvents()
 
-  return <DiscoveryView eventCategories={eventCategories} />
+  return (
+    <DiscoveryView navigation={navigation} eventCategories={eventCategories} />
+  )
 }
