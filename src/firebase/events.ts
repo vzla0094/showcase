@@ -20,6 +20,7 @@ import { useAppSelector } from '../hooks'
 import {
   categoryNamesArr,
   categoryPathMap,
+  CompanyEventsType,
   emptyEvent,
   EVENT_CATEGORY_NAMES,
   ICompany,
@@ -173,8 +174,13 @@ export const useEvent = (
 
 export const FBGetCompanyEvents = async (
   companyId: ICompany['companyId']
-): Promise<Array<IEvent>> => {
-  const companyEvents: Array<IEvent> = []
+): Promise<CompanyEventsType> => {
+  const companyEvents: CompanyEventsType = {
+    published: [],
+    draft: [],
+    expired: [],
+    all: [],
+  }
 
   await Promise.all(
     categoryNamesArr.map(async categoryName => {
@@ -186,7 +192,8 @@ export const FBGetCompanyEvents = async (
 
       querySnapshot.forEach(doc => {
         const data = doc.data() as IEvent
-        companyEvents.push(data)
+        companyEvents[data.state].push(data)
+        companyEvents.all.push(data)
       })
     })
   )

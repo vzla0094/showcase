@@ -113,3 +113,5 @@ export interface IEventSelector {
   eventId: IEvent['id']
   eventCategory: EVENT_CATEGORY_NAMES
 }
+
+export type CompanyEventsType = Record<IEvent['state'] | 'all', Array<IEvent>>
