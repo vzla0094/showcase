@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react'
 import {
   Button,
+  FormControl,
   HStack,
   IconButton,
-  Select,
+  Radio,
   Switch,
   Text,
   VStack,
@@ -113,20 +114,36 @@ export const EventEditDetailsView = ({
                 handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.Description)}
                 handleChange={handleChange(EVENT_FORM_FIELD_NAMES.Description)}
                 errors={errors}
-                label="description"
+                label="Description"
               />
 
-              <Select
-                placeholder="Select a category"
-                selectedValue={values[EVENT_FORM_FIELD_NAMES.Category]}
-                onValueChange={value => setFieldValue('category', value)}
-              >
-                <Select.Item label="Food" value="food" />
-                <Select.Item label="Activities" value="activities" />
-                <Select.Item label="Venues" value="venues" />
-                <Select.Item label="Accommodation" value="accommodation" />
-                <Select.Item label="Transportation" value="transportation" />
-              </Select>
+              <FormControl>
+                <FormControl.Label>Category</FormControl.Label>
+                <Radio.Group
+                  name="category"
+                  accessibilityLabel="category"
+                  value={values[EVENT_FORM_FIELD_NAMES.Category]}
+                  onChange={nextValue => setFieldValue('category', nextValue)}
+                >
+                  <HStack flexWrap="wrap" space={2}>
+                    <Radio my={1} value="food">
+                      Food
+                    </Radio>
+                    <Radio my={1} value="activities">
+                      Activities
+                    </Radio>
+                    <Radio my={1} value="venues">
+                      Venues
+                    </Radio>
+                    <Radio my={1} value="accommodation">
+                      Accommodation
+                    </Radio>
+                    <Radio my={1} value="transportation">
+                      Transportation
+                    </Radio>
+                  </HStack>
+                </Radio.Group>
+              </FormControl>
 
               <FormikInput
                 key={EVENT_FORM_FIELD_NAMES.StreetAddress}
