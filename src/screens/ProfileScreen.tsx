@@ -8,7 +8,6 @@ import { UserDetailsForm } from '../forms/UserDetailsForm'
 import { ViewContainer } from '../atoms/ViewContainer'
 
 import { editUser } from '../redux/slices/user'
-import { createCompany } from '../redux/slices/company'
 import { useAppDispatch, useAppSelector } from '../hooks'
 
 import {
@@ -16,6 +15,7 @@ import {
   EditUserDetailsSubmitType,
   IUser,
 } from '../types'
+import { createCompany } from '../redux/slices/company'
 
 export const ProfileScreen = ({
   navigation,

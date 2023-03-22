@@ -53,3 +53,5 @@ export interface IAddEventPayload {
   companyId: ICompany['companyId']
   eventId: IEvent['id']
 }
+
+export type EditCompanySubmitType = (companyDetails: CompanyDetailsType) => void

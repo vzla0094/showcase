@@ -54,9 +54,7 @@ export const CompanyStackNavigator = () => {
         component={CompanyDashboardScreen}
       />
       <Stack.Screen
-        options={{
-          title: 'Company details',
-        }}
+        options={{ title: 'Company details' }}
         name="CompanyDetails"
         component={CompanyDetailsScreen}
       />
