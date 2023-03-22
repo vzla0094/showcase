@@ -1,12 +1,6 @@
 import * as yup from 'yup'
 
-import { COMPANY_DETAILS } from '../../types'
-
-type CompanyDetailsSchemaType = {
-  [key in COMPANY_DETAILS]: yup.AnySchema
-}
-
-export const CompanyDetailsSchema: CompanyDetailsSchemaType = {
+export const CompanyDetailsSchema = yup.object({
   name: yup.string().required('Required'),
   streetAddress: yup.string().required('Required'),
   city: yup.string().required('Required'),
@@ -25,4 +19,4 @@ export const CompanyDetailsSchema: CompanyDetailsSchemaType = {
   telephoneNumber: yup.number().typeError('Must be a number'),
   cellphoneNumber: yup.number().typeError('Must be a number'),
   email: yup.string().email(),
-}
+})
