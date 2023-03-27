@@ -93,6 +93,14 @@ export const theme = extendTheme({
             color: `${colorScheme}.400`,
           },
         }),
+        link: () => ({
+          _text: {
+            color: 'primary.900',
+            fontFamily: 'body',
+            textTransform: 'none',
+            underline: true,
+          },
+        }),
       },
       sizes: {
         md: {
