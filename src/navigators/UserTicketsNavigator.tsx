@@ -3,7 +3,7 @@ import { IconButton, useTheme } from 'native-base'
 import { CaretLeft } from 'phosphor-react-native'
 
 import { UserTicketsStackParamList } from '../types'
-import { UserTicketsScreen } from '../screens/UserTicketsScreen'
+import { MyTicketsScreen } from '../screens/MyTicketsScreen'
 import { UserEventTicketsScreen } from '../screens/UserEventTicketsScreen'
 
 const Stack = createNativeStackNavigator<UserTicketsStackParamList>()
@@ -24,7 +24,13 @@ export const UserTicketsStackNavigator = () => {
         headerShadowVisible: false,
       }}
     >
-      <Stack.Screen name="UserTickets" component={UserTicketsScreen} />
+      <Stack.Screen
+        name="MyTickets"
+        options={{
+          title: 'My Tickets',
+        }}
+        component={MyTicketsScreen}
+      />
       <Stack.Screen
         options={({ navigation }) => ({
           title: 'Event Tickets',

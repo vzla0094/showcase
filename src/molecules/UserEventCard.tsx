@@ -7,6 +7,7 @@ interface IUserEventCardProps {
   onPress: (eventSelector: IEventSelector) => void
 }
 
+// TODO: Determine if it should be deleted
 export const UserEventCard = ({
   event,
   userTicketCount,

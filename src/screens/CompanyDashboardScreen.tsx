@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Box, Heading, IconButton, useTheme } from 'native-base'
-import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
 import { useFocusEffect } from '@react-navigation/native'
 
 import { FBGetCompanyEvents } from '../firebase'
@@ -13,12 +12,13 @@ import {
 } from '../redux/slices/activeEvent'
 
 import { EventList } from '../molecules/EventList'
+import { TabView } from '../molecules/TabView'
 import { ViewContainer } from '../atoms/ViewContainer'
 
 import {
   CompanyEventsType,
   CompanyStackScreenProps,
-  handleEventPressType,
+  HandleEventPressType,
 } from '../types'
 import { PlusCircle } from 'phosphor-react-native'
 
@@ -29,8 +29,6 @@ export const CompanyDashboardScreen = ({
   const dispatch = useAppDispatch()
   const { colors } = useTheme()
 
-  // TabView related logic
-  const [tabIndex, setTabIndex] = useState<number>(0)
   const routes = [
     { key: 'all', title: 'all' },
     { key: 'published', title: 'publish' },
@@ -60,14 +58,18 @@ export const CompanyDashboardScreen = ({
     }, [companyId])
   )
 
-  const handleEventPress: handleEventPressType = async ({ id, category }) => {
+  const handleEventPress: HandleEventPressType = async eventSelector => {
     await Promise.all([
-      dispatch(setActiveEvent({ eventId: id, eventCategory: category })),
-      dispatch(setEventTickets({ eventId: id, eventCategory: category })),
-      dispatch(setEventTicketTypes({ eventId: id, eventCategory: category })),
+      dispatch(setActiveEvent(eventSelector)),
+      dispatch(setEventTickets(eventSelector)),
+      dispatch(setEventTicketTypes(eventSelector)),
     ])
 
-    navigation.navigate('Event', { id, category, activeView: 'EventDetails' })
+    navigation.navigate('Event', {
+      id: eventSelector.eventId,
+      category: eventSelector.eventCategory,
+      activeView: 'EventDetails',
+    })
   }
 
   const handleCreateEventPress = async () => {
@@ -91,9 +93,7 @@ export const CompanyDashboardScreen = ({
         />
       </Box>
       <TabView
-        onIndexChange={setTabIndex}
-        navigationState={{ index: tabIndex, routes }}
-        renderScene={SceneMap({
+        sceneMap={{
           all: () => (
             <EventList events={companyEvents.all} onPress={handleEventPress} />
           ),
@@ -115,19 +115,8 @@ export const CompanyDashboardScreen = ({
               onPress={handleEventPress}
             />
           ),
-        })}
-        renderTabBar={props => (
-          <TabBar
-            {...props}
-            indicatorStyle={{ backgroundColor: colors.tertiary['400'] }}
-            style={{ backgroundColor: 'white' }}
-            labelStyle={{
-              color: colors.darkText,
-              fontFamily: 'Raleway_600SemiBold',
-            }}
-            activeColor={colors.tertiary['400']}
-          />
-        )}
+        }}
+        routes={routes}
       />
     </ViewContainer>
   )
