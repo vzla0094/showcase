@@ -40,9 +40,9 @@ export const LoginOrRegisterView = ({
 }: ILoginOrRegisterViewProps) => {
   const [showPassword, setShowPassword] = useState(false)
   return (
-    <ViewContainer>
-      <Heading mb={12}>
-        {variant === 'register' ? 'Register' : 'Login'} to Taisho
+    <ViewContainer flex={0} alignItems="stretch">
+      <Heading alignSelf="center" size="h1" mb={12}>
+        {variant === 'register' ? 'Register' : 'Login'}
       </Heading>
       <Stack w="100%" mb={12} space={5}>
         <FormControl isInvalid={'requireEmail' in errors}>
@@ -88,28 +88,28 @@ export const LoginOrRegisterView = ({
         {variant === 'register' ? 'Register' : 'Login'}
       </Button>
       <Box
-        mt={5}
+        mt={2}
         flexDirection="row"
+        justifyContent="center"
         alignItems="center"
-        alignSelf="flex-start"
       >
         <Text>
           {variant === 'register'
             ? 'Already have an account? '
             : "Don't have an account yet? "}
         </Text>
-        <Button
-          onPress={onChangeFormType}
-          variant="link"
-          p={0}
-          _text={{ underline: true }}
-        >
+        <Button onPress={onChangeFormType} variant="link" p={0}>
           {variant === 'register' ? 'Log in' : 'Register'}
         </Button>
       </Box>
-      <Button variant="link" alignSelf="flex-start" p={0}>
-        Privacy
-      </Button>
+      <Box mt={12} flexDirection="row" justifyContent="space-between">
+        <Button variant="link" alignSelf="flex-start" p={0}>
+          Privacy
+        </Button>
+        <Button variant="link" alignSelf="flex-start" p={0}>
+          Terms & Conditions
+        </Button>
+      </Box>
     </ViewContainer>
   )
 }
