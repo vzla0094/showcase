@@ -27,7 +27,7 @@ import {
   IEvent,
   IEventCategory,
   IUser,
-  IUserEventData,
+  UserEventsType,
 } from '../types'
 import { handleError } from '../helpers/errors'
 
@@ -245,16 +245,29 @@ export const FBDeleteEvent = async (event: IEvent) => {
 export const FBGetUserEvents = async (
   userId: IUser['uid'],
   eventsDataRefs: IUser['eventsDataRefs']
-): Promise<Array<IUserEventData>> => {
+): Promise<UserEventsType> => {
   try {
-    return await Promise.all(
-      eventsDataRefs.map(async ({ eventRef, ticketCount }) => {
-        const eventSnap = await getDoc(eventRef)
-        const event = eventSnap.data() as IEvent
+    const userEvents: UserEventsType = {
+      upcoming: [],
+      past: [],
+    }
 
-        return { event, ticketCount }
+    await Promise.all(
+      eventsDataRefs.map(async ({ eventRef }) => {
+        const eventSnap = await getDoc(eventRef)
+
+        const data = eventSnap.data() as IEvent
+
+        if (data.state === 'published') {
+          userEvents.upcoming.push(data)
+        }
+        if (data.state === 'expired') {
+          userEvents.past.push(data)
+        }
       })
     )
+
+    return userEvents
   } catch (e) {
     throw handleError('Error getting user events: ', e)
   }
@@ -264,25 +277,30 @@ export const useUserEvents = (
   userId: IUser['uid'],
   eventsDataRefs: IUser['eventsDataRefs']
 ) => {
-  const [eventsData, setEventsData] = useState<Array<IUserEventData>>([])
+  const initialUserEvents: UserEventsType = {
+    upcoming: [],
+    past: [],
+  }
+  const [userEvents, setUserEvents] =
+    useState<UserEventsType>(initialUserEvents)
   const [loading, setLoading] = useState<boolean>(true)
 
   useFocusEffect(
     useCallback(() => {
       const fetchEvents = async () => {
         const data = await FBGetUserEvents(userId, eventsDataRefs)
-        setEventsData(data)
+        setUserEvents(data)
         setLoading(false)
       }
 
       fetchEvents()
 
       return () => {
-        setEventsData([])
+        setUserEvents(initialUserEvents)
         setLoading(true)
       }
     }, [userId, eventsDataRefs])
   )
 
-  return { eventsData, loading }
+  return { userEvents, loading }
 }

@@ -31,7 +31,7 @@ export type DiscoveryStackParamList = {
 }
 
 export type UserTicketsStackParamList = {
-  UserTickets: undefined
+  MyTickets: undefined
   UserEventTickets: undefined
 }
 

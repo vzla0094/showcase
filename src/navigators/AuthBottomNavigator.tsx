@@ -78,7 +78,7 @@ export const AuthBottomNavigator = () => {
       />
       <Tab.Screen
         options={{
-          title: 'Tickets',
+          title: 'My Tickets',
           tabBarIcon: ({ color, size }) => <Ticket color={color} size={size} />,
         }}
         name="UserTicketsStack"

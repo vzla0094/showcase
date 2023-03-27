@@ -47,10 +47,7 @@ export interface IFirebaseInputField<FieldKeys, FieldValue> {
   value: FieldValue
 }
 
-export type handleEventPressType = (values: {
-  id: IEvent['id']
-  category: IEvent['category']
-}) => void
+export type HandleEventPressType = (values: IEventSelector) => void
 
 export enum EVENT_CATEGORY_NAMES {
   Food = 'food',
@@ -115,3 +112,5 @@ export interface IEventSelector {
 }
 
 export type CompanyEventsType = Record<IEvent['state'] | 'all', Array<IEvent>>
+
+export type UserEventsType = Record<'upcoming' | 'past', Array<IEvent>>
