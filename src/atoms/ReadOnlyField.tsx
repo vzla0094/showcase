@@ -8,7 +8,7 @@ export const ReadOnlyField = ({
   value: string
 }) => (
   <FormControl>
-    <FormControl.Label>{label}</FormControl.Label>
+    <FormControl.Label testID="label">{label}</FormControl.Label>
     <Input
       isDisabled
       _disabled={{
@@ -16,6 +16,7 @@ export const ReadOnlyField = ({
       }}
       variant="underlined"
       value={value}
+      testID={'input'}
     />
   </FormControl>
 )
