@@ -2,9 +2,9 @@ import {
   Badge,
   Box,
   Heading,
+  Image,
   IPressableProps,
   Pressable,
-  Square,
   Text,
 } from 'native-base'
 
@@ -24,7 +24,7 @@ export const EventCard = ({
   showState = false,
   onPress,
 }: IEventCardProps) => {
-  const { name, description, category, startDateTime, state } = event
+  const { name, description, category, startDateTime, state, image } = event
   const { full: date } = formatDate(startDateTime)
 
   const stateBadgeBg: Record<IEvent['state'], string> = {
@@ -38,21 +38,26 @@ export const EventCard = ({
   return (
     <Pressable
       flex={1}
+      rounded={'md'}
       borderColor="black"
       borderWidth={1}
-      borderRadius={'md'}
       onPress={onPress}
       flexDirection="row"
     >
-      <Square height={147} width={147} borderRightWidth={1}>
-        <Text>Image placeholder</Text>
-      </Square>
+      <Image
+        roundedLeft={'md'}
+        w={147}
+        h={147}
+        alt={image.alt}
+        resizeMode="cover"
+        src={image.uri}
+      />
       <Box flex={1} p={2} justifyContent="space-between">
-        <Box flex={1} justifyContent={'space-around'}>
+        <Box flex={1} justifyContent={'flex-start'}>
           <Heading size="h3" color="tertiary.400">
             {name}
           </Heading>
-          <Text variant="description" noOfLines={4}>
+          <Text variant="description" noOfLines={3}>
             {description}
           </Text>
         </Box>

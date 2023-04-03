@@ -15,6 +15,7 @@ import {
 
 import { db } from './config'
 import { isEventWithinRange } from './location'
+import { saveImage } from './storage'
 import { useAppSelector } from '../hooks'
 
 import {
@@ -42,12 +43,21 @@ export const FBCreateEvent = async (
     const eventRef = await doc(collection(db, path))
     const generatedEventId = eventRef.id
 
+    const newImageUri = await saveImage(
+      newEvent.image.uri,
+      `events/${generatedEventId}`
+    )
+
     // Adds initial data shape to the event document including
     // new generated id and company ref
     const data = {
       ...newEvent,
       id: generatedEventId,
       company: companyId,
+      image: {
+        uri: newImageUri,
+        alt: newEvent.name,
+      },
     }
     await setDoc(eventRef, data)
 
@@ -203,6 +213,15 @@ export const FBGetCompanyEvents = async (
 
 export const FBEditEvent = async (prevEvent: IEvent, newEvent: IEvent) => {
   try {
+    // Check if the image has been updated
+    if (prevEvent.image.uri !== newEvent.image.uri) {
+      const newImageDownloadURL = await saveImage(
+        newEvent.image.uri,
+        `events/${newEvent.id}`
+      )
+      newEvent.image.uri = newImageDownloadURL
+    }
+
     if (prevEvent.category === newEvent.category) {
       const path = categoryPathMap[newEvent.category]
       await setDoc(doc(db, path, newEvent.id), newEvent)

@@ -7,6 +7,7 @@ import {
   ScrollView,
   useSafeArea,
 } from 'native-base'
+import { VIEW_CONTAINER_SPACING } from '../types'
 
 interface IViewContainerProps {
   children: ReactNode
@@ -39,13 +40,18 @@ export const ViewContainer = ({
   const ContainedChildren = (
     // TODO: remove pt={5} when react-navigation fixes the header height issue
     // https://github.com/react-navigation/react-navigation/issues/10097
-    <Box bg="red" flex={flex} p={2} pt={safeArea ? pt : 5}>
+    <Box
+      bg="red"
+      flex={flex}
+      p={VIEW_CONTAINER_SPACING.OUTER_PADDING}
+      pt={safeArea ? pt : 5}
+    >
       <Box
         flex={flex}
         flexGrow={flexGrow}
         bg="white"
         rounded="xl"
-        p={5}
+        p={VIEW_CONTAINER_SPACING.INNER_PADDING}
         {...optionalProps}
       >
         {title && <Heading mb={4}>{title}</Heading>}

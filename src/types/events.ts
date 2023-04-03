@@ -20,6 +20,8 @@ export enum EVENT_FORM_FIELD_NAMES {
 
 export type EventFormValuesType = {
   [key in EVENT_FORM_FIELD_NAMES]: string
+} & {
+  image: { alt: string; uri: string }
 }
 
 export interface IEvent extends IAddress, IGeolocation {
@@ -34,6 +36,7 @@ export interface IEvent extends IAddress, IGeolocation {
   ticketCount: number
   ticketLimit: number
   timeSlots: []
+  image: { alt: string; uri: string }
 }
 
 export interface IActiveEventState {
@@ -102,6 +105,7 @@ export const emptyEvent: IEvent = {
   stateProvince: '',
   country: '',
   zipCode: '',
+  image: { alt: '', uri: '' },
   ...emptyGeoLocation,
 }
 

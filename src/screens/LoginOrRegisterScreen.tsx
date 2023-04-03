@@ -1,7 +1,7 @@
-import { useValidations } from '../helpers/useValidations'
+import { useValidations } from '../hooks/useValidations'
 import { useState } from 'react'
 
-import { useToast } from '../helpers/useToast'
+import { useToast } from '../hooks/useToast'
 import { LoginOrRegisterView } from '../views/LoginOrRegisterView'
 import { login, register } from '../redux/slices/user'
 import { useAppDispatch } from '../hooks'

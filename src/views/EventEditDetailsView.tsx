@@ -1,7 +1,9 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
+  Box,
   Button,
   FormControl,
+  Heading,
   HStack,
   IconButton,
   Radio,
@@ -11,16 +13,21 @@ import {
 } from 'native-base'
 import { Formik, FormikProps, FormikValues } from 'formik'
 import { useNavigation } from '@react-navigation/native'
+import { Dimensions } from 'react-native'
 
+import { ImagePicker } from '../molecules/ImagePicker'
 import { FormikInputDate } from '../molecules/FormikInputDate'
 import { ViewContainer } from '../atoms/ViewContainer'
 import { FormikInput } from '../atoms/FormikInput'
+
+import { useMediaLibrary } from '../hooks/useMediaLibrary'
 
 import {
   CompanyStackScreenProps,
   EVENT_FORM_FIELD_NAMES,
   EventFormValuesType,
   IEvent,
+  VIEW_CONTAINER_SPACING,
 } from '../types'
 
 export interface IOnSubmitPayload {
@@ -44,6 +51,10 @@ export const EventEditDetailsView = ({
   const formikRef = useRef<FormikProps<FormikValues>>(null)
   const eventExists = Boolean(event?.id)
 
+  const [loadingImage, setLoadingImage] = useState(false)
+
+  const { getPhotoFromMediaLibrary } = useMediaLibrary()
+
   useEffect(() => {
     navigation.setOptions({
       // useEffect doesn't like returning null here for hiding the button,
@@ -66,10 +77,22 @@ export const EventEditDetailsView = ({
     zipCode: event.zipCode,
     startDateTime: event.startDateTime,
     endDateTime: event.endDateTime,
+    image: event.image,
   }
+
+  const baseSpacingUnit = 4
+  const spacingX =
+    (VIEW_CONTAINER_SPACING.OUTER_PADDING +
+      VIEW_CONTAINER_SPACING.INNER_PADDING) *
+    baseSpacingUnit *
+    2
+
+  const imageSize = Dimensions.get('window').width - spacingX
 
   return (
     <ViewContainer alignItems="stretch" scroll>
+      <Heading mb={2}>Event details</Heading>
+      <Text mb={4}>These are de details for your event</Text>
       <Formik
         initialValues={initialValues}
         onSubmit={values => {
@@ -95,6 +118,13 @@ export const EventEditDetailsView = ({
           errors,
           setFieldValue,
         }) => {
+          const handleImagePickerPress = async () => {
+            setLoadingImage(true)
+            const image = await getPhotoFromMediaLibrary()
+            setFieldValue('image.uri', image.assets?.[0].uri)
+            setLoadingImage(false)
+          }
+
           return (
             <VStack space={4}>
               <FormikInput
@@ -104,17 +134,7 @@ export const EventEditDetailsView = ({
                 handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.Name)}
                 handleChange={handleChange(EVENT_FORM_FIELD_NAMES.Name)}
                 errors={errors}
-                label="Event name"
-              />
-
-              <FormikInput
-                key={EVENT_FORM_FIELD_NAMES.Description}
-                value={values[EVENT_FORM_FIELD_NAMES.Description]}
-                fieldName={EVENT_FORM_FIELD_NAMES.Description}
-                handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.Description)}
-                handleChange={handleChange(EVENT_FORM_FIELD_NAMES.Description)}
-                errors={errors}
-                label="Description"
+                label="Name"
               />
 
               <FormControl>
@@ -146,6 +166,35 @@ export const EventEditDetailsView = ({
               </FormControl>
 
               <FormikInput
+                key={EVENT_FORM_FIELD_NAMES.Description}
+                value={values[EVENT_FORM_FIELD_NAMES.Description]}
+                fieldName={EVENT_FORM_FIELD_NAMES.Description}
+                handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.Description)}
+                handleChange={handleChange(EVENT_FORM_FIELD_NAMES.Description)}
+                errors={errors}
+                label="Description"
+                inputProps={{ multiline: true }}
+              />
+
+              <FormikInputDate
+                value={values[EVENT_FORM_FIELD_NAMES.StartDateTime]}
+                fieldName={EVENT_FORM_FIELD_NAMES.StartDateTime}
+                handleChange={handleChange(
+                  EVENT_FORM_FIELD_NAMES.StartDateTime
+                )}
+                errors={errors}
+                label="Start date"
+              />
+
+              <FormikInputDate
+                value={values[EVENT_FORM_FIELD_NAMES.EndDateTime]}
+                fieldName={EVENT_FORM_FIELD_NAMES.EndDateTime}
+                handleChange={handleChange(EVENT_FORM_FIELD_NAMES.EndDateTime)}
+                errors={errors}
+                label="End date"
+              />
+
+              <FormikInput
                 key={EVENT_FORM_FIELD_NAMES.StreetAddress}
                 value={values[EVENT_FORM_FIELD_NAMES.StreetAddress]}
                 fieldName={EVENT_FORM_FIELD_NAMES.StreetAddress}
@@ -157,27 +206,31 @@ export const EventEditDetailsView = ({
                 label="Street Address"
               />
 
-              <FormikInput
-                key={EVENT_FORM_FIELD_NAMES.City}
-                value={values[EVENT_FORM_FIELD_NAMES.City]}
-                fieldName={EVENT_FORM_FIELD_NAMES.City}
-                handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.City)}
-                handleChange={handleChange(EVENT_FORM_FIELD_NAMES.City)}
-                errors={errors}
-                label="City"
-              />
+              <Box flexDirection="row">
+                <FormikInput
+                  key={EVENT_FORM_FIELD_NAMES.City}
+                  value={values[EVENT_FORM_FIELD_NAMES.City]}
+                  fieldName={EVENT_FORM_FIELD_NAMES.City}
+                  handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.City)}
+                  handleChange={handleChange(EVENT_FORM_FIELD_NAMES.City)}
+                  errors={errors}
+                  label="City"
+                  containerProps={{ flex: 1, mr: 2 }}
+                />
 
-              <FormikInput
-                key={EVENT_FORM_FIELD_NAMES.StateProvince}
-                value={values[EVENT_FORM_FIELD_NAMES.StateProvince]}
-                fieldName={EVENT_FORM_FIELD_NAMES.StateProvince}
-                handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.StateProvince)}
-                handleChange={handleChange(
-                  EVENT_FORM_FIELD_NAMES.StateProvince
-                )}
-                errors={errors}
-                label="State / Province"
-              />
+                <FormikInput
+                  key={EVENT_FORM_FIELD_NAMES.StateProvince}
+                  value={values[EVENT_FORM_FIELD_NAMES.StateProvince]}
+                  fieldName={EVENT_FORM_FIELD_NAMES.StateProvince}
+                  handleBlur={handleBlur(EVENT_FORM_FIELD_NAMES.StateProvince)}
+                  handleChange={handleChange(
+                    EVENT_FORM_FIELD_NAMES.StateProvince
+                  )}
+                  errors={errors}
+                  label="State"
+                  containerProps={{ flex: 1, ml: 2 }}
+                />
+              </Box>
 
               <FormikInput
                 key={EVENT_FORM_FIELD_NAMES.Country}
@@ -199,22 +252,12 @@ export const EventEditDetailsView = ({
                 label="Zip Code"
               />
 
-              <FormikInputDate
-                value={values[EVENT_FORM_FIELD_NAMES.StartDateTime]}
-                fieldName={EVENT_FORM_FIELD_NAMES.StartDateTime}
-                handleChange={handleChange(
-                  EVENT_FORM_FIELD_NAMES.StartDateTime
-                )}
-                errors={errors}
-                label="Start date"
-              />
-
-              <FormikInputDate
-                value={values[EVENT_FORM_FIELD_NAMES.EndDateTime]}
-                fieldName={EVENT_FORM_FIELD_NAMES.EndDateTime}
-                handleChange={handleChange(EVENT_FORM_FIELD_NAMES.EndDateTime)}
-                errors={errors}
-                label="End date"
+              <ImagePicker
+                placeholder={'upload image'}
+                height={imageSize}
+                onPress={handleImagePickerPress}
+                uri={values.image.uri}
+                loading={loadingImage}
               />
 
               <HStack alignItems="center" space={4}>

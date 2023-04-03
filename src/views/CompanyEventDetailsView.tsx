@@ -32,7 +32,8 @@ export const CompanyEventDetailsView = ({
 }: ICompanyEventDetailsProps) => {
   const navigation =
     useNavigation<CompanyStackScreenProps<'Event'>['navigation']>()
-  const { name, category, description, startDateTime } = activeEvent.event
+  const { name, category, description, startDateTime, image } =
+    activeEvent.event
   const { colors, space } = useTheme()
 
   useEffect(() => {
@@ -71,8 +72,8 @@ export const CompanyEventDetailsView = ({
         flex={1}
         width={imageSize}
         height={imageSize}
-        src={'https://picsum.photos/600'}
-        alt="placeholder image"
+        src={image.uri}
+        alt={image.alt}
       />
 
       <ViewContainer alignItems="stretch">
