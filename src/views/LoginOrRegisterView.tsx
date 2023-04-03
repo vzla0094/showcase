@@ -9,7 +9,7 @@ import {
   Stack,
   Text,
 } from 'native-base'
-import { Errors } from '../helpers/useValidations'
+import { Errors } from '../hooks/useValidations'
 import { FontAwesome } from '@expo/vector-icons'
 import { ViewContainer } from '../atoms/ViewContainer'
 

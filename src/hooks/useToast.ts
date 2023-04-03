@@ -1,4 +1,4 @@
-import { useToast as NBUseToast, IToastProps } from 'native-base'
+import { IToastProps, useToast as NBUseToast } from 'native-base'
 
 interface IShowArgs {
   description: IToastProps['description']

@@ -1,4 +1,4 @@
-import { FormControl, Input } from 'native-base'
+import { FormControl, IFormControlProps, IInputProps, Input } from 'native-base'
 import { FormikValues } from 'formik'
 
 interface IFormikProps {
@@ -12,6 +12,8 @@ export interface IFormikInputProps extends IFormikProps {
   fieldName: string
   label?: string
   placeholder?: string
+  inputProps?: IInputProps
+  containerProps?: IFormControlProps
 }
 
 export const FormikInput = ({
@@ -22,8 +24,10 @@ export const FormikInput = ({
   fieldName,
   label,
   placeholder,
+  inputProps,
+  containerProps,
 }: IFormikInputProps) => (
-  <FormControl isInvalid={fieldName in errors}>
+  <FormControl isInvalid={fieldName in errors} {...containerProps}>
     {label && <FormControl.Label testID={'label'}>{label}</FormControl.Label>}
     <Input
       onBlur={handleBlur}
@@ -31,6 +35,7 @@ export const FormikInput = ({
       value={value}
       placeholder={placeholder}
       testID={'input'}
+      {...inputProps}
     />
     <FormControl.ErrorMessage testID={'errorMessage'}>
       {errors[fieldName]}
