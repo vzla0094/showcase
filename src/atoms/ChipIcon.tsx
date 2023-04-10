@@ -32,6 +32,7 @@ export const ChipIcon = <T extends ReactNode>({
       alignSelf="flex-start"
       onPress={() => onPress?.(children)}
       {...props}
+      testID="pressable"
     >
       {icon({
         size: 24,
@@ -44,6 +45,7 @@ export const ChipIcon = <T extends ReactNode>({
         color={color}
         fontWeight={active ? 'semibold' : 'regular'}
         textTransform="capitalize"
+        testID="text"
       >
         {children}
       </Text>
