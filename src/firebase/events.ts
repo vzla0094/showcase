@@ -15,7 +15,7 @@ import {
 
 import { db } from './config'
 import { isEventWithinRange } from './location'
-import { saveImage } from './storage'
+import { removeImage, saveImage } from './storage'
 import { useAppSelector } from '../hooks'
 
 import {
@@ -30,7 +30,7 @@ import {
   IUser,
   UserEventsType,
 } from '../types'
-import { handleError } from '../helpers/errors'
+import { handleError } from '../helpers'
 
 export const FBCreateEvent = async (
   companyId: ICompany['companyId'],
@@ -251,8 +251,11 @@ export const FBEditEvent = async (prevEvent: IEvent, newEvent: IEvent) => {
 export const FBDeleteEvent = async (event: IEvent) => {
   const path = categoryPathMap[event.category]
   try {
-    const eventRef = doc(db, path, event.id)
+    // Remove the image associated with the event
+    await removeImage(event.image.uri)
 
+    // Delete the event document
+    const eventRef = doc(db, path, event.id)
     await deleteDoc(eventRef)
   } catch (e) {
     console.error('Error deleting event: ', e)

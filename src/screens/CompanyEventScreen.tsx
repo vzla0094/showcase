@@ -1,7 +1,7 @@
 import {
+  FBCreateEvent,
   FBDeleteEvent,
   FBEditEvent,
-  FBCreateEvent,
   getAddressQuery,
   getEventGeoLocation,
 } from '../firebase'
@@ -43,13 +43,14 @@ export const CompanyEventScreen = ({
 
   const handleDelete = async (event: IEvent) => {
     await FBDeleteEvent(event)
+    navigation.goBack()
   }
 
   return activeView === 'EventDetails' ? (
     <CompanyEventDetailsView activeEvent={activeEvent} />
   ) : (
     <EventEditDetailsView
-      event={activeEvent.event}
+      activeEvent={activeEvent}
       onSubmit={handleSubmit}
       onDelete={handleDelete}
     />
