@@ -36,12 +36,15 @@ export const CompanyDashboardScreen = ({
     { key: 'draft', title: 'draft' },
   ]
 
-  const [companyEvents, setCompanyEvents] = useState<CompanyEventsType>({
+  const initialCompanyEvents: CompanyEventsType = {
     published: [],
     draft: [],
     expired: [],
     all: [],
-  })
+  }
+
+  const [companyEvents, setCompanyEvents] =
+    useState<CompanyEventsType>(initialCompanyEvents)
 
   useEffect(() => {
     navigation.setOptions({ title: name })
@@ -55,6 +58,10 @@ export const CompanyDashboardScreen = ({
       }
 
       fetchCompanyEvents()
+
+      return () => {
+        setCompanyEvents(initialCompanyEvents)
+      }
     }, [companyId])
   )
 

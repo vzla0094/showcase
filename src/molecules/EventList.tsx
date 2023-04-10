@@ -1,7 +1,8 @@
-import { Box, FlatList, Text } from 'native-base'
+import { Box, FlatList } from 'native-base'
 
 import { HandleEventPressType, IEvent } from '../types'
 import { EventCard } from './EventCard'
+import { ListEmptyComponent } from '../atoms/ListEmptyComponent'
 
 interface IEventListProps {
   events: Array<IEvent>
@@ -17,18 +18,7 @@ export const EventList = ({
   <FlatList
     mt={6}
     ItemSeparatorComponent={() => <Box h={1} />}
-    ListEmptyComponent={
-      !events.length ? (
-        <Text
-          mt={12}
-          alignSelf="center"
-          variant="description"
-          color="trueGray.300"
-        >
-          {emptyMessage}
-        </Text>
-      ) : null
-    }
+    ListEmptyComponent={<ListEmptyComponent message={emptyMessage} />}
     data={events}
     renderItem={({ item }) => (
       <EventCard
